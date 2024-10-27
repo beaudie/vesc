@@ -1,0 +1,135 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8934d4d8_cd05db9c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-27T04:37:54Z",
+      "side": 1,
+      "message": "@i.nazarov@samsung.com would you mind taking a look at this change too?",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0a5a8e6_c9f50ae8",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-27T04:37:54Z",
+      "side": 1,
+      "message": "This duplication is getting a little out of hand. Could you please remove `TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_NO_LOCKS` instead, and make `TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN` have an `{egl_lock}` line here? Then when the template is instantiated you can set `egl_lock` to any of these 4 possibilities.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9147c7e4_208bdad6",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-27T04:37:54Z",
+      "side": 1,
+      "message": "Could you please take a look to see who the display is observing (is it a context?) and when the message could arrive? This would be a deadlock if `mContextMapMutex` is already locked.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ca9ba67_d8bd7a20",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-27T04:37:54Z",
+      "side": 1,
+      "message": "Please deduplicate with `AllocateGlobalMutexImpl`. You can make that function take a pointer to `g_Mutex` or `g_EGLSyncMutex`.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc4f95cf_d0e74f63",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-27T04:37:54Z",
+      "side": 1,
+      "message": "Same here, please deduplicate with `DeallocateGlobalMutex` using a helper.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "223dbb8f_081953ec",
+        "filename": "src/libANGLE/GlobalMutex.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-27T04:37:54Z",
+      "side": 1,
+      "message": "To stop the duplication (like if we later add a surface mutex), you can use a template argument in the first class above like this:\n\n```\nnamespace priv\n{\nenum class GlobalMutexChoice\n{\n    // All EGL entry points except EGL Sync objects\n    EGL,\n    // Entry points relating to EGL Sync objects\n    Sync,\n};\n}\n\ntemplate \u003cpriv::GlobalMutexChoice mutexChoice\u003e\nclass [[nodiscard]] ScopedOptionalGlobalMutexLock final : angle::NonCopyable\n```\n\nIn the cpp, you can `switch (mutexChoice)`, `?:` or whatever is needed to deduplicate the code as much as possible. Given that the parameter is a template argument, the compiler will optimize the ifs and switches away. You can use the trick here to make sure the template is actually instantiated: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp;l\u003d6761;drc\u003d9a4c7495f3cdc31d8db47947d6aef7ed19c74494\n\nIf it makes things simpler, you can also add this in the header for use in the autogen scripts and whatnot:\n\n```\nusing ScopedGlobalEGLMutexLock \u003d ScopedGlobalMutexLock\u003cpriv::GlobalMutexChoice::EGL\u003e;\nusing ScopedGlobalEGLSyncObjectMutexLock \u003d ScopedGlobalMutexLock\u003cpriv::GlobalMutexChoice::Sync\u003e;\n```",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 2
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc6d9070_4c2176bc",
+        "filename": "src/libANGLE/GlobalMutex.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-27T04:37:54Z",
+      "side": 1,
+      "message": "Better allocate all the mutexes in the same call.\n\n```suggestion\nvoid AllocateGlobalMutex();\nvoid DeallocateGlobalMutex();\n```",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 36
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
