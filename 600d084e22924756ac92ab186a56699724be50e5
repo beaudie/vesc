@@ -141,6 +141,30 @@
       },
       "revId": "600d084e22924756ac92ab186a56699724be50e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c144d29_317bc0a6",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T22:55:40Z",
+      "side": 1,
+      "message": "Looking at the CL chain, this is quite convoluted.. I think I understand this implementation but I find it quite difficult to reason about due to:\n\n* the conditional locked/unlocked state of the luck when the function returns\n* `Locked` suffix in the function name when only _some_ of the code in the function is executed under lock.\n\nIgor, have you considered\n\n1) Splitting the `startThreadLocked` function into two parts, one locked and one unlocked, and adjusting the caller to make the two calls accordingly (possibly carrying the return value from the locked call over the unlock boundary)\n\n2) Using templates instead of polymorphism (not insisting, but wondering if this would be better/worse/infeasible)\n\n?",
+      "parentUuid": "749b47b9_8e78e439",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 86
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
