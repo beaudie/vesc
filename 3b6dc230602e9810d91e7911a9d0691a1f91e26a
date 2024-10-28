@@ -34,6 +34,24 @@
       "parentUuid": "cb70be0c_0237b0ee",
       "revId": "3b6dc230602e9810d91e7911a9d0691a1f91e26a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eef6558f_470ba0ef",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 877,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-28T14:29:01Z",
+      "side": 1,
+      "message": "Updated the patchset with the barrier with host flags.",
+      "parentUuid": "628ee3d2_ce628bf2",
+      "revId": "3b6dc230602e9810d91e7911a9d0691a1f91e26a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
