@@ -1,6 +1,29 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb6a993e_282f13ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T16:51:08Z",
+      "side": 1,
+      "message": "Typo: `ELG` -\u003e `EGL`",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "8934d4d8_cd05db9c",
@@ -18,6 +41,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d3ae3d38_80ab5c9e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T16:51:08Z",
+      "side": 1,
+      "message": "Yes, I\u0027m already checking the implementation, but it could take some time)",
+      "parentUuid": "8934d4d8_cd05db9c",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0a5a8e6_c9f50ae8",
@@ -31,6 +72,46 @@
       "writtenOn": "2024-10-27T04:37:54Z",
       "side": 1,
       "message": "This duplication is getting a little out of hand. Could you please remove `TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_NO_LOCKS` instead, and make `TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN` have an `{egl_lock}` line here? Then when the template is instantiated you can set `egl_lock` to any of these 4 possibilities.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "746a3397_7f92cea6",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T16:51:08Z",
+      "side": 1,
+      "message": "`contextMap` is used without a `mContextMapMutex` lock.\n\n---\n\n@syoussefi@chromium.org\n\nEven tho, this change does not have a mutex lock here, I think this method should had a mutex lock even before this change. The `DisplayState::notifyDeviceLost()` may be called from multiple threads, so the `deviceLost` member must also be protected by the mutex.\n\nMutex locking order will be: `mContextMapMutex`, `ErrorSet::mMutex` (for each Context).\n\nIn some backends, `DisplayState::notifyDeviceLost()` may be called while `ErrorSet::mMutex` of some Context is already locked (from `ErrorSet::getGraphicsResetStatus()`).\n\nSo we will have mutex locking order:\n`ErrorSet::mMutex` (ctx1), `mContextMapMutex`, `ErrorSet::mMutex` (for each Context).\n\nWe will have a situation, when `ErrorSet::mMutex` and `mContextMapMutex` mutexes may be locked in reverse order from different threads - **possible deadlock**.\n\nBut because, `ErrorSet::markContextLost()` uses `getLockIfNotAlready()`, that uses `try_lock()` - the above deadlock will not happen. But this is because `getLockIfNotAlready()` will not work as intended. Intention is to skip lock if already locked by the **same thread**, but it will skip lock if already locked by **any thread**. In other words, deadlock will not happen because of the bug in `getLockIfNotAlready()`.\n\nEven if do not add `mContextMapMutex` lock, we may still have reverse mutex locking order if some two contexts are calling `ErrorSet::getGraphicsResetStatus()`, but this time this will be `ErrorSet::mMutex` mutexes of these contexts. Like in the previous case, deadlock will not happen because of the bug in `getLockIfNotAlready()`.\n\nWe have 3 problems:\n1. `getLockIfNotAlready()` skips lock even if other thread holding a lock (normal case - not a recursion)\n2. Make `DisplayState::notifyDeviceLost()` thread safe.\n3. Fix reverse mutex lock dead lock problems.\n\nSuggested solutions:\n\nFor the (1) I suggest tracking owner thread ID, like in `GlobalMutex` class when `ANGLE_ENABLE_GLOBAL_MUTEX_RECURSION` is defined. Maybe even create template `RecursiveMutex\u003c\u003e` (should be faster than using `std::recursive_mutex`), that will accept any (even `SimpleMutex`) non recursive mutex as `T`. We can use this new template to replace `GlobalMutex` in the mentioned case (not part of the fix - refactoring).\n\nFor (2): Protect `DisplayState::notifyDeviceLost()` by the `mContextMapMutex`. Make `deviceLost` atomic to avoid locking mutex in other places.\n\nFor (3): Add `mGraphicsResetStatusMutex` (or similar) mutex to the `Display`. Lock it when calling `mErrors.getGraphicsResetStatus()`.\n\n**I will investigate more** to see if there are other problems regarding dead locking.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4e1b3fa_9d00ee8b",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T16:51:08Z",
+      "side": 1,
+      "message": "Suggest moving this check (keeping the code here) to the parent scope, that takes the lock. This way we will avoid unnecessary `devicePlatformDisplayMapMutex` mutex lock if `display` was already obtained from `anglePlatformDisplays`.",
+      "range": {
+        "startLine": 891,
+        "startChar": 8,
+        "endLine": 891,
+        "endChar": 31
+      },
       "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
