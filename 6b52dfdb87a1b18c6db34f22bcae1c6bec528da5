@@ -106,6 +106,24 @@
       "parentUuid": "3f5cbb4c_4dacf547",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f886ea25_fa012091",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T20:57:35Z",
+      "side": 1,
+      "message": "\u003e Take any of our tests, add 16 EXPECT_*_COLOR_* lines and it should hit it.\n\nThis doesn\u0027t seem to work. Right before those readbacks we run into a flush with `mRenderPassCommands-\u003estarted()` which falls through to `mOutsideRenderPassSerialFactory.reset()` so we don\u0027t hit the bug. So I think we need to trigger an \"empty flush\" of sorts?\n\n\u003e compute-after-compute with a glMemoryBarrier in between 16 times.\n\nThe trace where we hit this is doing something like this but I don\u0027t get what I need to do to hit this specific sequence (but I was trying compute-after-draw so maybe that\u0027s the problem)\n\nThis seems pretty narrow and with the checks Charlie added adding a special-case test might not be adding a lot of value.",
+      "parentUuid": "62a8259d_1e45a77f",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
