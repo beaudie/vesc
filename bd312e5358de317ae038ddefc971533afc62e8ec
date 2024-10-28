@@ -16,6 +16,23 @@
       "message": "@geofflang@chromium.org Could you please review the code again? thx",
       "revId": "bd312e5358de317ae038ddefc971533afc62e8ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5f02723_0421b625",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-10-28T10:34:41Z",
+      "side": 1,
+      "message": "lgtm. Though I\u0027m not sure this assertion would be useful in production uses.",
+      "revId": "bd312e5358de317ae038ddefc971533afc62e8ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
