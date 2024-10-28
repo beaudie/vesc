@@ -124,6 +124,24 @@
       "parentUuid": "62a8259d_1e45a77f",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45c24950_97d9a2f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-28T21:01:58Z",
+      "side": 1,
+      "message": "\u003e This doesn\u0027t seem to work. Right before those readbacks we run into a flush with mRenderPassCommands-\u003estarted()\n\nOn the first EXPECT yes, not the rest of them (so ok, maybe needs 17 EXPECTs!)\n\n\u003e I was trying compute-after-draw so maybe that\u0027s the problem\n\nIt definitely would be, because the draw starts a render pass and leads to the `reset()`\n\n---\n\nCharlie must be right, it must have something to do with debug labels. We probably have support for them built with the tests but a runtime check must be disabling them. If you can enable that in the test suite Charlie has added for this, it should hopefully reproduce the bug.",
+      "parentUuid": "f886ea25_fa012091",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
