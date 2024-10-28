@@ -37,6 +37,8 @@
 #include "libANGLE/trace.h"
 #include "platform/PlatformMethods.h"
 
+#include "spirv-tools/libspirv.h"
+
 // Consts
 namespace
 {
@@ -6657,6 +6659,32 @@ angle::Result Renderer::finishOneCommandBatchAndCleanup(vk::Context *context, bo
 {
     return mCommandQueue.finishOneCommandBatchAndCleanup(context, getMaxFenceWaitTimeNs(),
                                                          anyBatchCleaned);
+}
+
+spv_target_env Renderer::getSpirvVersion() const
+{
+    uint32_t vulkanApiVersion = mDeviceVersion;
+    if (vulkanApiVersion < VK_API_VERSION_1_1)
+    {
+        return SPV_ENV_VULKAN_1_0;
+    }
+    else if (vulkanApiVersion < VK_API_VERSION_1_2)
+    {
+        if (mFeatures.supportsSPIRV14.enabled)
+        {
+            return SPV_ENV_VULKAN_1_1_SPIRV_1_4;
+        }
+        return SPV_ENV_VULKAN_1_1;
+    }
+    else if (vulkanApiVersion < VK_API_VERSION_1_3)
+    {
+        return SPV_ENV_VULKAN_1_2;
+    }
+    else
+    {
+        // return the latest supported version
+        return SPV_ENV_VULKAN_1_3;
+    }
 }
 
 // static

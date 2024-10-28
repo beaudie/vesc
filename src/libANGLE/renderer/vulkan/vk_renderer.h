@@ -35,6 +35,8 @@
 #include "libANGLE/renderer/vulkan/vk_mem_alloc_wrapper.h"
 #include "libANGLE/renderer/vulkan/vk_resource.h"
 
+#include "spirv-tools/libspirv.h"
+
 namespace angle
 {
 class Library;
@@ -778,6 +780,8 @@ class Renderer : angle::NonCopyable
         ASSERT(mPlaceHolderDescriptorSetLayout && mPlaceHolderDescriptorSetLayout->get().valid());
         return mPlaceHolderDescriptorSetLayout;
     }
+
+    spv_target_env getSpirvVersion() const;
 
   private:
     angle::Result setupDevice(vk::Context *context,

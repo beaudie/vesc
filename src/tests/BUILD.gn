@@ -366,7 +366,10 @@ if (is_win || is_linux || is_chromeos || is_android || is_fuchsia || is_apple) {
 
     if (angle_enable_vulkan) {
       sources += angle_white_box_tests_vulkan_sources
-      deps += [ "$angle_root/src/common/vulkan:angle_vulkan_entry_points" ]
+      deps += [
+        "$angle_root/src/common/vulkan:angle_vulkan_entry_points",
+        "$angle_spirv_tools_dir:spvtools_val",
+      ]
     }
   }
 }
@@ -457,6 +460,7 @@ if (is_win || is_linux || is_chromeos || is_android || is_apple) {
       deps += [
         "$angle_glslang_dir:glslang_lib_sources",
         "$angle_root/src/common/vulkan:angle_vulkan_entry_points",
+        "$angle_spirv_tools_dir:spvtools_val",
       ]
     }
 
