@@ -52,6 +52,24 @@
       "parentUuid": "f176c541_c8572bb8",
       "revId": "0a378aa9314d5ec97c5766e80f177caa7b536973",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08616747_a9621243",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 30
+      },
+      "lineNbr": 1081,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-28T14:17:59Z",
+      "side": 1,
+      "message": "Ack. LGTM. Did the same on the other patch.",
+      "parentUuid": "7bd043eb_6db38a8b",
+      "revId": "0a378aa9314d5ec97c5766e80f177caa7b536973",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
