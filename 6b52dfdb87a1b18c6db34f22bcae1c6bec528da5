@@ -70,6 +70,24 @@
       "parentUuid": "28ebac4a_6312b5a2",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f5cbb4c_4dacf547",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-28T20:35:10Z",
+      "side": 1,
+      "message": "Unless I\u0027m missing something, it should be quite easy actually. Take any of our tests, add 16 `EXPECT_*_COLOR_*` lines and it should hit it. In that case, we would create many outside RP commands, one for each line (due to glReadPixels), flush them, and there is no render pass in between.\n\nIf somehow the path that leads to a Vulkan submission also resets this, you could also add a test that does compute-after-compute with a glMemoryBarrier in between 16 times.",
+      "parentUuid": "04b67543_726fb490",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
