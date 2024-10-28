@@ -311,6 +311,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1a7e1c6_2cd6702c",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T15:15:32Z",
+      "side": 1,
+      "message": "\u003e may be unlocked\", is unlocked here a verb (in \"past principle\" form) or an adjective?\n\nIt is adjective. Now I understand the confusion.\n\n\u003e Which one of these do you mean?\n\u003e Having written that down, I believe you mean the latter.\n\nYes, your assumption is correct. I will use your wording.",
+      "parentUuid": "411bc478_43f001e8",
+      "range": {
+        "startLine": 175,
+        "startChar": 86,
+        "endLine": 175,
+        "endChar": 89
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a3384b6_387d3b33",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 3
