@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac29cef8_ffd74375",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 28
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T23:55:33Z",
+      "side": 1,
+      "message": "What does this statement mean:\n\n```\nThe descriptorSet itself gets reused next time another descriptorSet is needed.\n```\n\nBased on the previous statement, if next time another descriptorSet is needed, isn\u0027t current descriptorSet added into the garbage list?",
+      "revId": "20fcae8d7d09df0193a5d8959181e23b57dd7e99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
