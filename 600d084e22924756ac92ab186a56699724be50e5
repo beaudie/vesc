@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7f93946_422189bf",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T15:34:56Z",
+      "side": 1,
+      "message": "I think this can also be written as:\n\n```\npostAsyncTask(std::shared_ptr\u003cAsyncTask\u003e(asyncTask));\n\nreturn asyncTask;\n```\n\nThis avoids the std::move / aliasing awkwardness.. I\u0027m undecided if this makes it more clear though, up to you",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 40
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8820ed1b_91689bae",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T15:34:56Z",
+      "side": 1,
+      "message": "I understand that this is done for future flexibility, but could we hold off on this until we actually get to the point where it is useful, and maybe consider alternatives at that point? Currently it\u0027s difficult to reason about whether this class structure is the way to go.",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 86
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}

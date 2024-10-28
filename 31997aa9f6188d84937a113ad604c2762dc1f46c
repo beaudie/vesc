@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b555477_4f8a02c5",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T15:34:56Z",
+      "side": 1,
+      "message": "This structure seems confusing, and I think the discussion about the specific wording around lock might be an indication that this is not intuitive. Similarly to the other case, it\u0027s difficult to reason about whether or not this is the right option without seeing the other (future) implementations.\n\nDo you have a prototype of the upcoming changes that you could share? Without knowing the future use this CL feels too early to review.",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 46
+      },
+      "revId": "31997aa9f6188d84937a113ad604c2762dc1f46c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
