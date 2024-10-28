@@ -335,6 +335,9 @@ class UtilsVk : angle::NonCopyable
                                  const GenerateMipmapDestLevelViews &dstLevelViews,
                                  const vk::Sampler &sampler,
                                  const GenerateMipmapParameters &params);
+    angle::Result generateMipmapWithDraw(ContextVk *contextVk,
+                                         vk::ImageHelper *image,
+                                         vk::ImageViewHelper *imageViews);
 
     angle::Result unresolve(ContextVk *contextVk,
                             const FramebufferVk *framebuffer,

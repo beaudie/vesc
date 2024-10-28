@@ -4229,6 +4229,194 @@ angle::Result UtilsVk::generateMipmap(ContextVk *contextVk,
     return angle::Result::Continue;
 }
 
+angle::Result UtilsVk::generateMipmapWithDraw(ContextVk *contextVk,
+                                              vk::ImageHelper *image,
+                                              vk::ImageViewHelper *imageViews)
+{
+    // This function only supports -
+    // 1. color formats that support color attachment feature
+    // 2. image is of type VK_IMAGE_TYPE_2D and is not MSAA
+    vk::Renderer *renderer = contextVk->getRenderer();
+
+    ANGLE_TRY(ensureBlitResolveResourcesInitialized(contextVk));
+
+    ASSERT(!contextVk->hasActiveRenderPass());
+
+    ASSERT(image);
+    ASSERT(image->getType() == VK_IMAGE_TYPE_2D && image->getSamples() == 1);
+
+    angle::FormatID imageFormatID = image->getActualFormatID();
+    angle::FormatID actualFormatID =
+        imageViews->hasColorspaceOverrideForRead(*image)
+            ? imageViews->getColorspaceOverrideFormatForRead(imageFormatID)
+            : imageFormatID;
+    const angle::Format &actualFormat = angle::Format::Get(actualFormatID);
+    ASSERT(!actualFormat.hasDepthOrStencilBits());
+
+    // TODO: the following check is not enough; if the image is AHB-imported, then the draw path
+    // cannot be taken if AHARDWAREBUFFER_USAGE_GPU_FRAMEBUFFER hasn't been specified, even if the
+    // format is renderable.
+    ASSERT(vk::FormatHasNecessaryFeature(renderer, actualFormat.id, image->getTilingMode(),
+                                         VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BIT));
+
+    const VkExtent3D &extents = image->getExtents();
+    gl::Rectangle renderArea  = gl::Rectangle(0, 0, extents.width >> 1, extents.height >> 1);
+    uint32_t layerCount       = image->getLayerCount();
+    // uint32_t levelCount                         = image->getLevelCount();
+    gl::LevelIndex baseLevelGL = image->getFirstAllocatedLevel();
+    gl::LevelIndex nextLevelGL = baseLevelGL + 1;
+    vk::LevelIndex baseLevelVK = image->toVkLevel(baseLevelGL);
+    vk::LevelIndex nextLevelVK = image->toVkLevel(nextLevelGL);
+
+    // Manually manage the image memory barrier because it uses a lot more parameters than our
+    // usual one.
+    vk::CommandBufferAccess access;
+    access.onImageSelfDraw(baseLevelGL, 1, 0, layerCount, baseLevelGL + 1, 1, 0, layerCount,
+                           VK_IMAGE_ASPECT_COLOR_BIT, image);
+    vk::OutsideRenderPassCommandBuffer *outsideCommandBuffer;
+    ANGLE_TRY(contextVk->getOutsideRenderPassCommandBuffer(access, &outsideCommandBuffer));
+
+    VkImageMemoryBarrier srcBarrier            = {};
+    srcBarrier.sType                           = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    srcBarrier.image                           = image->getImage().getHandle();
+    srcBarrier.srcQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+    srcBarrier.dstQueueFamilyIndex             = VK_QUEUE_FAMILY_IGNORED;
+    srcBarrier.subresourceRange.aspectMask     = VK_IMAGE_ASPECT_COLOR_BIT;
+    srcBarrier.subresourceRange.baseArrayLayer = 0;
+    srcBarrier.subresourceRange.layerCount     = layerCount;
+    srcBarrier.subresourceRange.levelCount     = 1;
+    srcBarrier.oldLayout                       = image->getCurrentLayout(renderer);
+    srcBarrier.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT | VK_ACCESS_MEMORY_WRITE_BIT;
+
+    VkImageMemoryBarrier dstBarrier = srcBarrier;
+
+    srcBarrier.subresourceRange.baseMipLevel = baseLevelVK.get();
+    srcBarrier.newLayout                     = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    srcBarrier.dstAccessMask                 = VK_ACCESS_MEMORY_READ_BIT;
+
+    dstBarrier.subresourceRange.baseMipLevel = nextLevelVK.get();
+    dstBarrier.newLayout                     = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    dstBarrier.dstAccessMask                 = VK_ACCESS_MEMORY_WRITE_BIT;
+
+    vk::ImageView baseLevelReadImageView;
+    ANGLE_TRY(image->initReinterpretedLayerImageView(
+        contextVk, vk::Get2DTextureType(layerCount, image->getSamples()), image->getAspectFlags(),
+        gl::SwizzleState(), &baseLevelReadImageView, baseLevelVK, 1, 0, layerCount,
+        image->getUsage(), actualFormatID));
+
+    const vk::ImageView *nextLevelDrawImageView = nullptr;
+    ANGLE_TRY(imageViews->getLevelDrawImageView(contextVk, *image, baseLevelVK + 1, 0, layerCount,
+                                                &nextLevelDrawImageView));
+
+    vk::RenderPassDesc renderPassDesc;
+    renderPassDesc.setSamples(image->getSamples());
+    renderPassDesc.packColorAttachment(0, actualFormatID);
+
+    vk::GraphicsPipelineDesc pipelineDesc;
+    pipelineDesc.initDefaults(contextVk, vk::GraphicsPipelineSubset::Complete,
+                              contextVk->pipelineRobustness(),
+                              contextVk->pipelineProtectedAccess());
+    pipelineDesc.setSingleColorWriteMask(0, (VkColorComponentFlagBits::VK_COLOR_COMPONENT_R_BIT |
+                                             VkColorComponentFlagBits::VK_COLOR_COMPONENT_G_BIT |
+                                             VkColorComponentFlagBits::VK_COLOR_COMPONENT_B_BIT |
+                                             VkColorComponentFlagBits::VK_COLOR_COMPONENT_A_BIT));
+    pipelineDesc.setRasterizationSamples(image->getSamples());
+    pipelineDesc.setRenderPassDesc(renderPassDesc);
+
+    vk::RenderPassCommandBuffer *commandBuffer = nullptr;
+    ANGLE_TRY(startRenderPass(contextVk, image, nextLevelDrawImageView, renderPassDesc, renderArea,
+                              VK_IMAGE_ASPECT_COLOR_BIT, nullptr, &commandBuffer));
+
+    UpdateColorAccess(contextVk, MakeColorBufferMask(0), MakeColorBufferMask(0));
+
+    VkImageMemoryBarrier imageBarrier[2];
+    imageBarrier[0] = srcBarrier;
+    imageBarrier[1] = dstBarrier;
+    commandBuffer->pipelineBarrier(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                   VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                                   VK_DEPENDENCY_BY_REGION_BIT, 0, nullptr, 0, nullptr, 2,
+                                   imageBarrier);
+
+    int32_t currentLayer = 0;
+    BlitResolveShaderParams shaderParams;
+    shaderParams.offset.blit[0]  = 0.0f;
+    shaderParams.offset.blit[1]  = 0.0f;
+    shaderParams.stretch[0]      = 1.0f;
+    shaderParams.stretch[1]      = 1.0f;
+    shaderParams.invSrcExtent[0] = 1.0f;
+    shaderParams.invSrcExtent[1] = 1.0f;
+    shaderParams.srcLayer        = currentLayer;
+    shaderParams.samples         = 1;
+    shaderParams.invSamples      = 1.0f;
+    shaderParams.outputMask      = 1;
+    shaderParams.flipX           = 0;
+    shaderParams.flipY           = 0;
+    shaderParams.rotateXY        = 0;
+
+    uint32_t flags = GetBlitResolveFlags(true, false, false, actualFormat);
+    flags |= layerCount > 1 ? BlitResolve_frag::kSrcIsArray : 0;
+    Function function = Function::BlitResolve;
+
+    VkDescriptorSet descriptorSet;
+    ANGLE_TRY(allocateDescriptorSet(contextVk, &contextVk->getStartedRenderPassCommands(),
+                                    Function::BlitResolve, &descriptorSet));
+
+    VkDescriptorImageInfo imageInfos = {};
+    imageInfos.imageView             = baseLevelReadImageView.getHandle();
+    imageInfos.imageLayout           = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+    VkDescriptorImageInfo samplerInfo = {};
+    // samplerInfo.sampler = true ? mLinearSampler.getHandle() : mPointSampler.getHandle();
+    samplerInfo.sampler = mLinearSampler.getHandle();
+
+    VkWriteDescriptorSet writeInfos[2] = {};
+    writeInfos[0].sType                = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfos[0].dstSet               = descriptorSet;
+    writeInfos[0].dstBinding           = kBlitResolveColorOrDepthBinding;
+    writeInfos[0].descriptorCount      = 1;
+    writeInfos[0].descriptorType       = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
+    writeInfos[0].pImageInfo           = &imageInfos;
+
+    writeInfos[1].sType           = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    writeInfos[1].dstSet          = descriptorSet;
+    writeInfos[1].dstBinding      = kBlitResolveSamplerBinding;
+    writeInfos[1].descriptorCount = 1;
+    writeInfos[1].descriptorType  = VK_DESCRIPTOR_TYPE_SAMPLER;
+    writeInfos[1].pImageInfo      = &samplerInfo;
+
+    vkUpdateDescriptorSets(contextVk->getDevice(), 2, writeInfos, 0, nullptr);
+
+    vk::ShaderLibrary &shaderLibrary                 = contextVk->getShaderLibrary();
+    vk::RefCounted<vk::ShaderModule> *vertexShader   = nullptr;
+    vk::RefCounted<vk::ShaderModule> *fragmentShader = nullptr;
+    ANGLE_TRY(shaderLibrary.getFullScreenTri_vert(contextVk, 0, &vertexShader));
+    ANGLE_TRY(shaderLibrary.getBlitResolve_frag(contextVk, flags, &fragmentShader));
+
+    ANGLE_TRY(setupGraphicsProgram(contextVk, function, vertexShader, fragmentShader,
+                                   &mBlitResolve[flags], &pipelineDesc, descriptorSet,
+                                   &shaderParams, sizeof(shaderParams), commandBuffer));
+
+    // Set dynamic state
+    VkViewport viewport;
+    gl_vk::GetViewport(renderArea, 0.0f, 1.0f, false, false, renderArea.height, &viewport);
+    commandBuffer->setViewport(0, 1, &viewport);
+
+    VkRect2D scissor = gl_vk::GetRect(renderArea);
+    commandBuffer->setScissor(0, 1, &scissor);
+
+    SetDepthDynamicStateForUnused(renderer, commandBuffer);
+    SetStencilDynamicStateForUnused(renderer, commandBuffer);
+
+    // Note: this utility creates its own framebuffer, thus bypassing ContextVk::startRenderPass.
+    // As such, occlusion queries are not enabled.
+    commandBuffer->draw(3, 0);
+
+    contextVk->addGarbage(&baseLevelReadImageView);
+
+    // Close the render pass for this temporary framebuffer.
+    return contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::TemporaryForImageCopy);
+}
+
 angle::Result UtilsVk::unresolve(ContextVk *contextVk,
                                  const FramebufferVk *framebuffer,
                                  const UnresolveParameters &params)

@@ -3954,6 +3954,22 @@ class CommandBufferAccess : angle::NonCopyable
         onImageWrite(writeLevelStart, writeLevelCount, writeLayerStart, writeLayerCount,
                      aspectFlags, ImageLayout::TransferSrcDst, image);
     }
+    void onImageSelfDraw(gl::LevelIndex readLevelStart,
+                         uint32_t readLevelCount,
+                         uint32_t readLayerStart,
+                         uint32_t readLayerCount,
+                         gl::LevelIndex writeLevelStart,
+                         uint32_t writeLevelCount,
+                         uint32_t writeLayerStart,
+                         uint32_t writeLayerCount,
+                         VkImageAspectFlags aspectFlags,
+                         ImageHelper *image)
+    {
+        onImageReadSubresources(readLevelStart, readLevelCount, readLayerStart, readLayerCount,
+                                aspectFlags, ImageLayout::FragmentShaderReadOnly, image);
+        onImageWrite(writeLevelStart, writeLevelCount, writeLayerStart, writeLayerCount,
+                     aspectFlags, ImageLayout::ColorWrite, image);
+    }
     void onImageComputeShaderRead(VkImageAspectFlags aspectFlags, ImageHelper *image)
     {
         onImageRead(aspectFlags, ImageLayout::ComputeShaderReadOnly, image);

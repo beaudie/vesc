@@ -2229,6 +2229,7 @@ void ImageTest::ImageStorageGenerateMipmap_helper(const EGLint *attribs,
     GLFramebuffer fbo;
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dstTexture, 0);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
     glEnable(GL_SCISSOR_TEST);
     for (int i = 0; i < kNumTiles; ++i)
     {
@@ -2255,9 +2256,13 @@ void ImageTest::ImageStorageGenerateMipmap_helper(const EGLint *attribs,
     // data
     GLFramebuffer dstFbo;
     glBindFramebuffer(GL_FRAMEBUFFER, dstFbo);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dstTexture,
-                           mipLevelCount - 1);
-    EXPECT_PIXEL_NEAR(0, 0, expectedColor[0], expectedColor[1], expectedColor[2], expectedColor[3],
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, dstTexture, 1);
+    ASSERT_GL_FRAMEBUFFER_COMPLETE(GL_FRAMEBUFFER);
+    EXPECT_PIXEL_NEAR(2, 2, expectedColor[0], expectedColor[1], expectedColor[2], expectedColor[3],
+                      1);
+    EXPECT_PIXEL_NEAR(4, 4, expectedColor[0], expectedColor[1], expectedColor[2], expectedColor[3],
+                      1);
+    EXPECT_PIXEL_NEAR(8, 8, expectedColor[0], expectedColor[1], expectedColor[2], expectedColor[3],
                       1);
 
     // Verify that the target texture generates linear color when sampled
