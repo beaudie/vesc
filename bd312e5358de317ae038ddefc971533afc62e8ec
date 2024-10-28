@@ -33,6 +33,24 @@
       "message": "lgtm. Though I\u0027m not sure this assertion would be useful in production uses.",
       "revId": "bd312e5358de317ae038ddefc971533afc62e8ec",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52c79f49_e55d18b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3314858
+      },
+      "writtenOn": "2024-10-28T11:53:11Z",
+      "side": 1,
+      "message": "When MTLCommandBufferErrorOutOfMemory occurs，this assertion will make Chromium fallback to SwiftShader to avoid rendering exceptions.",
+      "parentUuid": "a5f02723_0421b625",
+      "revId": "bd312e5358de317ae038ddefc971533afc62e8ec",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
