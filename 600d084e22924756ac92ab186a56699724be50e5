@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fe465e4b_000a9d8e",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T16:31:58Z",
+      "side": 1,
+      "message": "`return asyncTask` will create new temporary object, so extra atomic increment.\n\nTo avoid this, need to write:\n```\npostAsyncTask(std::shared_ptr\u003cAsyncTask\u003e(asyncTask));\n\nreturn std::static_pointer_cast\u003cWaitableEvent\u003e(std::move(asyncTask));\n```\n\nBut I\u0027m not sure that this is cleaner than the original code...\n\nI guess I will use the above version, since it is closer to the other method, that will be added in the `Add dependency graph into the WorkerThread` CL.",
+      "parentUuid": "d7f93946_422189bf",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 40
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8820ed1b_91689bae",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 4
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-28T15:34:56Z",
       "side": 1,
       "message": "I understand that this is done for future flexibility, but could we hold off on this until we actually get to the point where it is useful, and maybe consider alternatives at that point? Currently it\u0027s difficult to reason about whether this class structure is the way to go.",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 86
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74b29d66_99905241",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T16:31:58Z",
+      "side": 1,
+      "message": "I may remove `WorkerThreadLoopPolicy` class, but this will increase diff in the future CL (that I wanted to avoid by splitting into multiple CLs).\n\n`Update DelegateWorkerPool to be a MultiThreadedWorkerPool` is the CL where `WorkerThreadLoopPolicy` class is really required.\n\n\u003e but could we hold off on this until we actually get to the point where \nit is useful, and maybe consider alternatives at that point? \n\nIf do that, then CL, where these classes will be really useful will include not only refactoring, but also a functional updates. This will make this CL larger and harder to review.",
+      "parentUuid": "8820ed1b_91689bae",
       "range": {
         "startLine": 167,
         "startChar": 4,

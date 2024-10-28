@@ -22,6 +22,30 @@
       },
       "revId": "31997aa9f6188d84937a113ad604c2762dc1f46c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e75b726_e07ae734",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T16:31:58Z",
+      "side": 1,
+      "message": "\u003e Do you have a prototype of the upcoming changes that you could share? \nWithout knowing the future use this CL feels too early to review.\n\nAll future CLs are ready and in the current relation chain.\n\n`Update DelegateWorkerPool to be a MultiThreadedWorkerPool` is the CL where `MultiThreadedWorkerPool` is really required.\n\nOriginally I had the final solution. Then I split it in to  multiple CLs, where next CL is mostly adds new code, instead of rewriting it.\n\nIf I will change base CLs to not use redundant methods, then there is no point splitting. I could have just submitted single XL change.\n\nTechnically, I can:\n- remove this CL entirely\n- Implement `Track free threads in the MultiThreadedWorkerPool` (change name) and `Improve free thread tracking in the AsyncWorkerPool` in the `AsyncWorkerPool`.\n- Include refactoring into the `Update DelegateWorkerPool to be a MultiThreadedWorkerPool` (need also change commit name).\n\nThere are multiple ways to split the CLs. I choose the one that has less conflicts with each other, and has less lines removed/changed - mostly adding new lines. One negative moment from this is that until you see a final picture, intermediate changes looks unnecessary.\n\nI also wanted so the final feature (dependency between tasks) is added in the last CL, so when it is added - it is added in the final form. Compared to adding some working but sub-optimal implementation with multiple follow ups that improve it.\n\nAlso, when you review a last CL, you mostly review changes, required to implement the feature, without the refactoring - easier to review.",
+      "parentUuid": "2b555477_4f8a02c5",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 46
+      },
+      "revId": "31997aa9f6188d84937a113ad604c2762dc1f46c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
