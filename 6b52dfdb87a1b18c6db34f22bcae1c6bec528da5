@@ -16,6 +16,24 @@
       "message": "A regression test would be nice",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "354de9a2_eef7d0b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T13:00:07Z",
+      "side": 1,
+      "message": "Not sure why we\u0027re not hitting this in some tests. A broken render pass + 16 calls to `generateOutsideRenderPassCommandsQueueSerial` should trigger this. Charlie suggested it might be because debug markers are not enabled in tests. I thought I only enabled dchecks though when I stumbled into this?..",
+      "parentUuid": "d7133bf2_5ac3619b",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
