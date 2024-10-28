@@ -2247,7 +2247,12 @@ void CaptureUpdateResourceIDs(const gl::Context *context,
     const char *resourceName = GetResourceIDTypeName(resourceIDType);
 
     std::stringstream updateFuncNameStr;
-    updateFuncNameStr << "Update" << resourceName << "ID";
+    updateFuncNameStr << "Update" << resourceName;
+    if (resourceIDType == ResourceIDType::Framebuffer)
+    {
+        updateFuncNameStr << "2";
+    }
+    updateFuncNameStr << "ID";
     std::string updateFuncName = updateFuncNameStr.str();
 
     const IDType *returnedIDs = reinterpret_cast<const IDType *>(param.data[0].data());
@@ -2260,6 +2265,10 @@ void CaptureUpdateResourceIDs(const gl::Context *context,
         IDType id                = returnedIDs[idIndex];
         GLsizei readBufferOffset = idIndex * sizeof(gl::RenderbufferID);
         ParamBuffer params;
+        if (resourceIDType == ResourceIDType::Framebuffer)
+        {
+            params.addValueParam("contextId", ParamType::TGLuint, context->id().value);
+        }
         params.addValueParam("id", ParamType::TGLuint, id.value);
         params.addValueParam("readBufferOffset", ParamType::TGLsizei, readBufferOffset);
         callsOut->emplace_back(updateFuncName, std::move(params));
@@ -5310,6 +5319,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         for (std::vector<CallCapture> *calls : framebufferSetupCalls)
         {
             Capture(calls, framebufferFuncs.bindFramebuffer(replayState, true, GL_FRAMEBUFFER, id));
+            // Set current context for this CallCapture
+            calls->back().contextID = context->id();
         }
         currentDrawFramebuffer = currentReadFramebuffer = id;
 

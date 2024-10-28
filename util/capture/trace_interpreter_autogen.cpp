@@ -6411,6 +6411,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
         ParamBuffer params = ParseParameters<decltype(UpdateFenceNVID)>(paramTokens, strings);
         return CallCapture("UpdateFenceNVID", std::move(params));
     }
+    if (strcmp(nameToken, "UpdateFramebuffer2ID") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(UpdateFramebuffer2ID)>(paramTokens, strings);
+        return CallCapture("UpdateFramebuffer2ID", std::move(params));
+    }
     if (strcmp(nameToken, "UpdateFramebufferID") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(UpdateFramebufferID)>(paramTokens, strings);
@@ -6748,6 +6753,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     if (call.customFunctionName == "UpdateFenceNVID")
     {
         DispatchCallCapture(UpdateFenceNVID, captures);
+        return;
+    }
+    if (call.customFunctionName == "UpdateFramebuffer2ID")
+    {
+        DispatchCallCapture(UpdateFramebuffer2ID, captures);
         return;
     }
     if (call.customFunctionName == "UpdateFramebufferID")
