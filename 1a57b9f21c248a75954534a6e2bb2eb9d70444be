@@ -113,6 +113,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2ffcc968_6362040a",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T20:55:29Z",
+      "side": 1,
+      "message": "\u003e Thank you Igor for the detailed description, would you please open a new\n issue to track this? I\u0027ve noticed threading issues with device loss \n\nelsewhere too: anglebug.com/42265604\n\nI will create new and check `anglebug.com/42265604` later.\n\n\u003e As to this change, what is your suggestion, should we take the `mContextMapMutex` lock or not take it, until the issue is addressed separately?\n\nI think that we can take the lock. It will not cause dead lock because of the bug in `getLockIfNotAlready()`. Then in a separate commit we can extend the lock to also include `deviceLost` member access and make it atomic.",
+      "parentUuid": "ab5d6de3_5be44d56",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4e1b3fa_9d00ee8b",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 10
