@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a347fd2_6a49ce3c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-28T15:55:36Z",
+      "side": 1,
+      "message": "Target will be unused after https://chromium-review.googlesource.com/c/chromium/src/+/5962761",
+      "revId": "e8289586f7325f279ec5c41b17c5e5bc0ebb5eb1",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
