@@ -731,7 +731,8 @@ enum class Indent
     NoIdent,
 };
 
-void UpdateResourceIDBuffer(std::ostream &out,
+void UpdateResourceIDBuffer(gl::ContextID contextID,
+                            std::ostream &out,
                             Indent indent,
                             size_t bufferIndex,
                             const char *mapName,
@@ -741,8 +742,16 @@ void UpdateResourceIDBuffer(std::ostream &out,
     {
         out << "    ";
     }
-    out << "UpdateResourceIDBuffer(" << bufferIndex << ", g" << mapName << "Map[" << resourceID
-        << "]);\n";
+    out << "UpdateResourceIDBuffer(" << bufferIndex << ", g";
+    if (strcmp(mapName, "Framebuffer") == 0)
+    {
+        out << "Framebuffer2Arrays[" << contextID.value << "][";
+    }
+    else
+    {
+        out << mapName << "Map[";
+    }
+    out << resourceID << "]);\n";
 }
 
 template <typename ParamT>
@@ -765,7 +774,8 @@ void WriteResourceIDPointerParamReplay(ReplayWriter &replayWriter,
         for (GLsizei resIndex = 0; resIndex < param.dataNElements; ++resIndex)
         {
             ParamT id = returnedIDs[resIndex];
-            UpdateResourceIDBuffer(header, Indent::NoIdent, resIndex, name, id.value);
+            UpdateResourceIDBuffer(call.contextID, header, Indent::NoIdent, resIndex, name,
+                                   id.value);
         }
 
         *maxResourceIDBufferSize = std::max<size_t>(*maxResourceIDBufferSize, param.dataNElements);
@@ -1109,7 +1119,8 @@ void WriteInitReplayCall(bool compression,
     out << ");\n";
 }
 
-void DeleteResourcesInReset(std::stringstream &out,
+void DeleteResourcesInReset(gl::ContextID contextID,
+                            std::stringstream &out,
                             const ResourceSet &newResources,
                             const ResourceSet &resourcesToDelete,
                             const char *resourceName,
@@ -1121,12 +1132,14 @@ void DeleteResourcesInReset(std::stringstream &out,
 
         for (GLuint oldResource : resourcesToDelete)
         {
-            UpdateResourceIDBuffer(out, Indent::Indent, count++, resourceName, oldResource);
+            UpdateResourceIDBuffer(contextID, out, Indent::Indent, count++, resourceName,
+                                   oldResource);
         }
 
         for (GLuint newResource : newResources)
         {
-            UpdateResourceIDBuffer(out, Indent::Indent, count++, resourceName, newResource);
+            UpdateResourceIDBuffer(contextID, out, Indent::Indent, count++, resourceName,
+                                   newResource);
         }
 
         // Delete all the new and old buffers at once
@@ -1166,7 +1179,7 @@ void MaybeResetResources(egl::Display *display,
             BufferCalls &bufferMapCalls   = resourceTracker->getBufferMapCalls();
             BufferCalls &bufferUnmapCalls = resourceTracker->getBufferUnmapCalls();
 
-            DeleteResourcesInReset(out, newBuffers, buffersToDelete, "Buffer",
+            DeleteResourcesInReset(contextID, out, newBuffers, buffersToDelete, "Buffer",
                                    maxResourceIDBufferSize);
 
             // If any of our starting buffers were deleted during the run, recreate them
@@ -1255,8 +1268,8 @@ void MaybeResetResources(egl::Display *display,
             ResourceCalls &framebufferRegenCalls   = trackedFramebuffers.getResourceRegenCalls();
             ResourceCalls &framebufferRestoreCalls = trackedFramebuffers.getResourceRestoreCalls();
 
-            DeleteResourcesInReset(out, newFramebuffers, framebuffersToDelete, "Framebuffer",
-                                   maxResourceIDBufferSize);
+            DeleteResourcesInReset(contextID, out, newFramebuffers, framebuffersToDelete,
+                                   "Framebuffer", maxResourceIDBufferSize);
 
             for (GLuint id : framebuffersToRegen)
             {
@@ -1297,8 +1310,8 @@ void MaybeResetResources(egl::Display *display,
             ResourceCalls &renderbufferRestoreCalls =
                 trackedRenderbuffers.getResourceRestoreCalls();
 
-            DeleteResourcesInReset(out, newRenderbuffers, renderbuffersToDelete, "Renderbuffer",
-                                   maxResourceIDBufferSize);
+            DeleteResourcesInReset(contextID, out, newRenderbuffers, renderbuffersToDelete,
+                                   "Renderbuffer", maxResourceIDBufferSize);
 
             for (GLuint id : renderbuffersToRegen)
             {
@@ -1411,7 +1424,7 @@ void MaybeResetResources(egl::Display *display,
             ResourceCalls &textureRegenCalls   = trackedTextures.getResourceRegenCalls();
             ResourceCalls &textureRestoreCalls = trackedTextures.getResourceRestoreCalls();
 
-            DeleteResourcesInReset(out, newTextures, texturesToDelete, "Texture",
+            DeleteResourcesInReset(contextID, out, newTextures, texturesToDelete, "Texture",
                                    maxResourceIDBufferSize);
 
             // If any of our starting textures were deleted, regen them
@@ -1472,8 +1485,8 @@ void MaybeResetResources(egl::Display *display,
             ResourceCalls &vertexArrayRegenCalls   = trackedVertexArrays.getResourceRegenCalls();
             ResourceCalls &vertexArrayRestoreCalls = trackedVertexArrays.getResourceRestoreCalls();
 
-            DeleteResourcesInReset(out, newVertexArrays, vertexArraysToDelete, "VertexArray",
-                                   maxResourceIDBufferSize);
+            DeleteResourcesInReset(contextID, out, newVertexArrays, vertexArraysToDelete,
+                                   "VertexArray", maxResourceIDBufferSize);
 
             // If any of our starting vertex arrays were deleted during the run, recreate them
             for (GLuint id : vertexArraysToRegen)
@@ -2247,7 +2260,12 @@ void CaptureUpdateResourceIDs(const gl::Context *context,
     const char *resourceName = GetResourceIDTypeName(resourceIDType);
 
     std::stringstream updateFuncNameStr;
-    updateFuncNameStr << "Update" << resourceName << "ID";
+    updateFuncNameStr << "Update" << resourceName;
+    if (resourceIDType == ResourceIDType::Framebuffer)
+    {
+        updateFuncNameStr << "2";
+    }
+    updateFuncNameStr << "ID";
     std::string updateFuncName = updateFuncNameStr.str();
 
     const IDType *returnedIDs = reinterpret_cast<const IDType *>(param.data[0].data());
@@ -2260,6 +2278,10 @@ void CaptureUpdateResourceIDs(const gl::Context *context,
         IDType id                = returnedIDs[idIndex];
         GLsizei readBufferOffset = idIndex * sizeof(gl::RenderbufferID);
         ParamBuffer params;
+        if (resourceIDType == ResourceIDType::Framebuffer)
+        {
+            params.addValueParam("contextId", ParamType::TGLuint, context->id().value);
+        }
         params.addValueParam("id", ParamType::TGLuint, id.value);
         params.addValueParam("readBufferOffset", ParamType::TGLsizei, readBufferOffset);
         callsOut->emplace_back(updateFuncName, std::move(params));
@@ -5310,6 +5332,8 @@ void CaptureMidExecutionSetup(const gl::Context *context,
         for (std::vector<CallCapture> *calls : framebufferSetupCalls)
         {
             Capture(calls, framebufferFuncs.bindFramebuffer(replayState, true, GL_FRAMEBUFFER, id));
+            // Set current context for this CallCapture
+            calls->back().contextID = context->id();
         }
         currentDrawFramebuffer = currentReadFramebuffer = id;
 
@@ -8350,10 +8374,16 @@ void FrameCaptureShared::maybeGenResourceOnBind(const gl::Context *context, Call
         const char *resourceName      = GetResourceIDTypeName(resourceIDType);
 
         std::stringstream updateFuncNameStr;
-        updateFuncNameStr << "Set" << resourceName << "ID";
+        updateFuncNameStr << "Set" << resourceName;
+        if (resourceIDType == ResourceIDType::Framebuffer)
+        {
+            updateFuncNameStr << "2";
+        }
+        updateFuncNameStr << "ID";
         std::string updateFuncName = updateFuncNameStr.str();
 
         ParamBuffer params;
+        params.addValueParam("contextID", ParamType::TGLuint, context->id().value);
         params.addValueParam("id", ParamType::TGLuint, id.value);
         mFrameCalls.emplace_back(updateFuncName, std::move(params));
     }

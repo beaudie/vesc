@@ -22,6 +22,17 @@ void UpdateResourceMap(GLuint *resourceMap, GLuint id, GLsizei readBufferOffset)
     resourceMap[id] = returnedID;
 }
 
+constexpr size_t kMaxContextArrays = 16;
+void UpdateResourceArray(GLuint *resourceArray[kMaxContextArrays],
+                         GLuint contextId,
+                         GLuint id,
+                         GLsizei readBufferOffset)
+{
+    GLuint returnedID;
+    memcpy(&returnedID, &gReadBuffer[readBufferOffset], sizeof(GLuint));
+    resourceArray[contextId][id] = returnedID;
+}
+
 angle::TraceCallbacks *gTraceCallbacks = nullptr;
 
 EGLClientBuffer GetClientBuffer(EGLenum target, uintptr_t key)
@@ -110,9 +121,9 @@ GLuint *gResourceIDBuffer;
 SyncResourceMap gSyncMap;
 ContextMap gContextMap;
 GLuint gShareContextId;
-
 GLuint *gBufferMap;
 GLuint *gFenceNVMap;
+GLuint *gFramebuffer2Arrays[kMaxContextArrays];
 GLuint *gFramebufferMap;
 GLuint *gMemoryObjectMap;
 GLuint *gProgramPipelineMap;
@@ -186,6 +197,12 @@ void InitializeReplay4(const char *binaryDataFileName,
                       maxTransformFeedback, maxVertexArray);
     gEGLSyncMap = AllocateZeroedValues<EGLSync>(maxEGLSyncID);
     gEGLDisplay = eglGetCurrentDisplay();
+
+    // Object maps are 1-based while zero is used as 'unbind'
+    for (uint8_t i = 0; i <= maxContext; i++)
+    {
+        gFramebuffer2Arrays[i] = AllocateZeroedValues<GLuint>(maxFramebuffer);
+    }
 }
 
 void InitializeReplay3(const char *binaryDataFileName,
@@ -311,7 +328,6 @@ void FinishReplay()
     }
     delete[] gReadBuffer;
     delete[] gResourceIDBuffer;
-
     delete[] gBufferMap;
     delete[] gContextMap2;
     delete[] gEGLImageMap2;
@@ -330,6 +346,11 @@ void FinishReplay()
     delete[] gSyncMap2;
     delete[] gTransformFeedbackMap;
     delete[] gVertexArrayMap;
+
+    for (GLuint *framebuffer2Array : gFramebuffer2Arrays)
+    {
+        delete[] framebuffer2Array;
+    }
 }
 
 void SetValidateSerializedStateCallback(ValidateSerializedStateCallback callback)
@@ -410,6 +431,11 @@ void UpdateFramebufferID(GLuint id, GLsizei readBufferOffset)
     UpdateResourceMap(gFramebufferMap, id, readBufferOffset);
 }
 
+void UpdateFramebuffer2ID(GLuint contextId, GLuint id, GLsizei readBufferOffset)
+{
+    UpdateResourceArray(gFramebuffer2Arrays, contextId, id, readBufferOffset);
+}
+
 void UpdateMemoryObjectID(GLuint id, GLsizei readBufferOffset)
 {
     UpdateResourceMap(gMemoryObjectMap, id, readBufferOffset);
@@ -463,6 +489,11 @@ void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset)
 void SetFramebufferID(GLuint id)
 {
     glGenFramebuffers(1, &gFramebufferMap[id]);
+}
+
+void SetFramebuffer2ID(GLuint contextID, GLuint id)
+{
+    glGenFramebuffers(1, &gFramebuffer2Arrays[contextID][id]);
 }
 
 void SetBufferID(GLuint id)

@@ -87,6 +87,7 @@ extern GLuint *gResourceIDBuffer;
 
 extern GLuint *gBufferMap;
 extern GLuint *gFenceNVMap;
+extern GLuint *gFramebuffer2Arrays[];
 extern GLuint *gFramebufferMap;
 extern GLuint *gMemoryObjectMap;
 extern GLuint *gProgramPipelineMap;
@@ -203,6 +204,7 @@ void UpdateResourceIDBuffer(int resourceIndex, GLuint id);
 void UpdateBufferID(GLuint id, GLsizei readBufferOffset);
 void UpdateFenceNVID(GLuint id, GLsizei readBufferOffset);
 void UpdateFramebufferID(GLuint id, GLsizei readBufferOffset);
+void UpdateFramebuffer2ID(GLuint contextId, GLuint id, GLsizei readBufferOffset);
 void UpdateMemoryObjectID(GLuint id, GLsizei readBufferOffset);
 void UpdateProgramPipelineID(GLuint id, GLsizei readBufferOffset);
 void UpdateQueryID(GLuint id, GLsizei readBufferOffset);
@@ -217,6 +219,7 @@ void UpdateVertexArrayID(GLuint id, GLsizei readBufferOffset);
 void SetCurrentContextID(GLuint id);
 
 void SetFramebufferID(GLuint id);
+void SetFramebuffer2ID(GLuint contextID, GLuint id);
 void SetBufferID(GLuint id);
 void SetRenderbufferID(GLuint id);
 void SetTextureID(GLuint id);
