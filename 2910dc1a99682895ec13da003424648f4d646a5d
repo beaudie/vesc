@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "572e0a71_03aef029",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-28T17:00:35Z",
+      "side": 1,
+      "message": "Is there way to make it not holding the mCommandQueueMutex?",
+      "range": {
+        "startLine": 393,
+        "startChar": 18,
+        "endLine": 393,
+        "endChar": 32
+      },
+      "revId": "2910dc1a99682895ec13da003424648f4d646a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
