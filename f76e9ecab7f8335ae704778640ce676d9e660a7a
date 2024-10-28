@@ -98,6 +98,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bada27ad_707f5f7a",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-10-28T12:53:46Z",
+      "side": 1,
+      "message": "Assertion is not enabled in chrome\u0027s release build afaik.",
+      "parentUuid": "99e5aa0f_4cb7d706",
+      "range": {
+        "startLine": 644,
+        "startChar": 15,
+        "endLine": 644,
+        "endChar": 16
+      },
+      "revId": "f76e9ecab7f8335ae704778640ce676d9e660a7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b35f6e89_134e9002",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
         "patchSetId": 2
