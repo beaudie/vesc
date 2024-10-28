@@ -33,7 +33,6 @@
 #include "compiler/translator/tree_ops/msl/FixTypeConstructors.h"
 #include "compiler/translator/tree_ops/msl/HoistConstants.h"
 #include "compiler/translator/tree_ops/msl/IntroduceVertexIndexID.h"
-#include "compiler/translator/tree_ops/msl/NameEmbeddedUniformStructsMetal.h"
 #include "compiler/translator/tree_ops/msl/ReduceInterfaceBlocks.h"
 #include "compiler/translator/tree_ops/msl/RewriteCaseDeclarations.h"
 #include "compiler/translator/tree_ops/msl/RewriteInterpolants.h"
@@ -1012,18 +1011,7 @@ bool TranslatorMSL::translateImpl(TInfoSinkBase &sink,
 
     if (aggregateTypesUsedForUniforms > 0)
     {
-        if (!NameEmbeddedStructUniformsMetal(this, root, &symbolTable))
-        {
-            return false;
-        }
-
-        if (!SeparateStructFromUniformDeclarations(this, root, &getSymbolTable()))
-        {
-            return false;
-        }
-
         int removedUniformsCount;
-
         if (!RewriteStructSamplers(this, root, &getSymbolTable(), &removedUniformsCount))
         {
             return false;
