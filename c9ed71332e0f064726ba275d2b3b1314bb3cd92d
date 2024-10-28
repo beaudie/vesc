@@ -125,6 +125,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7668a49c_fa15db4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T12:10:31Z",
+      "side": 1,
+      "message": "Done.\nAlso updated other CLs in this chain.",
+      "parentUuid": "71d445fc_9f967373",
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df6787ac_aa810845",
@@ -162,6 +180,30 @@
       "side": 1,
       "message": "Split is for future CL. Thread will be marked as free after `run()` and before `markAsReady()`.\n\nI did not want to make them private to then make them public in the follow up CL.",
       "parentUuid": "df6787ac_aa810845",
+      "range": {
+        "startLine": 45,
+        "startChar": 0,
+        "endLine": 47,
+        "endChar": 23
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0690fa7c_39b21450",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T12:10:31Z",
+      "side": 1,
+      "message": "Removed split in this CL. `run()` and `markAsReady()` will be added in the next CL to avoid the confusion.",
+      "parentUuid": "728aff14_50a3babe",
       "range": {
         "startLine": 45,
         "startChar": 0,
@@ -221,6 +263,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "991e05b9_bca61825",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T12:10:31Z",
+      "side": 1,
+      "message": "Added `(or may not)` into the comment.",
+      "parentUuid": "d306b2f7_6f2d216e",
+      "range": {
+        "startLine": 175,
+        "startChar": 86,
+        "endLine": 175,
+        "endChar": 89
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a3384b6_387d3b33",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 3
@@ -256,6 +322,30 @@
       "side": 1,
       "message": "Same as in the previous case. Caller of `startThreadLocked()` does not care if lock will be unlocked or stay locked, so the implementation is free to unlock or not. I did not want to force the implementation to always unlock the lock.\n\nIf I wanted to enforce `must` then just passed the lock by-value instead of pointer.",
       "parentUuid": "8a3384b6_387d3b33",
+      "range": {
+        "startLine": 195,
+        "startChar": 55,
+        "endLine": 195,
+        "endChar": 58
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52cee8c2_567a8669",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T12:10:31Z",
+      "side": 1,
+      "message": "Added `(or may not)` into the comment.",
+      "parentUuid": "30bf5a85_48f5c9d7",
       "range": {
         "startLine": 195,
         "startChar": 55,
