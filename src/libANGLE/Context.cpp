@@ -477,16 +477,65 @@ bool CanSupportAEP(const gl::Version &version, const gl::Extensions &extensions)
     // * EXT_texture_buffer
     // * EXT_texture_cube_map_array
     // * EXT_texture_sRGB_decode
-    return (version >= ES_3_1 && extensions.debugKHR && extensions.textureCompressionAstcLdrKHR &&
-            extensions.blendEquationAdvancedKHR && extensions.sampleShadingOES &&
-            extensions.sampleVariablesOES && extensions.shaderImageAtomicOES &&
-            extensions.shaderMultisampleInterpolationOES && extensions.textureStencil8OES &&
-            extensions.textureStorageMultisample2dArrayOES && extensions.copyImageEXT &&
-            extensions.drawBuffersIndexedEXT && extensions.geometryShaderEXT &&
-            extensions.gpuShader5EXT && extensions.primitiveBoundingBoxEXT &&
-            extensions.shaderIoBlocksEXT && extensions.tessellationShaderEXT &&
-            extensions.textureBorderClampEXT && extensions.textureBufferEXT &&
-            extensions.textureCubeMapArrayEXT && extensions.textureSRGBDecodeEXT);
+    bool result =
+        (version >= ES_3_1 && extensions.debugKHR && extensions.textureCompressionAstcLdrKHR &&
+         extensions.blendEquationAdvancedKHR && extensions.sampleShadingOES &&
+         extensions.sampleVariablesOES && extensions.shaderImageAtomicOES &&
+         extensions.shaderMultisampleInterpolationOES && extensions.textureStencil8OES &&
+         extensions.textureStorageMultisample2dArrayOES && extensions.copyImageEXT &&
+         extensions.drawBuffersIndexedEXT && extensions.geometryShaderEXT &&
+         extensions.gpuShader5EXT && extensions.primitiveBoundingBoxEXT &&
+         extensions.shaderIoBlocksEXT && extensions.tessellationShaderEXT &&
+         extensions.textureBorderClampEXT && extensions.textureBufferEXT &&
+         extensions.textureCubeMapArrayEXT && extensions.textureSRGBDecodeEXT);
+
+    if (!result)
+    {
+        INFO() << "CanSupportAEP() check failed for missing the following requirements:\n";
+        if (version < ES_3_1)
+            INFO() << "* version >= ES_3_1\n";
+        if (!extensions.debugKHR)
+            INFO() << "* extensions.debugKHR\n";
+        if (!extensions.textureCompressionAstcLdrKHR)
+            INFO() << "* extensions.textureCompressionAstcLdrKHR\n";
+        if (!extensions.blendEquationAdvancedKHR)
+            INFO() << "* extensions.blendEquationAdvancedKHR\n";
+        if (!extensions.sampleShadingOES)
+            INFO() << "* extensions.sampleShadingOES\n";
+        if (!extensions.sampleVariablesOES)
+            INFO() << "* extensions.sampleVariablesOES\n";
+        if (!extensions.shaderImageAtomicOES)
+            INFO() << "* extensions.shaderImageAtomicOES\n";
+        if (!extensions.shaderMultisampleInterpolationOES)
+            INFO() << "* extensions.shaderMultisampleInterpolationOES\n";
+        if (!extensions.textureStencil8OES)
+            INFO() << "* extensions.textureStencil8OES\n";
+        if (!extensions.textureStorageMultisample2dArrayOES)
+            INFO() << "* extensions.textureStorageMultisample2dArrayOES\n";
+        if (!extensions.copyImageEXT)
+            INFO() << "* extensions.copyImageEXT\n";
+        if (!extensions.drawBuffersIndexedEXT)
+            INFO() << "* extensions.drawBuffersIndexedEXT\n";
+        if (!extensions.geometryShaderEXT)
+            INFO() << "* extensions.geometryShaderEXT\n";
+        if (!extensions.gpuShader5EXT)
+            INFO() << "* extensions.gpuShader5EXT\n";
+        if (!extensions.primitiveBoundingBoxEXT)
+            INFO() << "* extensions.primitiveBoundingBoxEXT\n";
+        if (!extensions.shaderIoBlocksEXT)
+            INFO() << "* extensions.shaderIoBlocksEXT\n";
+        if (!extensions.tessellationShaderEXT)
+            INFO() << "* extensions.tessellationShaderEXT\n";
+        if (!extensions.textureBorderClampEXT)
+            INFO() << "* extensions.textureBorderClampEXT\n";
+        if (!extensions.textureBufferEXT)
+            INFO() << "* extensions.textureBufferEXT\n";
+        if (!extensions.textureCubeMapArrayEXT)
+            INFO() << "* extensions.textureCubeMapArrayEXT\n";
+        if (!extensions.textureSRGBDecodeEXT)
+            INFO() << "* extensions.textureSRGBDecodeEXT\n";
+    }
+    return result;
 }
 }  // anonymous namespace
 
