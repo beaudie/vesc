@@ -142,6 +142,24 @@
       "parentUuid": "f886ea25_fa012091",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f980981_8ac42e6e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T21:13:22Z",
+      "side": 1,
+      "message": "\u003e On the first EXPECT yes, not the rest of them (so ok, maybe needs 17 EXPECTs!)\n\nThe first EXPECT and the subsequent ones are the same, once we hit `reset()` we don\u0027t go back into the bad state by just EXPECT. We need a no-reset non-outside flush followed by 16 outside flushes. EXPECT doesn\u0027t result in a \"no-reset non-outside flush\", at least not in my tests.",
+      "parentUuid": "45c24950_97d9a2f9",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
