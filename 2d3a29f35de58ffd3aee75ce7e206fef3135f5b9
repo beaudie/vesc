@@ -16,6 +16,24 @@
       "message": "```suggestion\n// vkCreateGraphicsPipelines on some drivers.\n```",
       "revId": "2d3a29f35de58ffd3aee75ce7e206fef3135f5b9",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52ceda83_190668cc",
+        "filename": "src/tests/gl_tests/ShaderOpTest.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T18:05:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e3e0df1c_5c6b25fe",
+      "revId": "2d3a29f35de58ffd3aee75ce7e206fef3135f5b9",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
