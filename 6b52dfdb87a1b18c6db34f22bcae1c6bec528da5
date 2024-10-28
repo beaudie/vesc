@@ -88,6 +88,24 @@
       "parentUuid": "04b67543_726fb490",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62a8259d_1e45a77f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-28T20:41:13Z",
+      "side": 1,
+      "message": "I am pretty sure there is some tests in CI that test this code path when I was working on this. Unless things changed since then, we should already have the coverage there. That is why I think its because CI run the test without the debug label stuff, since the bug itself is specific to do with debug label.\n\nBut also, the assert I added should catch this now if anyone runs into it.",
+      "parentUuid": "3f5cbb4c_4dacf547",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
