@@ -74,6 +74,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "99e5aa0f_4cb7d706",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 3314858
+      },
+      "writtenOn": "2024-10-28T11:59:17Z",
+      "side": 1,
+      "message": "@lehoangquyen@chromium.org Could you please submit change? thx",
+      "parentUuid": "7bd2abb0_4a256bca",
+      "range": {
+        "startLine": 644,
+        "startChar": 15,
+        "endLine": 644,
+        "endChar": 16
+      },
+      "revId": "f76e9ecab7f8335ae704778640ce676d9e660a7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b35f6e89_134e9002",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
         "patchSetId": 2
