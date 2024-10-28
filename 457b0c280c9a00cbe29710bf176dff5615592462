@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27b569bc_328e975e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-28T23:36:58Z",
+      "side": 1,
+      "message": "Thanks! It looks like `linux-exp-test` has passed the tests. Also locally, I am unable to see errors on Linux/NVIDIA. Seems like the latest driver should no longer have this issue. As for the rest: (Using `kEnableLogMissingExtensionsForGLES32`)\n\n* Windows/Intel lacks `blendEquationAdvancedKHR`.\n* Pixel 4 lacks geometry/tessellation and `textureBorderClampEXT`.",
+      "parentUuid": "3edf5e0c_996f89d6",
+      "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06ad9700_5529e124",
         "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
         "patchSetId": 7
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-28T20:41:40Z",
       "side": 1,
       "message": "The deqp expectations should be unnecessary because we don\u0027t run the corresponding executables on SwiftShader, right?",
+      "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3aa6d66_17cd6a75",
+        "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-28T23:36:58Z",
+      "side": 1,
+      "message": "It looks like it. No failure seems to come from this suite. I think we can remove this.",
+      "parentUuid": "06ad9700_5529e124",
       "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }

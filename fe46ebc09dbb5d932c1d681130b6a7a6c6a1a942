@@ -69,6 +69,24 @@
       "parentUuid": "f809592f_d877b992",
       "revId": "fe46ebc09dbb5d932c1d681130b6a7a6c6a1a942",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0691ce0f_b763978e",
+        "filename": "src/libANGLE/renderer/vulkan/vk_caps_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 1361,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-28T23:36:58Z",
+      "side": 1,
+      "message": "Makes sense. Skipped various tests for Vulkan/Swiftshader.",
+      "parentUuid": "210fc91f_b6c83f2e",
+      "revId": "fe46ebc09dbb5d932c1d681130b6a7a6c6a1a942",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
