@@ -22,6 +22,30 @@
       },
       "revId": "2910dc1a99682895ec13da003424648f4d646a5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8410dc8_c7f87164",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 393,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-28T20:05:27Z",
+      "side": 1,
+      "message": "Currently all the enqueue api calls are structured this way - taking a lock at the call site. Will be revisited in the future to see if the locks can be fine grained.",
+      "parentUuid": "572e0a71_03aef029",
+      "range": {
+        "startLine": 393,
+        "startChar": 18,
+        "endLine": 393,
+        "endChar": 32
+      },
+      "revId": "2910dc1a99682895ec13da003424648f4d646a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
