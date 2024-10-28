@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b10bc8d4_93e97d4a",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T23:08:08Z",
+      "side": 1,
+      "message": "What is the reason that of this assert here?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "649a13c8_c132a2eb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7054,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T23:08:08Z",
+      "side": 1,
+      "message": "Do you mean `there is no specific layout`?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e68bd3e0_a9e93878",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4027,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T23:08:08Z",
+      "side": 1,
+      "message": "What does `redeclaration` mean here?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3aad499f_4407a119",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4240,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T23:08:08Z",
+      "side": 1,
+      "message": "Is there any reason the `level` parameter of `glFramebufferTexture2D()` is set to 1?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79237ef0_48c0da20",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4557,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T23:08:08Z",
+      "side": 1,
+      "message": "nit: `starting`",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "090daa2c_bbc3a819",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4775,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-28T23:08:08Z",
+      "side": 1,
+      "message": "What does `PPO` stand for?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
