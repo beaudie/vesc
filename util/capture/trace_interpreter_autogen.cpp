@@ -6358,6 +6358,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
         ParamBuffer params = ParseParameters<decltype(SetCurrentContextID)>(paramTokens, strings);
         return CallCapture("SetCurrentContextID", std::move(params));
     }
+    if (strcmp(nameToken, "SetFramebuffer2ID") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(SetFramebuffer2ID)>(paramTokens, strings);
+        return CallCapture("SetFramebuffer2ID", std::move(params));
+    }
     if (strcmp(nameToken, "SetFramebufferID") == 0)
     {
         ParamBuffer params = ParseParameters<decltype(SetFramebufferID)>(paramTokens, strings);
@@ -6410,6 +6415,11 @@ CallCapture ParseCallCapture(const Token &nameToken,
     {
         ParamBuffer params = ParseParameters<decltype(UpdateFenceNVID)>(paramTokens, strings);
         return CallCapture("UpdateFenceNVID", std::move(params));
+    }
+    if (strcmp(nameToken, "UpdateFramebuffer2ID") == 0)
+    {
+        ParamBuffer params = ParseParameters<decltype(UpdateFramebuffer2ID)>(paramTokens, strings);
+        return CallCapture("UpdateFramebuffer2ID", std::move(params));
     }
     if (strcmp(nameToken, "UpdateFramebufferID") == 0)
     {
@@ -6700,6 +6710,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
         DispatchCallCapture(SetCurrentContextID, captures);
         return;
     }
+    if (call.customFunctionName == "SetFramebuffer2ID")
+    {
+        DispatchCallCapture(SetFramebuffer2ID, captures);
+        return;
+    }
     if (call.customFunctionName == "SetFramebufferID")
     {
         DispatchCallCapture(SetFramebufferID, captures);
@@ -6748,6 +6763,11 @@ void ReplayCustomFunctionCall(const CallCapture &call, const TraceFunctionMap &c
     if (call.customFunctionName == "UpdateFenceNVID")
     {
         DispatchCallCapture(UpdateFenceNVID, captures);
+        return;
+    }
+    if (call.customFunctionName == "UpdateFramebuffer2ID")
+    {
+        DispatchCallCapture(UpdateFramebuffer2ID, captures);
         return;
     }
     if (call.customFunctionName == "UpdateFramebufferID")
