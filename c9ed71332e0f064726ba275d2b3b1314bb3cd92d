@@ -287,6 +287,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "411bc478_43f001e8",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-28T14:28:09Z",
+      "side": 1,
+      "message": "Ok this is a little confusing (because of English):\n\n\"may be unlocked\", is unlocked here a verb (in \"past principle\" form) or an adjective? Which one of these do you mean?\n\n* When returned false, an unlock operation may be called by the caller afterwards (because the lock is still in a locked state)\n* When returned false, the lock may be in an unlocked state afterwards (because the function has unlocked it)\n\nHaving written that down, I believe you mean the latter.",
+      "parentUuid": "991e05b9_bca61825",
+      "range": {
+        "startLine": 175,
+        "startChar": 86,
+        "endLine": 175,
+        "endChar": 89
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a3384b6_387d3b33",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 3
