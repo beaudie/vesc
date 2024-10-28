@@ -194,6 +194,24 @@
       "parentUuid": "438e5964_68c2476d",
       "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "228be534_b3f5c198",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-28T12:06:21Z",
+      "side": 1,
+      "message": "Added comments in `markAsReady()` and in `isReady()` regarding atomic synchronization.",
+      "parentUuid": "6fc4faf4_f5b03efd",
+      "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
