@@ -36,6 +36,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3abd0257_e7ed63f8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-28T01:05:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6402e926_b9404266",
+      "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d62c3e4_3f83bf07",
@@ -156,6 +174,24 @@
       "side": 1,
       "message": "Right, thanks for not following my suggestions blindly, lol 😄",
       "parentUuid": "a2a54567_66d2a704",
+      "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6fc4faf4_f5b03efd",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-28T01:05:35Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "438e5964_68c2476d",
       "revId": "b53c88a618dee6fc401628ad4e8ab5518bc27bf3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
