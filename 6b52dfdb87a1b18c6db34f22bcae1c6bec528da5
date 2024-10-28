@@ -52,6 +52,24 @@
       "parentUuid": "354de9a2_eef7d0b6",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04b67543_726fb490",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-28T19:41:53Z",
+      "side": 1,
+      "message": "It seems hitting this bug is even harder than that.\n\nNormally we reach `mOutsideRenderPassSerialFactory.reset()` here:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;drc\u003dfe99836c8bb809d5352c8f0baf2bb0024358e893;l\u003d8131\n\nand then we don\u0027t hit the bug. To hit it, we also need to take this `!mRenderPassCommands-\u003estarted()` early return from flush:\nhttps://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;drc\u003dfe99836c8bb809d5352c8f0baf2bb0024358e893;l\u003d8057\n\nOriginally we hit it in offscreen rendering + blit to default fb. Is that what has to be done to repro?",
+      "parentUuid": "28ebac4a_6312b5a2",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
