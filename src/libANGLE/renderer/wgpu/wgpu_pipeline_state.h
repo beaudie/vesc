@@ -139,6 +139,9 @@ class RenderPipelineDesc final
     void setFrontFace(GLenum frontFace);
     void setCullMode(gl::CullFaceMode cullMode, bool cullFaceEnabled);
     void setColorWriteMask(size_t colorIndex, bool r, bool g, bool b, bool a);
+    void setBlendEnabled(size_t colorIndex, bool enabled);
+    void setBlendFactors(size_t colorIndex, const gl::BlendStateExt &blendStateExt);
+    void setBlendOps(size_t colorIndex, const gl::BlendStateExt &blendStateExt);
 
     bool setVertexAttribute(size_t attribIndex, PackedVertexAttribute &newAttrib);
     bool setColorAttachmentFormat(size_t colorIndex, wgpu::TextureFormat format);

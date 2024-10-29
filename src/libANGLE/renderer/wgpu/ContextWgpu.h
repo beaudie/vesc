@@ -304,6 +304,8 @@ class ContextWgpu : public ContextImpl
         DIRTY_BIT_VIEWPORT,
         DIRTY_BIT_SCISSOR,
 
+        DIRTY_BIT_BLEND_CONSTANT,
+
         DIRTY_BIT_VERTEX_BUFFERS,
         DIRTY_BIT_INDEX_BUFFER,
 
@@ -348,8 +350,11 @@ class ContextWgpu : public ContextImpl
                                            DirtyBits::Iterator *dirtyBitsIterator);
     angle::Result handleDirtyIndexBuffer(gl::DrawElementsType indexType,
                                          DirtyBits::Iterator *dirtyBitsIterator);
+    angle::Result handleDirtyBlendConstant(DirtyBits::Iterator *dirtyBitsIterator);
 
     angle::Result handleDirtyRenderPass(DirtyBits::Iterator *dirtyBitsIterator);
+
+    void setRenderPipelineDescColorTarget(gl::state::DirtyBits::Iterator dirtyBitsIterator);
 
     angle::ImageLoadContext mImageLoadContext;
 
