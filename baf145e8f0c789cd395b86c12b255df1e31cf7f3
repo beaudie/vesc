@@ -34,6 +34,24 @@
       "parentUuid": "274d898f_2dc901a1",
       "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e89bbd40_75c62aa9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-29T19:13:07Z",
+      "side": 1,
+      "message": "Sorry about all the frustration, Igor.\n\nNote that I did not ask you to make changes according to by comments, but rather asked for your thoughts on my ideas. I did not actually expect you to spend a significant amount of time trying to get them to work, unless you also found them appealing yourself.\n\nAlso note that I myself had to spend a rather significant amount of time to understand the change you\u0027re proposing, and I still do not find the structure easy to reason about and hence error prone for future changes and it makes debugging harder. Changes that are difficult to review tend to be causing maintenance difficulties down the road. This creates risks for the project, which is what ultimately causes discussions. Minimizing or mitigating such risks is part of our job. \"Is there a simpler way to achieve the same goal\" and \"is there a way to make implementation less complex\" are very common questions on that path, let\u0027s please stay focused on the technical details and refrain from making assumptions about other people\u0027s intentions.",
+      "parentUuid": "e4ed8be3_3248fb93",
+      "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
