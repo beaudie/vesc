@@ -218,6 +218,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "73443171_99da11e2",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T22:34:30Z",
+      "side": 1,
+      "message": "My pleasure to help.\nYes, everything is correct.",
+      "parentUuid": "73f6748f_25ec95a8",
+      "range": {
+        "startLine": 891,
+        "startChar": 8,
+        "endLine": 891,
+        "endChar": 31
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9147c7e4_208bdad6",
