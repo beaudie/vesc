@@ -16,6 +16,23 @@
       "message": "Hi kkinnunen@apple.com, could you please take a look? Thanks.",
       "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ab55f40_bdff8010",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-10-29T11:19:17Z",
+      "side": 1,
+      "message": "Alexey: seems like the Family3 values here are incorrect. Tables say it\u0027s 60 for family 3, 124 for family 4.",
+      "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
