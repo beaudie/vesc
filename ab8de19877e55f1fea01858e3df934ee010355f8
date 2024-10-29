@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64738e28_782bc147",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T17:17:28Z",
+      "side": 1,
+      "message": "Fixed the formatting here, you can copy paste to your local commit when addressing comments.",
+      "revId": "ab8de19877e55f1fea01858e3df934ee010355f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3391cded_8b51e839",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T17:17:28Z",
+      "side": 1,
+      "message": "Driving by",
+      "revId": "ab8de19877e55f1fea01858e3df934ee010355f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a79fe77c_f9afd930",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T17:17:28Z",
+      "side": 1,
+      "message": "No need for vector or string:\n\n```suggestion\n    std::pair\u003cconst char *, bool\u003e requirements[] \u003d {\n```",
+      "revId": "ab8de19877e55f1fea01858e3df934ee010355f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
