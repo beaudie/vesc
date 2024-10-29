@@ -1884,7 +1884,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             // Cache miss. A new cache entry has been created.
             ANGLE_TRY(descriptorBuilder.updateActiveTexturesForCacheMiss(
                 context, mVariableInfoMap, mTextureWriteDescriptorDescs, *mExecutable, textures,
-                samplers, pipelineType, newSharedCacheKey));
+                samplers, newSharedCacheKey));
 
             descriptorBuilder.updateDescriptorSet(
                 context->getRenderer(), mTextureWriteDescriptorDescs, updateBuilder,
@@ -1900,8 +1900,7 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
         ANGLE_TRY(descriptorBuilder.updateFullActiveTexturesDescriptorSet(
             context, mVariableInfoMap, mTextureWriteDescriptorDescs, updateBuilder, *mExecutable,
-            textures, samplers, pipelineType,
-            mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet()));
+            textures, samplers, mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet()));
     }
 
     return angle::Result::Continue;

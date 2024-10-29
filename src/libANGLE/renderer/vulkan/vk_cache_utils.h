@@ -1979,7 +1979,6 @@ class DescriptorSetDescBuilder final
         const gl::ProgramExecutable &executable,
         const gl::ActiveTextureArray<TextureVk *> &textures,
         const gl::SamplerBindingVector &samplers,
-        PipelineType pipelineType,
         const SharedDescriptorSetCacheKey &sharedCacheKey);
 
     angle::Result updateFullActiveTexturesDescriptorSet(
@@ -1990,7 +1989,6 @@ class DescriptorSetDescBuilder final
         const gl::ProgramExecutable &executable,
         const gl::ActiveTextureArray<TextureVk *> &textures,
         const gl::SamplerBindingVector &samplers,
-        PipelineType pipelineType,
         VkDescriptorSet descriptorSet);
 
     void updateDescriptorSet(Renderer *renderer,
