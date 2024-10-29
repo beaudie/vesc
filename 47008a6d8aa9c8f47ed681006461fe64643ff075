@@ -83,6 +83,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc3871ca_7f673d50",
+        "filename": "src/libANGLE/CLDevice.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-29T15:32:24Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "6cc0a04a_ba1087dc",
+      "revId": "47008a6d8aa9c8f47ed681006461fe64643ff075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "113c81e3_f007637c",
