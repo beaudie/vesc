@@ -6480,23 +6480,46 @@ angle::Result DescriptorSetDescBuilder::updateActiveTexturesForCacheMiss(
     return angle::Result::Continue;
 }
 
-angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
+angle::Result DescriptorSetDescBuilder::updateFullActiveTexturesDescriptorSet(
     Context *context,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const WriteDescriptorDescs &writeDescriptorDescs,
+    UpdateDescriptorSetsBuilder *updateBuilder,
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
-    PipelineType pipelineType)
+    PipelineType pipelineType,
+    VkDescriptorSet descriptorSet)
 {
     // This is only used when cache is disabled.
     ASSERT(!context->getFeatures().descriptorSetCache.enabled);
+    Renderer *renderer                                     = context->getRenderer();
     const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
     const std::vector<GLuint> &samplerBoundTextureUnits = executable.getSamplerBoundTextureUnits();
     const std::vector<gl::LinkedUniform> &uniforms      = executable.getUniforms();
     const gl::ActiveTextureTypeArray &textureTypes      = executable.getActiveSamplerTypes();
 
     resize(writeDescriptorDescs.getTotalDescriptorCount());
+
+    // Allocate VkWriteDescriptorSet and initialize it
+    VkWriteDescriptorSet *writeDescriptorSets =
+        updateBuilder->allocWriteDescriptorSets(writeDescriptorDescs.size());
+    for (uint32_t writeIndex = 0; writeIndex < writeDescriptorDescs.size(); ++writeIndex)
+    {
+        VkWriteDescriptorSet &writeSet = writeDescriptorSets[writeIndex];
+
+        writeSet.descriptorCount = writeDescriptorDescs[writeIndex].descriptorCount;
+        writeSet.descriptorType =
+            static_cast<VkDescriptorType>(writeDescriptorDescs[writeIndex].descriptorType);
+        writeSet.dstArrayElement  = 0;
+        writeSet.dstBinding       = writeIndex;
+        writeSet.dstSet           = descriptorSet;
+        writeSet.pBufferInfo      = nullptr;
+        writeSet.pImageInfo       = nullptr;
+        writeSet.pNext            = nullptr;
+        writeSet.pTexelBufferView = nullptr;
+        writeSet.sType            = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+    }
 
     for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
     {
@@ -6513,6 +6536,12 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
         const ShaderInterfaceVariableInfo &info =
             variableInfoMap.getVariableById(firstShaderType, samplerUniform.getId(firstShaderType));
 
+        VkWriteDescriptorSet &writeSet = writeDescriptorSets[info.binding];
+        ASSERT(writeSet.descriptorCount > 0);
+        VkDescriptorImageInfo *imageInfos = updateBuilder->allocDescriptorImageInfos(
+            writeDescriptorDescs[info.binding].descriptorCount);
+        writeSet.pImageInfo = imageInfos;
+
         uint32_t arraySize        = static_cast<uint32_t>(samplerBinding.textureUnitsCount);
         bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
 
@@ -6522,52 +6551,39 @@ angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
                 samplerBinding.getTextureUnit(samplerBoundTextureUnits, arrayElement);
             TextureVk *textureVk = textures[textureUnit];
 
-            uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
-                                 arrayElement + samplerUniform.getOuterArrayOffset();
-            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
-
             if (textureTypes[textureUnit] == gl::TextureType::Buffer)
             {
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getBufferViewSerial();
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.imageLayoutOrRange      = 0;
-                infoDesc.samplerOrBufferSerial   = 0;
-                infoDesc.imageSubresourceRange   = 0;
-
+                ASSERT(writeSet.descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER);
                 const BufferView *view = nullptr;
                 ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, &samplerBinding,
                                                                false, &view));
-                mHandles[infoIndex].bufferView = view->getHandle();
+
+                // Fill pTexelBufferView
+                VkBufferView &bufferView  = updateBuilder->allocBufferView();
+                bufferView                = view->getHandle();
+                writeSet.pTexelBufferView = &bufferView;
             }
             else
             {
+                ASSERT(writeSet.descriptorType == VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER);
                 gl::Sampler *sampler       = samplers[textureUnit].get();
                 const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
-
                 const SamplerHelper &samplerHelper =
                     samplerVk ? samplerVk->getSampler()
                               : textureVk->getSampler(isSamplerExternalY2Y);
                 const gl::SamplerState &samplerState =
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
-                ImageOrBufferViewSubresourceSerial imageViewSerial =
-                    textureVk->getImageViewSubresourceSerial(
-                        samplerState, samplerUniform.isTexelFetchStaticUse());
-
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
-                SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
-                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
-                infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
-                memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
-                       sizeof(uint32_t));
-
-                mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
-
                 const ImageView &imageView = textureVk->getReadImageView(
                     context, samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
                     isSamplerExternalY2Y);
-                mHandles[infoIndex].imageView = imageView.getHandle();
+
+                // Fill ImageInfo
+                VkDescriptorImageInfo &imageInfo = imageInfos[arrayElement];
+                imageInfo.imageLayout = ConvertImageLayoutToVkImageLayout(renderer, imageLayout);
+                imageInfo.imageView   = imageView.getHandle();
+                imageInfo.sampler     = samplerHelper.get().getHandle();
             }
         }
     }
