@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6df9251_0b6d005c",
+        "filename": "src/libANGLE/CLKernel.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T03:19:09Z",
+      "side": 1,
+      "message": "Please deduplicate in like a private `initImpl` function.",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 85
+      },
+      "revId": "102085ad109340cf899818a9a37a03d6cc884bbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
