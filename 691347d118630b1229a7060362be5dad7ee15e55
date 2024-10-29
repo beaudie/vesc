@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcade615_1ed8b0b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:55:55Z",
+      "side": 1,
+      "message": "Glad to see this happening in the end. Please consider adding an overview of how command queue works, what the responsibilities of the async thread are etc in a file under `../vulkan/doc/`, it\u0027ll be good to have the logic behind our past discussions that led to this design captured somewhere.",
+      "revId": "691347d118630b1229a7060362be5dad7ee15e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa2d3e24_ff13bd13",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:55:55Z",
+      "side": 1,
+      "message": "Speaking from experience, it\u0027ll be hard to reason about the async thread operating on the same object as the main thread (like guaranteeing thread-safety, which parts of the object are accessible to which thread).\n\nUnless the async thread is supposed to have access to _everything_ in CLCommandQueueVk, you\u0027re better off splitting at least its state into a dedicated class with a restricted interface.",
+      "revId": "691347d118630b1229a7060362be5dad7ee15e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
