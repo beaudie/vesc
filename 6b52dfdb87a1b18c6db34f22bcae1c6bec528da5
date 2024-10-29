@@ -214,6 +214,24 @@
       "parentUuid": "42967ed9_6a784909",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7bd737f_94bd3345",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T17:37:08Z",
+      "side": 1,
+      "message": "What if you add it after the 16th (or 15th?) compute call? There are other ways to set the RP pointer to nullptr, like you could switch to a second render pass, and call glClear. In that case, the RP pointer is nulled-out, but the RP is still open.\n\nYou could probably do that switchFBO/clear right after the initial draw call",
+      "parentUuid": "0dcfd1f9_362c5182",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
