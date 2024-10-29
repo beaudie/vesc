@@ -49,6 +49,19 @@ std::shared_ptr<WaitableEvent> RunInline(const std::shared_ptr<WorkerTask> &task
     waitable->markAsReady();
     return waitable;
 }
+
+template <class WorkerPool>
+std::shared_ptr<WaitableEvent> PostWorkerTask(WorkerPool *workerPool,
+                                              const std::shared_ptr<WorkerTask> &task)
+{
+    // Thread safety: This function is thread-safe because |postAsyncTask| is expected to be
+    // thread-safe.
+    auto asyncTask = std::make_shared<AsyncTask>(task);
+
+    workerPool->postAsyncTask(std::shared_ptr<AsyncTask>(asyncTask));
+
+    return asyncTask;
+}
 }  // anonymous namespace
 
 // WaitableEvent implementation.
@@ -145,7 +158,7 @@ bool SingleThreadedWorkerPool::isAsync()
     return false;
 }
 
-#if ANGLE_STD_ASYNC_WORKERS
+#if ANGLE_DELEGATE_WORKERS || ANGLE_STD_ASYNC_WORKERS
 
 // Notes:
 //   "Locked" suffix means, that the mutex MUST be locked for the entire duration of the call.
@@ -270,6 +283,10 @@ bool MultiThreadedTaskQueue::needToStartThreadLocked() const
     return (mTaskQueue.size() > mFreeThreadCount.load(std::memory_order_relaxed));
 }
 
+#endif  // ANGLE_DELEGATE_WORKERS || ANGLE_STD_ASYNC_WORKERS
+
+#if ANGLE_STD_ASYNC_WORKERS
+
 class AsyncWorkerPool final : public WorkerThreadPool
 {
   public:
@@ -279,6 +296,8 @@ class AsyncWorkerPool final : public WorkerThreadPool
     // WorkerThreadPool
     std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
     bool isAsync() override;
+
+    void postAsyncTask(std::shared_ptr<AsyncTask> &&task);
 
   private:
     void beginStartThreadLocked(bool *needToEndStartThreadOut);
@@ -355,15 +374,16 @@ void AsyncWorkerPool::endStartThreadUnlocked()
 std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(
     const std::shared_ptr<WorkerTask> &task)
 {
-    // Thread safety: This function is thread-safe because |insertTask| is thread-safe.
-    auto asyncTask = std::make_shared<AsyncTask>(task);
+    return PostWorkerTask(this, task);
+}
 
+void AsyncWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
+{
+    // Thread safety: This function is thread-safe because |insertTask| is thread-safe.
     mTaskQueue.insertTask(
-        std::shared_ptr<AsyncTask>(asyncTask),
+        std::move(task),
         [this](bool *needToEndStartThreadOut) { beginStartThreadLocked(needToEndStartThreadOut); },
         [this]() { endStartThreadUnlocked(); });
-
-    return asyncTask;
 }
 
 void AsyncWorkerPool::threadLoop()
@@ -434,71 +454,126 @@ bool AsyncWorkerPool::isAsync()
 
 #if ANGLE_DELEGATE_WORKERS
 
-class DelegateWorkerPool final : public WorkerThreadPool
+class DelegateWorkerPool final : public WorkerThreadPool,
+                                 public std::enable_shared_from_this<DelegateWorkerPool>
 {
   public:
     explicit DelegateWorkerPool(PlatformMethods *platform) : mPlatform(platform) {}
-    ~DelegateWorkerPool() override = default;
+    ~DelegateWorkerPool() override;
 
     // WorkerThreadPool
     std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
     bool isAsync() override;
 
+    void postAsyncTask(std::shared_ptr<AsyncTask> &&task);
+
   private:
+    void beginStartThreadLocked();
+    void endStartThreadUnlocked();
+
     PlatformMethods *mPlatform;
+    MultiThreadedTaskQueue mTaskQueue;
+
+    friend class DelegateWorkerThread;
 };
 
-// A function wrapper to execute the worker task and to notify the waitable
-// event after the execution.
-class DelegateWorkerTask
+// Represents a delegate worker thread that will call the |runTasks| method.
+class DelegateWorkerThread final : angle::NonCopyable
 {
   public:
-    DelegateWorkerTask(const std::shared_ptr<WorkerTask> &task,
-                       std::shared_ptr<AsyncWaitableEvent> waitable)
-        : mTask(task), mWaitable(waitable)
+    DelegateWorkerThread(std::shared_ptr<DelegateWorkerPool> &&workerPool)
+        : mWorkerPool(std::move(workerPool))
     {}
-    DelegateWorkerTask()                     = delete;
-    DelegateWorkerTask(DelegateWorkerTask &) = delete;
 
-    static void RunTask(void *userData)
+    static void Run(void *userData)
     {
-        DelegateWorkerTask *workerTask = static_cast<DelegateWorkerTask *>(userData);
-        (*workerTask->mTask)();
-        workerTask->mWaitable->markAsReady();
-
-        // Delete the task after its execution.
-        delete workerTask;
+        auto worker = static_cast<DelegateWorkerThread *>(userData);
+        worker->run();
+        // Delete the worker after its execution.
+        delete worker;
     }
 
   private:
-    ~DelegateWorkerTask() = default;
+    ~DelegateWorkerThread() = default;
 
-    std::shared_ptr<WorkerTask> mTask;
-    std::shared_ptr<AsyncWaitableEvent> mWaitable;
+    void run()
+    {
+        mWorkerPool->mTaskQueue.runTasks(
+            [this](auto &&lock) mutable { return ensureHasNextTaskToRun(lock); });
+        if (mNeedToEndStartThread)
+        {
+            mWorkerPool->endStartThreadUnlocked();
+        }
+    }
+
+    bool ensureHasNextTaskToRun(std::unique_lock<std::mutex> *lock)
+    {
+        // Only run a first task.
+        if (!mWorkerPool->mTaskQueue.isEmptyLocked() && mIsFirstRun)
+        {
+            mIsFirstRun = false;
+            return true;
+        }
+        // |MultiThreadedTaskQueue::insertTask| may skip starting a thread in hope that exiting
+        // free thread will run the task.  However in reality, free thread may stop running tasks
+        // because of the above condition, causing lack of free threads.  To account for this
+        // problem, call |needToStartThreadLocked| below and start a thread if needed.
+        if (mWorkerPool->mTaskQueue.needToStartThreadLocked())
+        {
+            mWorkerPool->beginStartThreadLocked();
+            mNeedToEndStartThread = true;
+        }
+        return false;
+    }
+
+    std::shared_ptr<DelegateWorkerPool> mWorkerPool;
+    bool mIsFirstRun           = true;
+    bool mNeedToEndStartThread = false;
 };
 
 // DelegateWorkerPool implementation.
-ANGLE_NO_SANITIZE_CFI_ICALL
+DelegateWorkerPool::~DelegateWorkerPool()
+{
+    // No lock because all threads MUST not be running at this point.
+    ASSERT(mTaskQueue.isEmptyLocked());
+}
+
 std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(
     const std::shared_ptr<WorkerTask> &task)
+{
+    return PostWorkerTask(this, task);
+}
+
+void DelegateWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
+{
+    // Thread safety: This function is thread-safe because |insertTask| is thread-safe.
+    mTaskQueue.insertTask(
+        std::move(task), [this](bool *) { beginStartThreadLocked(); },
+        [this]() { endStartThreadUnlocked(); });
+}
+
+void DelegateWorkerPool::beginStartThreadLocked()
+{
+    mTaskQueue.incrementFreeThreadCount(1);
+}
+
+ANGLE_NO_SANITIZE_CFI_ICALL
+void DelegateWorkerPool::endStartThreadUnlocked()
 {
     if (mPlatform->postWorkerTask == nullptr)
     {
         // In the unexpected case where the platform methods have been changed during execution and
-        // postWorkerTask is no longer usable, simply run the task on the calling thread.
-        return RunInline(task);
+        // postWorkerTask is no longer usable, simply run all tasks on the calling thread.
+        return mTaskQueue.runTasks([this](auto &&) { return !mTaskQueue.isEmptyLocked(); });
     }
 
     // Thread safety: This function is thread-safe because the |postWorkerTask| platform method is
     // expected to be thread safe.  For Chromium, that forwards the call to the |TaskTracker| class
     // in base/task/thread_pool/task_tracker.h which is thread-safe.
-    auto waitable = std::make_shared<AsyncWaitableEvent>();
 
-    // The task will be deleted by DelegateWorkerTask::RunTask(...) after its execution.
-    DelegateWorkerTask *workerTask = new DelegateWorkerTask(task, waitable);
-    mPlatform->postWorkerTask(mPlatform, DelegateWorkerTask::RunTask, workerTask);
-
-    return waitable;
+    // The worker will be deleted by DelegateWorkerThread::Run(...) after its execution.
+    auto worker = new DelegateWorkerThread(shared_from_this());
+    mPlatform->postWorkerTask(mPlatform, DelegateWorkerThread::Run, worker);
 }
 
 bool DelegateWorkerPool::isAsync()
