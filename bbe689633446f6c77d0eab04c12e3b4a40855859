@@ -88,6 +88,24 @@
       "parentUuid": "0a6ffeb2_16284db9",
       "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f1dadb8_4079f4bf",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 4394,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-29T01:20:13Z",
+      "side": 0,
+      "message": "The ES 3.2 tests for SwS have been skipped.\nSince there are different missing extensions for each platform, does adding a flag check in `DisplayVk::getMaxSupportedESVersion()` work for the traces (called during context creation validation)? Or adding the `|| exposeNonConformant` condition for each missing extension per platform?",
+      "parentUuid": "2add7f5b_6d96caa3",
+      "revId": "bbe689633446f6c77d0eab04c12e3b4a40855859",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

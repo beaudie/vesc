@@ -69,6 +69,24 @@
       "parentUuid": "06ad9700_5529e124",
       "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f9d3994_020a4b23",
+        "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-29T01:20:13Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "f3aa6d66_17cd6a75",
+      "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
