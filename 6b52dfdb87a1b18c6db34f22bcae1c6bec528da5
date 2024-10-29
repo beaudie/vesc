@@ -232,6 +232,24 @@
       "parentUuid": "0dcfd1f9_362c5182",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e899625e_cd31ded4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-29T20:23:49Z",
+      "side": 1,
+      "message": "\u003e What if you add it after the 16th (or 15th?) compute call?\n\nThis doesn\u0027t seem to work, didn\u0027t put my finger on it but I think it resets something else this way.\n\n\u003e You could probably do that switchFBO/clear right after the initial draw call\n\nYay this worked. So the full repro is:\n* Draw to fb1\n* Switch to fb2, glClear + glEndQuery\n* Switch to fb0, 16x glMemoryBarrier + glDispatchCompute\n\nI\u0027m not sure how much value a test like this would add though. Seems very specific and Charlie already added some more general checks to catch this kind of issue elsewhere.",
+      "parentUuid": "b7bd737f_94bd3345",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
