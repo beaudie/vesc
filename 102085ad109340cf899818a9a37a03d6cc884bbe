@@ -22,6 +22,30 @@
       },
       "revId": "102085ad109340cf899818a9a37a03d6cc884bbe",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "de724339_447db12e",
+        "filename": "src/libANGLE/CLKernel.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-29T13:55:20Z",
+      "side": 1,
+      "message": "See your point. Will push an update.",
+      "parentUuid": "e6df9251_0b6d005c",
+      "range": {
+        "startLine": 231,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 85
+      },
+      "revId": "102085ad109340cf899818a9a37a03d6cc884bbe",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
