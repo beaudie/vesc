@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "274d898f_2dc901a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T17:12:49Z",
+      "side": 1,
+      "message": "Igor, I apologize I haven\u0027t found the time to review this change yet.\n\nHave you seen the bottom of this commit message? https://chromium-review.googlesource.com/c/angle/angle/+/5006874/6//COMMIT_MSG\n\nI thought about this in the past, I was always a little worried that we\u0027d be implementing a scheduler on top of the OS scheduler and be swamped with complexity and weird behavior because of it.\n\nI am fully aware of the problem, just unsure of the best solution. So I have two asks here:\n\n1. I have a benchmark for this I\u0027ve used in the past: https://chromium-review.googlesource.com/c/angle/angle/+/4859584/ You can see the tasks in perfetto which helps visualize exactly what\u0027s going on and how well the algorithm is working. I assume you also have something you\u0027ve been testing against. How much does this improve things compared with ToT? For my benchmark, I\u0027d easily imagine ~33% reduction in frame time, but it would be good to have an exact measure (verified with a perfetto trace).\n\n2. If instead of all of this, we\u0027d just multiply `mDesiredThreadCount` by 1.5 in ToT of ANGLE, how much do we gain in the same benchmarks? My reasoning for this is that we\u0027d use more threads than there are CPUs, but knowing the link-waits-for-two-compiles pattern, a third of the tasks are blocked, and the rest constitute 100% of the CPUs.\n\nMy hope is that the +50% threads solution gets us close enough to the performance of what you have and we can live with a much simpler implementation.",
+      "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
