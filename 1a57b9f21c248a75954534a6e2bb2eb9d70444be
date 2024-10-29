@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "c985f21e_bf2e1493",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb6a993e_282f13ee",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 8
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "8934d4d8_cd05db9c",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 10
@@ -72,6 +96,24 @@
       "writtenOn": "2024-10-27T04:37:54Z",
       "side": 1,
       "message": "This duplication is getting a little out of hand. Could you please remove `TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_NO_LOCKS` instead, and make `TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN` have an `{egl_lock}` line here? Then when the template is instantiated you can set `egl_lock` to any of these 4 possibilities.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feb781df_966d3282",
+        "filename": "scripts/generate_entry_points.py",
+        "patchSetId": 10
+      },
+      "lineNbr": 527,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:21:06Z",
+      "side": 1,
+      "message": "`TEMPLATE_EGL_ENTRY_POINT_WITH_RETURN_NO_LOCKS` is a bit different from other templates, it doesn\u0027t have the line `ANGLE_EGL_SCOPED_CONTEXT_LOCK` and the corresponding scope paratheses, so I kept it.",
+      "parentUuid": "e0a5a8e6_c9f50ae8",
       "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -169,6 +211,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c681950b_da48e6ed",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 1015,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:21:06Z",
+      "side": 1,
+      "message": "Thank you. This is the change I found that introduced the `Display::onSubjectStateChange()`: https://chromium-review.googlesource.com/c/angle/angle/+/2240638. `DisplayImpl` is the only subject that `Display` is observing.\n\nAmong all of the `DisplayImpl` subjects, only `DisplayCGL` is calling `Subject::onstateChange`--\u003e`Display::onSubjectStateChange()`.\n\n`EGL_HandleGPUSwitchANGLE()`, or `EGL_ForceGPUSwitchANGLE()`, will eventually invoke this function. No `mContextMapMutex` is taken in these two function chains. except in this `Display::onSubjectStateChange()`.",
+      "parentUuid": "9147c7e4_208bdad6",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ca9ba67_d8bd7a20",
@@ -186,6 +246,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f07f49f_6b42975e",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ca9ba67_d8bd7a20",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc4f95cf_d0e74f63",
@@ -199,6 +277,24 @@
       "writtenOn": "2024-10-27T04:37:54Z",
       "side": 1,
       "message": "Same here, please deduplicate with `DeallocateGlobalMutex` using a helper.",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe3f409e_023ba5ff",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc4f95cf_d0e74f63",
       "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -226,6 +322,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ca569bc_e2cd0312",
+        "filename": "src/libANGLE/GlobalMutex.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "223dbb8f_081953ec",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 2
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dc6d9070_4c2176bc",
@@ -239,6 +359,30 @@
       "writtenOn": "2024-10-27T04:37:54Z",
       "side": 1,
       "message": "Better allocate all the mutexes in the same call.\n\n```suggestion\nvoid AllocateGlobalMutex();\nvoid DeallocateGlobalMutex();\n```",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 36
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "134e2063_83800c54",
+        "filename": "src/libANGLE/GlobalMutex.h",
+        "patchSetId": 10
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:21:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc6d9070_4c2176bc",
       "range": {
         "startLine": 56,
         "startChar": 0,
