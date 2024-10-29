@@ -261,6 +261,30 @@
       },
       "revId": "600d084e22924756ac92ab186a56699724be50e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "deb04d4f_bd9619de",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T19:20:09Z",
+      "side": 1,
+      "message": "\u003e  This case feels like maybe some templates and composition could simplify things but I\u0027m not sure,\n\nI tried to do as you asked. Here is the result: https://chromium-review.googlesource.com/c/angle/angle/+/5973180\n\nIt is applied to the final CL, because spreading changes across all CLs is too much work. If it is better that the current version, than I will update other CLs and remove the DRAFT. If no - I will simply remove the DRAFT.",
+      "parentUuid": "fb139be4_6e5c8a17",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 86
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
