@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e3baf23_8751d413",
+        "filename": "src/libANGLE/renderer/vulkan/vk_renderer.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 6664,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T03:26:15Z",
+      "side": 1,
+      "message": "Instead of pulling SPIR-V Tools headers into ANGLE/GL, I suggest adding a helper that just returns `mDeviceVersion` and add move this to a function in `clspv_utils.h` that converts the device version to SPIR-V version. You can then keep SPIR-V Tools as a dependency only with CL just like before.\n\nThe change becomes simpler then, at which point you can squash it in the next CL.",
+      "revId": "1042427a05e052c641e44f6c03057c3f0d3f2828",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
