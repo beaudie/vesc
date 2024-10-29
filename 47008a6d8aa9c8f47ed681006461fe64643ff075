@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "384c8830_279fd180",
+        "filename": "src/libANGLE/CLCommandQueue.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T14:37:38Z",
+      "side": 1,
+      "message": "This logic should live in the validation file.",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 92,
+        "endChar": 13
+      },
+      "revId": "47008a6d8aa9c8f47ed681006461fe64643ff075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46093691_0873de47",
+        "filename": "src/libANGLE/CLDevice.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T14:37:38Z",
+      "side": 1,
+      "message": "Will the returned error be correct here if this is returned? Actually, looks like error is not even possible.\n\nWhy not call `mImpl-\u003egetInfoUInt` directly and `ASSERT` that it cannot fail?",
+      "revId": "47008a6d8aa9c8f47ed681006461fe64643ff075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "113c81e3_f007637c",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 2247,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T14:37:38Z",
+      "side": 1,
+      "message": "A little faster maybe:\n\n```suggestion\n        if (!device.supportsNonUniformWorkGroups())\n        {\n            for (cl_uint i \u003d 0; i \u003c work_dim; ++i)\n            {\n                if (global_work_size[i] % local_work_size[i] !\u003d 0)\n                {\n                    return CL_INVALID_WORK_GROUP_SIZE;\n                }\n            }\n        }\n```",
+      "range": {
+        "startLine": 2240,
+        "startChar": 0,
+        "endLine": 2247,
+        "endChar": 9
+      },
+      "revId": "47008a6d8aa9c8f47ed681006461fe64643ff075",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
