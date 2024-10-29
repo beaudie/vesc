@@ -34,6 +34,24 @@
       "parentUuid": "ac29cef8_ffd74375",
       "revId": "20fcae8d7d09df0193a5d8959181e23b57dd7e99",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "919d77c4_ad0c5c69",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 28
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T01:18:09Z",
+      "side": 1,
+      "message": "I see, thank you. I suggest rewording to:\n\n```\nWhen cache is disabled, every time a new descriptorSet is allocated and\nbind to program, the previous descriptorSet will be add to the tail of garbage\nlist, and the new descriptorSet is retrieved from the head of the garbage list. This means there will never be a situation\nthat a significant amount of descriptorSets are needed and a new descriptor pool is required, therefore we do not need pool eviction.\n```",
+      "parentUuid": "0ef7b49a_43834673",
+      "revId": "20fcae8d7d09df0193a5d8959181e23b57dd7e99",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
