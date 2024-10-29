@@ -57,7 +57,7 @@ class CompileMslTask final : public LinkSubTask
     {}
     ~CompileMslTask() override = default;
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         mResult = CreateMslShaderLib(mContext, mInfoLog, mTranslatedMslInfo, mSubstitutionMacros);
     }
