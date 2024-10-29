@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fd6e318_27d3f9b8",
+        "filename": "src/compiler/translator/tree_ops/SeparateDeclarations.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-10-29T06:24:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9ff3206a_ddc5a39f",
+      "range": {
+        "startLine": 108,
+        "startChar": 0,
+        "endLine": 109,
+        "endChar": 49
+      },
+      "revId": "88db72bba3de55c16a1f3d7ad21a00e0421850cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e3ee447a_f0545b0f",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-10-25T19:40:52Z",
       "side": 1,
       "message": "Could you please add an all-encompassing test in GLSLTest.cpp too so all the backends are exercised?",
+      "revId": "88db72bba3de55c16a1f3d7ad21a00e0421850cc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88ae1b23_4e935e52",
+        "filename": "src/tests/compiler_tests/MSLOutput_test.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 933,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-10-29T06:24:24Z",
+      "side": 1,
+      "message": "Most of the cases are covered already. Added one that perhaps wasnt, and added a comment to the commit msg saying most are covered.",
+      "parentUuid": "e3ee447a_f0545b0f",
       "revId": "88db72bba3de55c16a1f3d7ad21a00e0421850cc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
