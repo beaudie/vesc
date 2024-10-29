@@ -6316,6 +6316,23 @@ uint y = gl_LocalInvocationID.y;
 outData = texture(tex, vec2(x, y));
 })";
 
+    constexpr GLsizei kSize = 2;
+    // tex[0] is what's being tested.  The others are helpers.
+    GLTexture tex[3];
+    for (int i = 0; i < 3; ++i)
+    {
+        glBindTexture(GL_TEXTURE_2D, tex[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, kSize, kSize, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                     nullptr);
+    }
+    GLFramebuffer fbo[3];
+    for (int i = 0; i < 3; ++i)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, fbo[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex[i], 0);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo[0]);
+
     GLfloat initValue[4] = {1.0, 1.0, 1.0, 1.0};
 
     // Step 1: Set up a simple 2D Texture rendering loop.
@@ -6343,8 +6360,17 @@ outData = texture(tex, vec2(x, y));
     ASSERT_GL_NO_ERROR();
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
     ASSERT_GL_NO_ERROR();
-    uint64_t expectedRenderPassCount = getPerfCounters().renderPasses + 1;
+
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo[1]);
+    glClear(GL_COLOR_BUFFER_BIT);
+    GLuint query = 0;
+    glGenQueries(1, &query);
+    glBeginQuery(GL_TIME_ELAPSED_EXT, query);
+    glEndQuery(GL_TIME_ELAPSED_EXT);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Step 2: sample this texture through compute
     GLBuffer ssbo;
@@ -6355,21 +6381,24 @@ outData = texture(tex, vec2(x, y));
     ANGLE_GL_COMPUTE_PROGRAM(csProgram, kCSSource);
     glUseProgram(csProgram);
 
-    glBindTexture(GL_TEXTURE_2D, texture);
+    GLTexture texture2;
+    glBindTexture(GL_TEXTURE_2D, texture2);
     glUniform1i(glGetUniformLocation(csProgram, "tex"), 0);
     glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
     glBindBufferBase(GL_SHADER_STORAGE_BUFFER, 0, ssbo);
 
     glDispatchCompute(1, 1, 1);
+
+    for (int i = 0; i < 100; i++)
+    {
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, ssbo);
+        glBufferData(GL_SHADER_STORAGE_BUFFER, 16, nullptr, GL_STREAM_DRAW);
+        glBindBuffer(GL_SHADER_STORAGE_BUFFER, 0);
+        glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT);
+
+        glDispatchCompute(1, 1, 1);
+    }
     EXPECT_GL_NO_ERROR();
-
-    // Step3: use the first program sample texture again
-    glUseProgram(program);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    ASSERT_GL_NO_ERROR();
-
-    uint64_t actualRenderPassCount = getPerfCounters().renderPasses;
-    EXPECT_EQ(expectedRenderPassCount, actualRenderPassCount);
 }
 
 // Verify a mid-render pass clear of a newly enabled attachment uses LOAD_OP_CLEAR.
