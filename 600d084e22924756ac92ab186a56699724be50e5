@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a68e1bf0_4b1876c2",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T15:23:25Z",
+      "side": 1,
+      "message": "\u003e `return asyncTask` will create new temporary object, so extra atomic increment.\n\nSorry, I was wrong. In the above case move-convert constructor will be used without adding extra reference.\n\nI also removed usage of `std::static_pointer_cast` where it was unnecessary.",
+      "parentUuid": "fe465e4b_000a9d8e",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 131,
+        "endChar": 40
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8820ed1b_91689bae",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 4
@@ -204,6 +228,30 @@
       "writtenOn": "2024-10-29T14:47:40Z",
       "side": 1,
       "message": "re: templates in general, I disagree with blindly applying that sentiment to everything. I think there are cases where they actually make things both simpler (by avoiding inheritance chains) and faster. They can absolutely be overused and misused though, we agree there. This case feels like maybe some templates and composition could simplify things but I\u0027m not sure, and the sunk cost argument is fair.\n\n\u003e The Locked suffix means that the function itself must be executed under the lock\n\nThat\u0027s not the only meaning that this \"intuitively\" conveys though. Example:\n\n```\nfLocked() {\n  gLocked();\n  hLocked();\n}\n```\n\nThis code looks totally innocuous, but if `gLocked` can sometimes unlock then it\u0027s incorrect. I understand that this isn\u0027t how your code is *currently* written, but there is a risk of future code changes leading to this kind issues.\n\nIf you prefer this behavior over splitting into two parts that I suggested (I think you got the idea right), then we should definitely have comments about this at the call spots and also consider changing the `Locked` suffix to something that hints at this behavior (I know naming is hard...).",
+      "parentUuid": "9bb016a6_f0a22777",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 86
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb139be4_6e5c8a17",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T15:23:25Z",
+      "side": 1,
+      "message": "Updated `startThreadLocked()`, `startThreadIfNeededLocked()`, and `ensureHasNextTaskToRunLocked()` to accept `lock` by value.\n\nFor `startThreadLocked()` and `startThreadIfNeededLocked()` now it is clear, that the lock will be always unlocked.\n\nBut the `ensureHasNextTaskToRunLocked()` may return the `lock` argument back depending on the result. So there is explicit ownership change for the `lock` object.\n\n---\n\n\u003e but if `gLocked` can sometimes unlock then it\u0027s incorrect\n\nI disagree, because it is subjective. There is no such standard about what `Locked` means.\n\nIncorrect is to call `hLocked()` if `gLocked()` unlocked the mutex.\n\nWith my last update to the code there is no need to comment this, because `hLocked()` will consume the lock like this: `hLocked(std::move(lock))`. So above example will not compile, need rewrite:\n```\nfLocked(lock) {\n  gLocked(move(lock));\n  // Can\u0027t call because no longer have the lock.\n  //hLocked();}\n```\nIf `hLocked()` need to be called in some cases, then:\n```\nfLocked(lock) {\n  newLock \u003d gLocked(move(lock)); // need to check documentation of gLocked\n  if (newLock.locked)\n      hLocked();\n}\n```\nIMO, `Locked` means that the method must be called while the mutex is locked - that is it. Anyway, in this code the `Locked` means exactly this and not more.\n\nIf a `Locked` function is waiting on a conditional variable it unlocks the mutex in order to wait. In your opinion `Locked` here also incorrect?\n\nIn my cases, these function accepting the `lock` specifically to be able to do early unlock. In both these cases, these functions a last functions that a called.\n\nWith my last update this is clear, because `lock` is moved inside the functions. For the caller now it is clear that there will be no lock after `startThreadLocked()` for example. In case of `ensureHasNextTaskToRunLocked()` we moving old lock inside, while obtaining new lock in return - we always need to check documentation to what function returns.\n\n---\n\n\u003e This case feels like maybe some templates and composition could simplify\n things but I\u0027m not sure, and the sunk cost argument is fair.\n\nI do not see how I can do this. I can try, but not sure if it will be worth the wasted time.\n\n\u003e and also consider changing the Locked suffix to something that hints at this behavior (I know naming is hard...).\n\nAgain, I think it is subjective.\nI can remove `Locked` from all functions, so there is no confusion. Not sure if this will be better.",
       "parentUuid": "9bb016a6_f0a22777",
       "range": {
         "startLine": 167,
