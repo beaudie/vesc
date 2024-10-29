@@ -52,6 +52,24 @@
       "parentUuid": "e4ed8be3_3248fb93",
       "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd6c7e3_4e595cf6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T19:53:45Z",
+      "side": 1,
+      "message": "\u003e Sorry about all the frustration, Igor.\n\nThank you.\n\n\u003e Note that I did not ask you to make changes according to by comments, \nbut rather asked for your thoughts on my ideas. I did not actually \nexpect you to spend a significant amount of time trying to get them to \nwork, unless you also found them appealing yourself.\n\nI already did as you asked: https://chromium-review.googlesource.com/c/angle/angle/+/5973180\n\nBut I\u0027m not sure that I like it better.\n\nWith templates you need to rely entirely on comments to know what to pass to the method. Also code completion is not working with templates...\n\n\u003e but rather asked for your thoughts on my ideas.\n\nI was spending few week to come up with these classes, methods, names. I\u0027m very critical to myself as well. I\u0027m always trying to compare multiple solutions. But sometimes there is just no better solution (except if not implement it at all).\n\nI\u0027m open to suggestions, but just saying it is confusing, maybe try template, is not very constructive, so I do not know how it may help. As I already mentioned, I was trying to write simplest code possible, that ticked all the boxes and this is the result. In other words - I do not know how to make it simpler. I did all I could.\n\nRegarding splitting `startThreadLocked` into locked/unlocked parts I disagree. Maybe it makes sings clear regarding locking, but will make harder the implementation. But OK, I will to such change in another DRAFT.\n\nRegarding templates. IMO I think, that they generally harder than polymorphism (no clear interface, code completion does not work, convoluted compiler errors). And generally is not always. I\u0027m not a template-phobic. I just think that this solution is not requiring templates.\n\nI agree, that composition is better than inheritance (in order to reuse code and not be used), but more often it requires writing repeated boilerplate code. In this particular case, all classes inside a single CPP, so I decided to go with inheritance for simplicity.\n\n\u003e \"Is there a simpler way to achieve the same goal\" and \"is there a way \nto make implementation less complex\" are very common questions on that \npath,\n\nI\u0027m always asking this myself.\nThe answer is - If there is simpler way - I would have implemented it.\nSo I do not know a simpler way.\n\nIMO, current version is sufficiently simple.\n\n\u003e and I still do not find the structure easy to reason about and hence \nerror prone for future changes and it makes debugging harder.\n\nI open for suggestions.\nBut I need more than just this is complex make it simple.\nThe fact that I made the refactoring to use templates proves that I\u0027m willing to cooperate.\n\n\u003e Changes that are difficult to review tend to be causing maintenance \ndifficulties down the road. This creates risks for the project, which is\n what ultimately causes discussions\n\nI understand, but opposite is also true. Very simple change may brake of fix a lot of thinks.\n\n\u003e let\u0027s please stay focused on the technical details and refrain \nfrom making assumptions about other people\u0027s intentions.\n\nI\u0027m not making assumptions. I\u0027m really physically tired.\nAnd frustrated, because I do no know what I can do so it start to look simpler to you.\n\nSometimes things can\u0027t be simpler...\n\nI even split implementation into separate CLs so it will be simpler to review. Each next CL mostly adds new code - so just review code one CL at a time.\n\nI will really appreciate if you could point to real problems in my code, like a potential deadlock or UB, or something. But currently it is just it is confusing and because of that may cause bugs in the future.",
+      "parentUuid": "e89bbd40_75c62aa9",
+      "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
