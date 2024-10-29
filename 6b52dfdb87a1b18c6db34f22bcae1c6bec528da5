@@ -178,6 +178,24 @@
       "parentUuid": "3f980981_8ac42e6e",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42967ed9_6a784909",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T15:55:48Z",
+      "side": 1,
+      "message": "Ok right, for the bug you need the RP to be open, but the outside RP to keep getting flushed. This should work:\n\n- Draw to something completely unrelated to the rest of the test (opens render pass)\n- Loop 20 times:\n  * glDispatchCompute -\u003e write to buffer B\n  * glMemoryBarrier(GL_SHADER_STORAGE_BARRIER_BIT)",
+      "parentUuid": "b355b943_a15ccb0e",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
