@@ -1982,13 +1982,16 @@ class DescriptorSetDescBuilder final
         PipelineType pipelineType,
         const SharedDescriptorSetCacheKey &sharedCacheKey);
 
-    angle::Result updateFullActiveTextures(Context *context,
-                                           const ShaderInterfaceVariableInfoMap &variableInfoMap,
-                                           const WriteDescriptorDescs &writeDescriptorDescs,
-                                           const gl::ProgramExecutable &executable,
-                                           const gl::ActiveTextureArray<TextureVk *> &textures,
-                                           const gl::SamplerBindingVector &samplers,
-                                           PipelineType pipelineType);
+    angle::Result updateFullActiveTexturesDescriptorSet(
+        Context *context,
+        const ShaderInterfaceVariableInfoMap &variableInfoMap,
+        const WriteDescriptorDescs &writeDescriptorDescs,
+        UpdateDescriptorSetsBuilder *updateBuilder,
+        const gl::ProgramExecutable &executable,
+        const gl::ActiveTextureArray<TextureVk *> &textures,
+        const gl::SamplerBindingVector &samplers,
+        PipelineType pipelineType,
+        VkDescriptorSet descriptorSet);
 
     void updateDescriptorSet(Renderer *renderer,
                              const WriteDescriptorDescs &writeDescriptorDescs,
