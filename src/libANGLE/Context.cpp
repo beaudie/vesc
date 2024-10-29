@@ -9343,7 +9343,7 @@ std::shared_ptr<angle::WaitableEvent> Context::postCompileLinkTask(
             std::make_shared<angle::AsyncWaitableEvent>();
         auto unlockedTask = [task, event](void *resultOut) {
             ANGLE_TRACE_EVENT0("gpu.angle", "Compile/Link (unlocked)");
-            (*task)();
+            (*task)(event.get());
             event->markAsReady();
         };
         egl::Display::GetCurrentThreadUnlockedTailCall()->add(unlockedTask);

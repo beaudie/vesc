@@ -10,6 +10,7 @@
 
 #include "common/WorkerThread.h"
 
+#include "common/FixedVector.h"
 #include "common/angleutils.h"
 #include "common/system_utils.h"
 
@@ -20,24 +21,50 @@
 #endif  // !defined(ANGLE_STD_ASYNC_WORKERS) && & !defined(ANGLE_ENABLE_WINDOWS_UWP)
 
 #if ANGLE_DELEGATE_WORKERS || ANGLE_STD_ASYNC_WORKERS
-#    include <queue>
 #    include <thread>
 #endif  // ANGLE_DELEGATE_WORKERS || ANGLE_STD_ASYNC_WORKERS
 
 namespace angle
 {
-class AsyncTask final : public AsyncWaitableEvent
+class AsyncTaskWorkerPool;
+
+constexpr size_t kMaxAsyncTaskKeySize = 8;
+using AsyncTaskKey                    = FixedVector<uint64_t, kMaxAsyncTaskKeySize>;
+
+class AsyncTask final : public AsyncWaitableEvent, public std::enable_shared_from_this<AsyncTask>
 {
   public:
     explicit AsyncTask(const std::shared_ptr<WorkerTask> &workerTask);
+    AsyncTask(const std::shared_ptr<WorkerTask> &workerTask,
+              std::shared_ptr<AsyncTaskWorkerPool> &&workerPool,
+              size_t dependencyCount);
     ~AsyncTask() override;
 
     void run();
     void markAsReady();
     void runAndMarkAsReady();
 
+    const AsyncTaskKey &getKey() const
+    {
+        ASSERT(!mKey.empty());
+        return mKey;
+    }
+    bool isSubTask() const { return mKey.size() > 1; }
+
+    void onDependencyEventReady(uint64_t eventSerial, TaskDependencyHint hint);
+    void onDependencyTaskReady(const AsyncTaskKey &key, TaskDependencyHint hint);
+
+  protected:
+    // AsyncWaitableEvent
+    void notifyDependencyReady(AsyncTask *task, TaskDependencyHint hint) override;
+
   private:
+    void handleDependencyReady(const AsyncTaskKey &key, TaskDependencyHint hint);
+
+    AsyncTaskKey mKey;
     std::shared_ptr<WorkerTask> mWorkerTask;
+    std::shared_ptr<AsyncTaskWorkerPool> mWorkerPool;
+    size_t mDependencyCount;
 };
 
 class AsyncTaskWorkerPool
@@ -52,9 +79,15 @@ namespace
 std::shared_ptr<WaitableEvent> RunInline(const std::shared_ptr<WorkerTask> &task)
 {
     auto waitable = std::make_shared<AsyncWaitableEvent>();
-    (*task)();
+    (*task)(waitable.get());
     waitable->markAsReady();
     return waitable;
+}
+
+uint64_t GetNextEventSerial()
+{
+    static std::atomic<uint64_t> sSerialCounter{0};
+    return (sSerialCounter.fetch_add(1, std::memory_order_relaxed) + 1);
 }
 
 std::shared_ptr<WaitableEvent> PostWorkerTask(AsyncTaskWorkerPool *workerPool,
@@ -68,6 +101,29 @@ std::shared_ptr<WaitableEvent> PostWorkerTask(AsyncTaskWorkerPool *workerPool,
 
     return asyncTask;
 }
+
+std::shared_ptr<WaitableEvent> PostWorkerTask(std::shared_ptr<AsyncTaskWorkerPool> &&workerPool,
+                                              const std::shared_ptr<WorkerTask> &task,
+                                              const TaskDependencies &dependencies)
+{
+    if (dependencies.empty())
+    {
+        return PostWorkerTask(workerPool.get(), task);
+    }
+
+    // Thread safety: This function is thread-safe because |addDependentTask| is expected to be
+    // thread-safe.
+    auto asyncTask = std::make_shared<AsyncTask>(task, std::move(workerPool), dependencies.size());
+
+    // Task will call |postAsyncTask| once all dependency events are ready.
+    for (const TaskDependency &dependency : dependencies)
+    {
+        ASSERT(dependency.event != nullptr);
+        dependency.event->addDependentTask(asyncTask, dependency.hint);
+    }
+
+    return asyncTask;
+}
 }  // anonymous namespace
 
 // WaitableEvent implementation.
@@ -75,8 +131,34 @@ WaitableEvent::WaitableEvent()  = default;
 WaitableEvent::~WaitableEvent() = default;
 
 // AsyncWaitableEvent implementation.
+AsyncWaitableEvent::AsyncWaitableEvent() : mSerial(GetNextEventSerial()) {}
+
+void AsyncWaitableEvent::addDependentTask(const std::shared_ptr<AsyncTask> &task,
+                                          TaskDependencyHint hint)
+{
+    ASSERT(task);
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+        if (!mIsReady)
+        {
+            // Add task inside the lock to prevent marking the event ready and therefore iterating
+            // over the vector from other thread.
+            mDependentTasks.emplace_back(DependentTask{task, hint});
+            return;
+        }
+    }
+    // If event is ready notify the task right away while not holding the lock.
+    notifyDependencyReady(task.get(), hint);
+}
+
+void AsyncWaitableEvent::notifyDependencyReady(AsyncTask *task, TaskDependencyHint hint)
+{
+    task->onDependencyEventReady(mSerial, hint);
+}
+
 void AsyncWaitableEvent::markAsReady()
 {
+    ASSERT(!isReady());
     {
         std::lock_guard<std::mutex> lock(mMutex);
         // Using release ordering to provide synchronization to |isReady|'s acquire load, which does
@@ -84,6 +166,14 @@ void AsyncWaitableEvent::markAsReady()
         mIsReady.store(1, std::memory_order_release);
     }
     mCondition.notify_all();
+
+    // Notify tasks without mutex lock, since no new tasks will be added when event is ready.
+    // Also calling callbacks while holding the lock may potentially cause a deadlock.
+    for (DependentTask &dependentTask : mDependentTasks)
+    {
+        notifyDependencyReady(dependentTask.task.get(), dependentTask.hint);
+    }
+    mDependentTasks.clear();
 }
 
 void AsyncWaitableEvent::wait()
@@ -103,9 +193,23 @@ bool AsyncWaitableEvent::isReady()
 }
 
 // AsyncTask implementation.
-AsyncTask::AsyncTask(const std::shared_ptr<WorkerTask> &workerTask) : mWorkerTask(workerTask)
+AsyncTask::AsyncTask(const std::shared_ptr<WorkerTask> &workerTask)
+    : mWorkerTask(workerTask), mDependencyCount(0)
 {
     ASSERT(mWorkerTask);
+    // Initialize key now, since it will not change.
+    mKey.emplace_back(mSerial);
+}
+
+AsyncTask::AsyncTask(const std::shared_ptr<WorkerTask> &workerTask,
+                     std::shared_ptr<AsyncTaskWorkerPool> &&workerPool,
+                     size_t dependencyCount)
+    : mWorkerTask(workerTask), mWorkerPool(std::move(workerPool)), mDependencyCount(dependencyCount)
+{
+    ASSERT(mWorkerTask);
+    ASSERT(mWorkerPool);
+    ASSERT(mDependencyCount > 0);
+    // Key will be calculated later based on dependency hints.
 }
 
 AsyncTask::~AsyncTask()
@@ -113,13 +217,84 @@ AsyncTask::~AsyncTask()
     ASSERT(!mWorkerTask || !isReady());
 }
 
+void AsyncTask::notifyDependencyReady(AsyncTask *task, TaskDependencyHint hint)
+{
+    task->onDependencyTaskReady(mKey, hint);
+}
+
+void AsyncTask::onDependencyEventReady(uint64_t eventSerial, TaskDependencyHint hint)
+{
+    // Convert event serial into the task key.
+    AsyncTaskKey key = {eventSerial};
+    handleDependencyReady(key, hint);
+}
+
+void AsyncTask::onDependencyTaskReady(const AsyncTaskKey &key, TaskDependencyHint hint)
+{
+    handleDependencyReady(key, hint);
+}
+
+void AsyncTask::handleDependencyReady(const AsyncTaskKey &key, TaskDependencyHint hint)
+{
+    ASSERT(!key.empty());
+    bool isAllDependenciesReady = false;
+    {
+        std::lock_guard<std::mutex> lock(mMutex);
+
+        ASSERT(mDependencyCount > 0);
+        --mDependencyCount;
+        isAllDependenciesReady = (mDependencyCount == 0);
+
+        // Treat SubTask dependency as Normal if key is already at maximum size.
+        if (hint == TaskDependencyHint::SubTask && key.size() < kMaxAsyncTaskKeySize)
+        {
+            if (mKey.empty())
+            {
+                mKey = key;
+                mKey.emplace_back(mSerial);
+            }
+            else
+            {
+                AsyncTaskKey newKey = key;
+                newKey.emplace_back(mSerial);
+                if (newKey < mKey)
+                {
+                    mKey = newKey;
+                }
+            }
+        }
+        else if (mKey.empty())
+        {
+            if (hint != TaskDependencyHint::Deferred)
+            {
+                mKey.emplace_back(mSerial);
+            }
+            else if (isAllDependenciesReady)
+            {
+                mKey.emplace_back(GetNextEventSerial());
+            }
+        }
+    }
+    if (isAllDependenciesReady)
+    {
+        // Only single thread may be there.  Do not hold the lock to avoid potential problems when
+        // calling |postAsyncTask| below and to reduce the lock scope.
+        ASSERT(mWorkerPool);
+        // |mWorkerPool| must be rest prior to posting a task, since it may be inlined.
+        auto workerPool = std::move(mWorkerPool);
+        workerPool->postAsyncTask(shared_from_this());
+    }
+}
+
 void AsyncTask::run()
 {
+    ASSERT(mDependencyCount == 0);
+    ASSERT(!mWorkerPool);
     ASSERT(mWorkerTask);
 
     // Note: always add an ANGLE_TRACE_EVENT* macro in the worker task.  Then the job will show up
     // in traces.
-    (*mWorkerTask)();
+    (*mWorkerTask)(this);
 
     // Release shared_ptr<WorkerTask> before notifying the event to allow for destructor based
     // dependencies (example: anglebug.com/42267099)
@@ -142,12 +317,19 @@ void AsyncTask::runAndMarkAsReady()
 WorkerThreadPool::WorkerThreadPool()  = default;
 WorkerThreadPool::~WorkerThreadPool() = default;
 
-class SingleThreadedWorkerPool final : public WorkerThreadPool
+class SingleThreadedWorkerPool final : public WorkerThreadPool,
+                                       public AsyncTaskWorkerPool,
+                                       public std::enable_shared_from_this<AsyncTaskWorkerPool>
 {
   public:
     // WorkerThreadPool
     std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
+    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task,
+                                                  const TaskDependencies &dependencies) override;
     bool isAsync() override;
+
+    // AsyncTaskWorkerPool
+    void postAsyncTask(std::shared_ptr<AsyncTask> &&task) override;
 };
 
 // SingleThreadedWorkerPool implementation.
@@ -159,9 +341,23 @@ std::shared_ptr<WaitableEvent> SingleThreadedWorkerPool::postWorkerTask(
     return RunInline(task);
 }
 
+std::shared_ptr<WaitableEvent> SingleThreadedWorkerPool::postWorkerTask(
+    const std::shared_ptr<WorkerTask> &task,
+    const TaskDependencies &dependencies)
+{
+    return PostWorkerTask(shared_from_this(), task, dependencies);
+}
+
 bool SingleThreadedWorkerPool::isAsync()
 {
     return false;
+}
+
+void SingleThreadedWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
+{
+    // Thread safety: This function is thread-safe because the task is run on the calling thread
+    // itself.
+    task->runAndMarkAsReady();
 }
 
 #if ANGLE_DELEGATE_WORKERS || ANGLE_STD_ASYNC_WORKERS
@@ -206,8 +402,17 @@ class MultiThreadedTaskQueue final : angle::NonCopyable
     bool isNeedToStartThreadLocked() const;
 
   private:
+    struct SharedAsyncTaskGreater
+    {
+        bool operator()(const std::shared_ptr<AsyncTask> &a,
+                        const std::shared_ptr<AsyncTask> &b) const
+        {
+            return b->getKey() < a->getKey();  // Using operator less in reverse.
+        }
+    };
+
     std::mutex mMutex;  // Protects access to the fields in this class
-    std::queue<std::shared_ptr<AsyncTask>> mTaskQueue;
+    std::vector<std::shared_ptr<AsyncTask>> mTaskQueue;
     std::atomic<size_t> mFreeThreadCount{0};
 };
 
@@ -227,7 +432,8 @@ void MultiThreadedTaskQueue::insertTask(std::shared_ptr<AsyncTask> &&task,
     {
         std::lock_guard<std::mutex> lock(mMutex);
 
-        mTaskQueue.emplace(std::move(task));
+        mTaskQueue.emplace_back(std::move(task));
+        std::push_heap(mTaskQueue.begin(), mTaskQueue.end(), SharedAsyncTaskGreater{});
 
         needToStartThreadUnlocked = isNeedToStartThreadLocked() && !startThreadLocked();
     }
@@ -254,8 +460,10 @@ void MultiThreadedTaskQueue::runTasks(EnsureHasNextTaskToRunLocked &&ensureHasNe
                 onLoopExitUnlocked();
                 return;
             }
+            // |pop_heap| doesn't access first element's value, so we can move it to the |task|.
             task = std::move(getNextTaskLocked());
-            mTaskQueue.pop();
+            std::pop_heap(mTaskQueue.begin(), mTaskQueue.end(), SharedAsyncTaskGreater{});
+            mTaskQueue.pop_back();
         }
 
         task->run();
@@ -263,6 +471,8 @@ void MultiThreadedTaskQueue::runTasks(EnsureHasNextTaskToRunLocked &&ensureHasNe
         // Mark this thread as free before marking task as ready.
         incrementFreeThreadCount(1);
 
+        // This may trigger |postAsyncTask| call in case of a dependency.  Because of the added
+        // free thread above, we can avoid starting a thread unnecessarily.
         task->markAsReady();
     }
 }
@@ -293,7 +503,9 @@ bool MultiThreadedTaskQueue::isNeedToStartThreadLocked() const
 
 #if ANGLE_STD_ASYNC_WORKERS
 
-class AsyncWorkerPool final : public WorkerThreadPool, AsyncTaskWorkerPool
+class AsyncWorkerPool final : public WorkerThreadPool,
+                              public AsyncTaskWorkerPool,
+                              public std::enable_shared_from_this<AsyncTaskWorkerPool>
 {
   public:
     explicit AsyncWorkerPool(size_t numThreads);
@@ -301,12 +513,14 @@ class AsyncWorkerPool final : public WorkerThreadPool, AsyncTaskWorkerPool
 
     // WorkerThreadPool
     std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
+    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task,
+                                                  const TaskDependencies &dependencies) override;
     bool isAsync() override;
 
-  private:
     // AsyncTaskWorkerPool
     void postAsyncTask(std::shared_ptr<AsyncTask> &&task) override;
 
+  private:
     bool startThreadLocked();
     void startThreadUnlocked();
 
@@ -382,6 +596,13 @@ std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(
     const std::shared_ptr<WorkerTask> &task)
 {
     return PostWorkerTask(this, task);
+}
+
+std::shared_ptr<WaitableEvent> AsyncWorkerPool::postWorkerTask(
+    const std::shared_ptr<WorkerTask> &task,
+    const TaskDependencies &dependencies)
+{
+    return PostWorkerTask(shared_from_this(), task, dependencies);
 }
 
 void AsyncWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
@@ -461,8 +682,8 @@ bool AsyncWorkerPool::isAsync()
 #if ANGLE_DELEGATE_WORKERS
 
 class DelegateWorkerPool final : public WorkerThreadPool,
-                                 public std::enable_shared_from_this<DelegateWorkerPool>,
-                                 AsyncTaskWorkerPool
+                                 public AsyncTaskWorkerPool,
+                                 public std::enable_shared_from_this<DelegateWorkerPool>
 {
   public:
     explicit DelegateWorkerPool(PlatformMethods *platform) : mPlatform(platform) {}
@@ -470,12 +691,14 @@ class DelegateWorkerPool final : public WorkerThreadPool,
 
     // WorkerThreadPool
     std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task) override;
+    std::shared_ptr<WaitableEvent> postWorkerTask(const std::shared_ptr<WorkerTask> &task,
+                                                  const TaskDependencies &dependencies) override;
     bool isAsync() override;
 
-  private:
     // AsyncTaskWorkerPool
     void postAsyncTask(std::shared_ptr<AsyncTask> &&task) override;
 
+  private:
     bool startThreadLocked();
     void startThreadUnlocked();
 
@@ -507,8 +730,9 @@ class DelegateWorkerThread final : angle::NonCopyable
   private:
     bool ensureHasNextTaskToRunLocked(std::unique_lock<std::mutex> *lock)
     {
-        // Only run a first task.
-        if (!mWorkerPool->mTaskQueue.isEmptyLocked() && mIsFirstRun)
+        // Always run a first task or if it is a sub-task.
+        if (!mWorkerPool->mTaskQueue.isEmptyLocked() &&
+            (mIsFirstRun || mWorkerPool->mTaskQueue.getNextTaskLocked()->isSubTask()))
         {
             mIsFirstRun = false;
             return true;
@@ -548,6 +772,13 @@ std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(
     const std::shared_ptr<WorkerTask> &task)
 {
     return PostWorkerTask(this, task);
+}
+
+std::shared_ptr<WaitableEvent> DelegateWorkerPool::postWorkerTask(
+    const std::shared_ptr<WorkerTask> &task,
+    const TaskDependencies &dependencies)
+{
+    return PostWorkerTask(shared_from_this(), task, dependencies);
 }
 
 void DelegateWorkerPool::postAsyncTask(std::shared_ptr<AsyncTask> &&task)
