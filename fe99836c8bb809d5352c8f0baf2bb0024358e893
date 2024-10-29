@@ -22,6 +22,30 @@
       },
       "revId": "fe99836c8bb809d5352c8f0baf2bb0024358e893",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51319829_69bb7f24",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-29T21:38:23Z",
+      "side": 0,
+      "message": "I believe the next line does the install: `out/AndroidPerformance/angle_trace_tests`",
+      "parentUuid": "7e0cf5da_68ac7268",
+      "range": {
+        "startLine": 438,
+        "startChar": 0,
+        "endLine": 438,
+        "endChar": 81
+      },
+      "revId": "fe99836c8bb809d5352c8f0baf2bb0024358e893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

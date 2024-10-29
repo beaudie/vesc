@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f6f8f5_7ca7595f",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-29T21:38:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6949f311_a1a59741",
+      "range": {
+        "startLine": 71,
+        "startChar": 91,
+        "endLine": 71,
+        "endChar": 96
+      },
+      "revId": "2fe95657bf10f345cac9c25a228290ed91e98632",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "577e5e97_4686dedc",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-10-29T21:19:32Z",
       "side": 1,
       "message": "you mentioned it was `-PREDICTION-MODEL`, could we use `\u0027MODEL\u0027 in name.split(\u0027-\u0027)` instead of this additional check? Also quick mention in the description?",
+      "range": {
+        "startLine": 553,
+        "startChar": 21,
+        "endLine": 553,
+        "endChar": 46
+      },
+      "revId": "2fe95657bf10f345cac9c25a228290ed91e98632",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ccf3ed6_3da567b6",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-29T21:38:23Z",
+      "side": 1,
+      "message": "Works for me.",
+      "parentUuid": "577e5e97_4686dedc",
       "range": {
         "startLine": 553,
         "startChar": 21,
