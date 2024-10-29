@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f5dc676_20433a27",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-29T00:25:27Z",
+      "side": 1,
+      "message": "It is very hard to write such a test, given how rare it is to hit the pool eviction. In my to do list is to rework the whole eviction logic from pool eviction to per descriptorSet eviction, if we are going to keep the cache path. When this is done, I am going to add some test to ensure the eviction actually tested and works. But I don\u0027t think we should spend more time on the pool eviction here other than fix the obvious bug.",
+      "parentUuid": "c1c4eb79_e70f46ad",
+      "revId": "1616157b3b4c061eca7771e5ee0067737ada1150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7822cadb_762cbcb0",
         "filename": "/COMMIT_MSG",
         "patchSetId": 9
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-29T00:01:50Z",
       "side": 1,
       "message": "typo: `descriptoret` --\u003e `descriptorset`",
+      "revId": "1616157b3b4c061eca7771e5ee0067737ada1150",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8314a7a2_3bbb1676",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-29T00:25:27Z",
+      "side": 1,
+      "message": "Will fix in next update.",
+      "parentUuid": "7822cadb_762cbcb0",
       "revId": "1616157b3b4c061eca7771e5ee0067737ada1150",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
