@@ -165,6 +165,30 @@
       },
       "revId": "600d084e22924756ac92ab186a56699724be50e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bb016a6_f0a22777",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T12:16:36Z",
+      "side": 1,
+      "message": "\u003e the conditional locked/unlocked state of the luck when the function returns\n\nThe `startThreadLocked()` **must** always be executed when the lock is held (this is indicated by the `Locked` suffix). However, it may or may not unlock the lock inside the call. This is not the problem for the caller, because it calls it in the end of the locking scope, where unlock will happen (in other words - it does not care). Description in `startThreadLocked()` only says that it may unlock the lock early, and the caller should expect that, and place the call at the end of the locked scope as one way to handle this.\n\n\u003e `Locked` suffix in the function name when only some of the code in the function is executed under lock.\n\nThe `Locked` suffix means that the function itself **must** be executed under the lock. Passing `lock` inside a function is separate from the having the suffix. There are other `Locked` function that do not have `lock` parameter.\n\nI seen this suffix used in other places in ANGLE (`SharedGarbageList` or in `CommandQueue`)\n\n\u003e 1) Splitting the startThreadLocked function into two parts,\n one locked and one unlocked, and adjusting the caller to make the two \ncalls accordingly (possibly carrying the return value from the locked \ncall over the unlock boundary)\n\nNow we have:\n```\nvoid MultiThreadedWorkerPool::postAsyncTask(std::shared_ptr\u003cAsyncTask\u003e \u0026\u0026task)\n{\n    std::unique_lock\u003cstd::mutex\u003e lock(mMutex);\n    //...\n    startThreadIfNeededLocked(\u0026lock);\n}\n\nvoid MultiThreadedWorkerPool::startThreadIfNeededLocked(std::unique_lock\u003cstd::mutex\u003e *lock)\n{\n    if (mTaskQueue.size() \u003e mFreeThreadCount.load(std::memory_order_relaxed))\n    {\n        startThreadLocked(lock);\n    }\n}\n\nvoid AsyncWorkerPool::startThreadLocked(std::unique_lock\u003cstd::mutex\u003e *lock)\n{\n    // Try to wake a waiting thread.\n    if (mWaitingThreadCount \u003e mNotifiedThreadCount)\n    {\n        incrementNotifiedThreadCountLocked(1);\n        lock-\u003eunlock();\n        mCondVar.notify_one();\n        return;\n    }\n\n    // Otherwise, try to create a new thread.\n    if (mThreads.size() \u003c mDesiredThreadCount)\n    {\n        incrementFreeThreadCount(1);\n        mThreads.emplace_back(\u0026AsyncWorkerPool::threadLoop, this);\n        return;\n    }\n\n    // All threads are created and running, so nothing to do.\n}\n```\nSo the `AsyncWorkerPool::startThreadLocked()` may unlock or not unlock the thread, depending if it wakes existing thread or creates new thread.\n\nWe can rewrite into 2 methods (as I understand you suggesting):\n```\nvoid MultiThreadedWorkerPool::postAsyncTask(std::shared_ptr\u003cAsyncTask\u003e \u0026\u0026task)\n{\n    bool needStartThreadUnlocked \u003d false;\n    {\n        std::unique_lock\u003cstd::mutex\u003e lock(mMutex);\n        //...\n        needStartThreadUnlocked \u003d !startThreadIfNeededLocked();\n    }\n    if (needStartThreadUnlocked)\n    {\n        startThreadUnlocked();\n    }\n}\n\nbool AsyncWorkerPool::startThreadLocked()\n{\n    // Try to wake a waiting thread.\n    if (mWaitingThreadCount \u003e mNotifiedThreadCount)\n    {\n        incrementNotifiedThreadCountLocked(1);\n        // Notify expected to be called in |startThreadUnlocked| because of the\n        // returned false.\n        return false;\n    }\n\n    // Otherwise, try to create a new thread.\n    if (mThreads.size() \u003c mDesiredThreadCount)\n    {\n        incrementFreeThreadCount(1);\n        mThreads.emplace_back(\u0026AsyncWorkerPool::threadLoop, this);\n        return true;\n    }\n\n    // All threads are created and running, so nothing to do.\n    return true;\n}\nvoid AsyncWorkerPool::startThreadUnlocked()\n{\n    mCondVar.notify_one();\n}\n```\nMy opinion, is the second version is more complex, and more error prone.\n\nThe `DelegateWorkerPool::startThreadLocked()` after split will mostly do it\u0027s work in the unlocked function.\n\n\u003e 2) Using templates instead of polymorphism (not insisting, but wondering if this would be better/worse/infeasible)\n\nGenerally, templates a harder to understand vs polymorphism by most programmers. I even once had a boss that banned templates because of complexity). Templates are generally used for performance and not for clarity.\n\nRegardless, of the above. It is hard to imagine what will be the template(s).\n\nI\u0027m agree to make it simpler, but I spend a lot of time so all things come together, and not sure that I can make everything simpler.\n\nI can simplify `startThreadLocked()` by passing lock **by value**, so the caller will know, that the lock will be **always** unlocked.\n\nI can also make same thing for the `ensureHasNextTaskToRunLocked()`, but then I will need to change return value from `bool` to `std::pair\u003cbool, std::unique_lock\u003cstd::mutex\u003e\u003e`, where in case of `result.first \u003d\u003d true`, the `result.second` will be a **valid locked lock**, otherwise - **empty lock object**.\n\nI will do the above, so you can compare differences and see which is better in your opinion.",
+      "parentUuid": "4c144d29_317bc0a6",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 86
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
