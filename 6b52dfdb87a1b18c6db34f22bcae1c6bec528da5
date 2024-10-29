@@ -250,6 +250,24 @@
       "parentUuid": "b7bd737f_94bd3345",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1a009c2_7f72bcbb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T20:30:51Z",
+      "side": 1,
+      "message": "Nice. glEndQuery should be unnecessary. Switch to fb0 is also unnecessary.\n\nSince you did the work to reproduce it in a test, might as well land it. The issue _was_ hit in the real world, so better make sure it\u0027s covered in tests.",
+      "parentUuid": "e899625e_cd31ded4",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
