@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9d36c323_b3ade686",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:17:07Z",
+      "side": 1,
+      "message": "Right, now we\u0027re back to the same problem that this makes SwiftShader return a 3.2 context, and the eventual hack to single it out by checking for geometry/tessellation support 😕\n\nI opened a discussion about what to do here on chat, let\u0027s discuss it over there.",
+      "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29e9326e_e3e2f924",
+        "filename": "src/tests/deqp_support/deqp_khr_noctx_gles32_test_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:17:07Z",
+      "side": 1,
+      "message": "Same here, and the other gles32 test suite",
+      "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
