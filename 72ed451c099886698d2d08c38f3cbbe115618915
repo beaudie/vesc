@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7a433e0_f4ef6154",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:13:57Z",
+      "side": 1,
+      "message": "Yes, ANGLE now behaves the same as the native ARM driver. The bad rendering is due to the interaction of D/S FF usage in the trace shaders, but the trace was captured on a device without D/S FF (I suspect).\n\nI\u0027ve accepted the changes, good or bad, we\u0027re matching native.",
+      "parentUuid": "27932693_80004a09",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b10bc8d4_93e97d4a",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-28T23:08:08Z",
       "side": 1,
       "message": "What is the reason that of this assert here?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcada38d_c02f0de4",
+        "filename": "src/libANGLE/renderer/vulkan/FramebufferVk.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 2948,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:13:57Z",
+      "side": 1,
+      "message": "The path that uses VkFramebuffer objects doesn\u0027t support D/S FF. In particular, the `mCurrentFramebufferDesc` doesn\u0027t take D/S input attachments into account.",
+      "parentUuid": "b10bc8d4_93e97d4a",
       "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -52,6 +88,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "14067bd9_404edc90",
+        "filename": "src/libANGLE/renderer/vulkan/vk_cache_utils.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 7054,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:13:57Z",
+      "side": 1,
+      "message": "The specific layout is `VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ_KHR`, which is why a different value is chosen if dynamic rendering.",
+      "parentUuid": "649a13c8_c132a2eb",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e68bd3e0_a9e93878",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-10-28T23:08:08Z",
       "side": 1,
       "message": "What does `redeclaration` mean here?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "017a3c24_c0ccc6ef",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4027,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:13:57Z",
+      "side": 1,
+      "message": "Redeclaration of `gl_LastFragDepthARM` and `gl_LastFragStencilARM` in the shader.",
+      "parentUuid": "e68bd3e0_a9e93878",
       "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -86,6 +158,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84bcc173_eaab752d",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4240,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:13:57Z",
+      "side": 1,
+      "message": "Just varying the parameters for better coverage 😊",
+      "parentUuid": "3aad499f_4407a119",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79237ef0_48c0da20",
@@ -103,6 +193,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85971b2d_656076cb",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4557,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:13:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "79237ef0_48c0da20",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "090daa2c_bbc3a819",
@@ -116,6 +224,24 @@
       "writtenOn": "2024-10-28T23:08:08Z",
       "side": 1,
       "message": "What does `PPO` stand for?",
+      "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69cd5a77_3c5b7b73",
+        "filename": "src/tests/gl_tests/FramebufferFetchTest.cpp",
+        "patchSetId": 6
+      },
+      "lineNbr": 4775,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:13:57Z",
+      "side": 1,
+      "message": "Program Pipeline Object",
+      "parentUuid": "090daa2c_bbc3a819",
       "revId": "72ed451c099886698d2d08c38f3cbbe115618915",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
