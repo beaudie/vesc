@@ -46,6 +46,40 @@
       },
       "revId": "2910dc1a99682895ec13da003424648f4d646a5d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef55006f_2d0e832f",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 397,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T03:11:07Z",
+      "side": 1,
+      "message": "Nit: for consistency with unmap:\n\n```suggestion\n    CLBufferVk \u0026bufferVk \u003d buffer.getImpl\u003cCLBufferVk\u003e();\n```",
+      "revId": "2910dc1a99682895ec13da003424648f4d646a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61839507_4fef38ae",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T03:11:07Z",
+      "side": 1,
+      "message": "This _looks_ like it\u0027s copying from the buffer to itself. I imagine `getHostPtr()` is returning a different buffer from `bufferVk`\u0027s internal memory, like a shadow buffer? If that\u0027s true, shouldn\u0027t this be done when `CL_MEM_USE_HOST_PTR` is **not** provided?",
+      "revId": "2910dc1a99682895ec13da003424648f4d646a5d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
