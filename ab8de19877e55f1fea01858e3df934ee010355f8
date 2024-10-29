@@ -50,6 +50,24 @@
       "message": "No need for vector or string:\n\n```suggestion\n    std::pair\u003cconst char *, bool\u003e requirements[] \u003d {\n```",
       "revId": "ab8de19877e55f1fea01858e3df934ee010355f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "180f8b45_aed1689a",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1551137
+      },
+      "writtenOn": "2024-10-29T17:23:25Z",
+      "side": 1,
+      "message": "The strings were intended for logging.  Future requirements can be added easily in the vector.   Or, do you prefer the style in Patchset 2?\n\n```\n    if (!result)\n    {\n        INFO() \u003c\u003c \"CanSupportAEP() check failed for missing the following requirements:\\n\";\n        if (version \u003c ES_3_1)\n            INFO() \u003c\u003c \"* version \u003e\u003d ES_3_1\\n\";\n        if (!extensions.debugKHR)\n            INFO() \u003c\u003c \"* extensions.debugKHR\\n\";\n        if (!extensions.textureCompressionAstcLdrKHR)\n            INFO() \u003c\u003c \"* extensions.textureCompressionAstcLdrKHR\\n\";\n        if (!extensions.blendEquationAdvancedKHR)\n            INFO() \u003c\u003c \"* extensions.blendEquationAdvancedKHR\\n\";\n        if (!extensions.sampleShadingOES)\n            INFO() \u003c\u003c \"* extensions.sampleShadingOES\\n\";\n        if (!extensions.sampleVariablesOES)\n            INFO() \u003c\u003c \"* extensions.sampleVariablesOES\\n\";\n        if (!extensions.shaderImageAtomicOES)\n...\n```",
+      "parentUuid": "a79fe77c_f9afd930",
+      "revId": "ab8de19877e55f1fea01858e3df934ee010355f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
