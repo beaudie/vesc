@@ -335,6 +335,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a152b85c_20f46723",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T15:25:51Z",
+      "side": 1,
+      "message": "I have update `ensureHasNextTaskToRunLocked()` and `startThreadLocked()` signatures. Please give your opinion, if this is clearer/better than the old version.",
+      "parentUuid": "e1a7e1c6_2cd6702c",
+      "range": {
+        "startLine": 175,
+        "startChar": 86,
+        "endLine": 175,
+        "endChar": 89
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a3384b6_387d3b33",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 3
