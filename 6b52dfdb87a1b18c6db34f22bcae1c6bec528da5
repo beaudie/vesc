@@ -196,6 +196,24 @@
       "parentUuid": "b355b943_a15ccb0e",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0dcfd1f9_362c5182",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-29T17:28:44Z",
+      "side": 1,
+      "message": "Ok great this gets us closer, but then in the bug we hit this line in `ContextVk::insertEventMarkerImpl` which updates `mOutsideRenderPassCommands`: https://crsrc.org/c/third_party/angle/src/libANGLE/renderer/vulkan/ContextVk.cpp;drc\u003d08c1724fec38b9cf5242ed29e82bc4e9437aa650;l\u003d4714\n\nIn my test I\u0027m getting `hasActiveRenderPass() \u003d\u003d true` because `mRenderPassCommandBuffer` is not null, so the marker is inserted into `mRenderPassCommandBuffer` instead and we don\u0027t hit the bug.\n\nIn the bug the render pass appears to be finished by `glEndQuery(GL_TIME_ELAPSED_EXT)` and that sets `mRenderPassCommandBuffer` to null. When I try to do this in my test, if I add it to the draw part we end up with `handleDirtyGraphicsRenderPass` which sets up `mRenderPassCommandBuffer` again. If I add it to the first compute part, the finish ends up happening after `beginNewRenderPass` which again avoids the bug. Stars really have to align for this to happen!",
+      "parentUuid": "42967ed9_6a784909",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
