@@ -160,6 +160,24 @@
       "parentUuid": "45c24950_97d9a2f9",
       "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b355b943_a15ccb0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-10-29T15:44:04Z",
+      "side": 1,
+      "message": "So we do need to hit `beginNewRenderPass` somehow. In the bug this was happening via a blit from the offscreen buffer. If I do only a sequence of compute I\u0027m not hitting `beginNewRenderPass`. If I do a draw followed by compute I\u0027m hitting `beginNewRenderPass` but with `mRenderPassCommands-\u003estarted()`. Still missing something.",
+      "parentUuid": "3f980981_8ac42e6e",
+      "revId": "6b52dfdb87a1b18c6db34f22bcae1c6bec528da5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ],
   "submitRequirementResults": [
