@@ -70,6 +70,24 @@
       "parentUuid": "e89bbd40_75c62aa9",
       "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f3c752f_2c3637a6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-29T20:48:22Z",
+      "side": 1,
+      "message": "\u003e Regarding splitting startThreadLocked into locked/unlocked \nparts I disagree. Maybe it makes sings clear regarding locking, but will\n make harder the implementation. But OK, I will to such change in \nanother DRAFT.\n\nAdded changes here: https://chromium-review.googlesource.com/c/angle/angle/+/5973181\n\nAlso added `onLoopExitUnlocked` to be used with `ensureHasNextTaskToRunLocked` instead of unlocking the mutex.",
+      "parentUuid": "3dd6c7e3_4e595cf6",
+      "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
