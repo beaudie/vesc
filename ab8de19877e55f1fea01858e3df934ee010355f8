@@ -68,6 +68,24 @@
       "parentUuid": "a79fe77c_f9afd930",
       "revId": "ab8de19877e55f1fea01858e3df934ee010355f8",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7cff517_7aee6e1e",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T17:29:08Z",
+      "side": 1,
+      "message": "Did you see the suggested edit? Click `SHOW EDIT`, I don\u0027t know why gerrit doesn\u0027t show it today.\n\nYou can do exactly what you\u0027re doing right now, just without dynamic allocation.",
+      "parentUuid": "180f8b45_aed1689a",
+      "revId": "ab8de19877e55f1fea01858e3df934ee010355f8",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
