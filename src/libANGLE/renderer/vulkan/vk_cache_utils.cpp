@@ -6408,7 +6408,6 @@ angle::Result DescriptorSetDescBuilder::updateActiveTexturesForCacheMiss(
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
-    PipelineType pipelineType,
     const SharedDescriptorSetCacheKey &sharedCacheKey)
 {
     // This is only used when cache is enabled.
@@ -6450,8 +6449,8 @@ angle::Result DescriptorSetDescBuilder::updateActiveTexturesForCacheMiss(
                 textureVk->onNewDescriptorSet(sharedCacheKey);
 
                 const BufferView *view = nullptr;
-                ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, &samplerBinding,
-                                                               false, &view));
+                ANGLE_TRY(
+                    textureVk->getBufferView(context, nullptr, &samplerBinding, false, &view));
                 mHandles[infoIndex].bufferView = view->getHandle();
             }
             else
@@ -6470,7 +6469,7 @@ angle::Result DescriptorSetDescBuilder::updateActiveTexturesForCacheMiss(
                 mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
 
                 const ImageView &imageView = textureVk->getReadImageView(
-                    context, samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
+                    samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
                     isSamplerExternalY2Y);
                 mHandles[infoIndex].imageView = imageView.getHandle();
             }
@@ -6551,8 +6550,8 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
             {
                 ASSERT(writeSet.descriptorType == VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER);
                 const BufferView *view = nullptr;
-                ANGLE_TRY(textureVk->getBufferViewAndRecordUse(context, nullptr, &samplerBinding,
-                                                               false, &view));
+                ANGLE_TRY(
+                    textureVk->getBufferView(context, nullptr, &samplerBinding, false, &view));
 
                 VkBufferView &bufferView  = updateBuilder->allocBufferView();
                 bufferView                = view->getHandle();
@@ -6573,7 +6572,7 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
 
                 ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
                 const ImageView &imageView = textureVk->getReadImageView(
-                    context, samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
+                    samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
                     isSamplerExternalY2Y);
 
                 VkDescriptorImageInfo *imageInfo = const_cast<VkDescriptorImageInfo *>(
@@ -6941,8 +6940,7 @@ angle::Result DescriptorSetDescBuilder::updateImages(
                                      arrayElement + imageUniform.getOuterArrayOffset();
 
                 const vk::BufferView *view = nullptr;
-                ANGLE_TRY(
-                    textureVk->getBufferViewAndRecordUse(context, format, nullptr, true, &view));
+                ANGLE_TRY(textureVk->getBufferView(context, format, nullptr, true, &view));
 
                 DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
                 infoDesc.imageViewSerialOrOffset =

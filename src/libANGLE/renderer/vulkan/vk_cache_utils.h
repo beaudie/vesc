@@ -1979,7 +1979,6 @@ class DescriptorSetDescBuilder final
         const gl::ProgramExecutable &executable,
         const gl::ActiveTextureArray<TextureVk *> &textures,
         const gl::SamplerBindingVector &samplers,
-        PipelineType pipelineType,
         const SharedDescriptorSetCacheKey &sharedCacheKey);
 
     void updateDescriptorSet(Renderer *renderer,
