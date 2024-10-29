@@ -332,7 +332,7 @@ class ProgramD3D::GetVertexExecutableTask : public GetExecutableTask
     {}
     ~GetVertexExecutableTask() override = default;
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "GetVertexExecutableTask::run");
 
@@ -350,7 +350,7 @@ class ProgramD3D::GetPixelExecutableTask : public GetExecutableTask
     {}
     ~GetPixelExecutableTask() override = default;
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "GetPixelExecutableTask::run");
         if (!mShader)
@@ -376,7 +376,7 @@ class ProgramD3D::GetGeometryExecutableTask : public GetExecutableTask
     {}
     ~GetGeometryExecutableTask() override = default;
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "GetGeometryExecutableTask::run");
         // Auto-generate the geometry shader here, if we expect to be using point rendering in
@@ -403,7 +403,7 @@ class ProgramD3D::GetComputeExecutableTask : public GetExecutableTask
     {}
     ~GetComputeExecutableTask() override = default;
 
-    void operator()() override
+    void operator()(angle::WaitableEvent *event) override
     {
         ANGLE_TRACE_EVENT0("gpu.angle", "GetComputeExecutableTask::run");
 

@@ -298,7 +298,7 @@ std::string ProcessBuildOptions(const std::vector<std::string> &optionTokens,
 
 }  // namespace
 
-void CLAsyncBuildTask::operator()()
+void CLAsyncBuildTask::operator()(angle::WaitableEvent *event)
 {
     ANGLE_TRACE_EVENT0("gpu.angle", "CLProgramVk::buildInternal (async)");
     CLProgramVk::ScopedProgramCallback spc(mNotify);
