@@ -16,6 +16,24 @@
       "message": "Are we implicitly casting WeakPtr to a SharedPtr here?",
       "revId": "5e17eece320bc81c58828c58fdfe41ab89a2506d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dc6739e_fcbba9fb",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 4444,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-29T00:19:52Z",
+      "side": 1,
+      "message": "It will invoke the constructor of `SharedPtr(const WeakPtr\u003cT\u003e \u0026other)`.",
+      "parentUuid": "26c48849_ef81b6fb",
+      "revId": "5e17eece320bc81c58828c58fdfe41ab89a2506d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
