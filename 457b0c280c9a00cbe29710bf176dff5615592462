@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7770831b_245a0758",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-29T02:24:08Z",
+      "side": 1,
+      "message": "Ok for windows/intel, I think the problem is input attachment usage missing from swapchain; you can add an `|| nonconformant` to this for `!isIntel` to work around it: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_renderer.cpp\n\nFor Pixel 4: I think the right thing to do is actually treat it like SwiftShader. If it can\u0027t support ES3.2, then we shouldn\u0027t force it, just don\u0027t test ES3.2 on Pixel 4.\n\nAfter that, we can just wait for the Linux/Nvidia bot upgrade to finish before landing this change.",
+      "parentUuid": "27b569bc_328e975e",
+      "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06ad9700_5529e124",
         "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
         "patchSetId": 7
