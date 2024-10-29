@@ -196,6 +196,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "73f6748f_25ec95a8",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 891,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-29T22:26:33Z",
+      "side": 1,
+      "message": "Thank you Igor. I made the change, could you please check if I understand your suggestion correctly?",
+      "parentUuid": "c4e1b3fa_9d00ee8b",
+      "range": {
+        "startLine": 891,
+        "startChar": 8,
+        "endLine": 891,
+        "endChar": 31
+      },
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9147c7e4_208bdad6",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 10
