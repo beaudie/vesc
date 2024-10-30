@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1783eac_6a180519",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-30T21:36:46Z",
+      "side": 1,
+      "message": "Thanks! Done.",
+      "parentUuid": "8e3ed642_91aecaeb",
+      "range": {
+        "startLine": 859,
+        "startChar": 73,
+        "endLine": 859,
+        "endChar": 85
+      },
+      "revId": "5744a74f9cdb4f229064241c62d5ea787fc145c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fdf29b17_d4a8bd35",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-30T15:54:39Z",
       "side": 1,
       "message": "Is this qualcomm bug or other reason?",
+      "range": {
+        "startLine": 1342,
+        "startChar": 0,
+        "endLine": 1342,
+        "endChar": 68
+      },
+      "revId": "5744a74f9cdb4f229064241c62d5ea787fc145c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06d135de_15d1f6e6",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 26
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-30T21:36:46Z",
+      "side": 1,
+      "message": "Yes. It looks like a QCOM bug related to fully clearing 3D textures via API. A bug has now been filed.",
+      "parentUuid": "fdf29b17_d4a8bd35",
       "range": {
         "startLine": 1342,
         "startChar": 0,
