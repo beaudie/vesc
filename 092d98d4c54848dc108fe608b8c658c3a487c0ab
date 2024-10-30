@@ -105,6 +105,24 @@
       "parentUuid": "fde22fd4_53ae367c",
       "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a779cd00_d0652e0c",
+        "filename": "src/tests/deqp_support/deqp_khr_noctx_gles32_test_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-30T18:25:15Z",
+      "side": 1,
+      "message": "We should just run those on another device IMO, not SwiftShader. So we get the coverage without forcing ANGLE to expose 3.2 on SwiftShader.",
+      "parentUuid": "3238aa26_7d3e7058",
+      "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
