@@ -20,6 +20,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0785f90f_e3d0bf3e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3462878
+      },
+      "writtenOn": "2024-10-30T01:19:42Z",
+      "side": 1,
+      "message": "Hi geofflang@chromium.org, could you take a look since you\u0027re the file owner? Thanks.",
+      "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9ab55f40_bdff8010",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 4
@@ -31,6 +48,24 @@
       "writtenOn": "2024-10-29T11:19:17Z",
       "side": 1,
       "message": "Alexey: seems like the Family3 values here are incorrect. Tables say it\u0027s 60 for family 3, 124 for family 4.",
+      "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3e51f06_68b8ed3c",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 3462878
+      },
+      "writtenOn": "2024-10-30T01:19:42Z",
+      "side": 1,
+      "message": "Thanks Kimmo. I’m curious if the behavior of `[supportsFamily:]` on the simulator is intentional or if there might be an issue with it?",
+      "parentUuid": "9ab55f40_bdff8010",
       "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
