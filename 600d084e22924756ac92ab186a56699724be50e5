@@ -285,6 +285,30 @@
       },
       "revId": "600d084e22924756ac92ab186a56699724be50e5",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e2df278_dd7a8199",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-30T01:16:09Z",
+      "side": 1,
+      "message": "\u003e Looking at  the CL chain, this is quite convoluted.. I think I understand this implementation but I find it quite difficult to reason about due to:\n- the conditional locked/unlocked state of the luck when the function returns\n- `Locked` suffix in the function name when only some of the code in the function is executed under lock.\n\nI have updated the code in all CLs of the chain. Now `Locked` means, that the function must be called while the mutex is locked and the mutex will be locked when the call ends.\n\nHowever function is still allowed to unlock the mutex *temporarily* inside the call. I asked you if this is OK, but did not found the answer. Is using `Locked` suffix is OK in this case?\n\nIs updated implementation more clear now?\n\n\u003e Igor, have you considered\n\u003e\n\u003e 1) Splitting the `startThreadLocked` function into two parts, one locked and one unlocked, and adjusting the caller to make the two calls accordingly (possibly carrying the return  value from the locked call over the unlock boundary)\n\nDone.\n\n\u003e 2) Using templates instead of polymorphism (not insisting, but wondering if this would be better/worse/infeasible)?\n\nDone.\n\n---\n\nOne question. Will it be clear if I simply remove the `Locked` suffix and only pass the `lock`. Then I will write in the documentation that the lock must be locked when calling the function, but may be unlocked when call ends in some cases?\n\nThis way there will be no `Locked` promise, and whoever will be using that function will not assume anything. It will also see that lock is passed as pointer `\u0026lock`, indicating that the lock may change inside.\n\nI really do not see that splitting functions making code clearer.",
+      "parentUuid": "deb04d4f_bd9619de",
+      "range": {
+        "startLine": 167,
+        "startChar": 4,
+        "endLine": 167,
+        "endChar": 86
+      },
+      "revId": "600d084e22924756ac92ab186a56699724be50e5",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }

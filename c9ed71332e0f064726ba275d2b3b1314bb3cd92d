@@ -359,6 +359,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "82eff5ae_4e69cd95",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-30T01:16:09Z",
+      "side": 1,
+      "message": "I have updated the function once more, so this `may be unlocked` is no longer relevant.\n\n`ensureHasNextTaskToRunLocked` is split into template parameters:\n- `bool ensureHasNextTaskToRunLocked(std::unique_lock\u003cstd::mutex\u003e *lock)` - does **not unlock** the lock when call ends.\n- `void onLoopExitUnlocked()` - must be called without a lock, if above returns false.",
+      "parentUuid": "a152b85c_20f46723",
+      "range": {
+        "startLine": 175,
+        "startChar": 86,
+        "endLine": 175,
+        "endChar": 89
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8a3384b6_387d3b33",
         "filename": "src/common/WorkerThread.cpp",
         "patchSetId": 3
@@ -418,6 +442,30 @@
       "side": 1,
       "message": "Added `(or may not)` into the comment.",
       "parentUuid": "30bf5a85_48f5c9d7",
+      "range": {
+        "startLine": 195,
+        "startChar": 55,
+        "endLine": 195,
+        "endChar": 58
+      },
+      "revId": "c9ed71332e0f064726ba275d2b3b1314bb3cd92d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "531564ae_07035a8e",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-30T01:16:09Z",
+      "side": 1,
+      "message": "I have split the function similarly to `ensureHasNextTaskToRunLocked()`.\n\n`startThreadLocked` is split into:\n- `bool startThreadLocked()` - can\u0027t unlock, since no lock passed.\nIf returns false - need to call `startThreadUnlocked()` to finish the job.- `void startThreadUnlocked()` - must be called without a lock, if above returns false.",
+      "parentUuid": "52cee8c2_567a8669",
       "range": {
         "startLine": 195,
         "startChar": 55,

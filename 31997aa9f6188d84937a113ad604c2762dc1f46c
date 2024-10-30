@@ -46,6 +46,30 @@
       },
       "revId": "31997aa9f6188d84937a113ad604c2762dc1f46c",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d01e3e00_2800722d",
+        "filename": "src/common/WorkerThread.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-30T01:16:09Z",
+      "side": 1,
+      "message": "\u003e and I think the discussion about the specific wording around lock might be an indication that this is not intuitive\n\nDiscussion was because I\u0027m bad at English... Слава Україні!\n\nI have written: `\"the lock may be unlocked after the call.\"` - allowed to be unlocked by the caller?!\nBut what I really wanted to write: `\"the lock may be in an unlocked state after the call\"`",
+      "parentUuid": "9e75b726_e07ae734",
+      "range": {
+        "startLine": 186,
+        "startChar": 0,
+        "endLine": 187,
+        "endChar": 46
+      },
+      "revId": "31997aa9f6188d84937a113ad604c2762dc1f46c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
