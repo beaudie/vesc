@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e3ed642_91aecaeb",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 26
+      },
+      "lineNbr": 859,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-30T15:54:39Z",
+      "side": 1,
+      "message": "You can check area against texture extents and use FullClear if possible.",
+      "range": {
+        "startLine": 859,
+        "startChar": 73,
+        "endLine": 859,
+        "endChar": 85
+      },
+      "revId": "5744a74f9cdb4f229064241c62d5ea787fc145c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdf29b17_d4a8bd35",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 26
+      },
+      "lineNbr": 1342,
+      "author": {
+        "id": 1392020
+      },
+      "writtenOn": "2024-10-30T15:54:39Z",
+      "side": 1,
+      "message": "Is this qualcomm bug or other reason?",
+      "range": {
+        "startLine": 1342,
+        "startChar": 0,
+        "endLine": 1342,
+        "endChar": 68
+      },
+      "revId": "5744a74f9cdb4f229064241c62d5ea787fc145c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
