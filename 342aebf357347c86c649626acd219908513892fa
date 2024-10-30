@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d61315f_05152a00",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-30T16:23:58Z",
+      "side": 1,
+      "message": "Please shorten this a line smaller than 65 chars. You can keep the longer description after an empty line under it. The git commit message format is:\n\n```\nSingle line of short description\n\nLong lines wrapped to 72 characters .....\n.....\n.....\n.....\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 56
+      },
+      "revId": "342aebf357347c86c649626acd219908513892fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a65db778_7d346cae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-30T16:23:58Z",
+      "side": 1,
+      "message": "Need a `Bug:` line here, in this case:\n\n```\nBug: angleproject:374797737\n```",
+      "revId": "342aebf357347c86c649626acd219908513892fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
