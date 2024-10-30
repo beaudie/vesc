@@ -16,6 +16,24 @@
       "message": "I believe this was only Pixel4, right?\n\n```suggestion\n42267047 PIXEL4ORXL VULKAN : GLSLTest_ES3.VaryingAnonymousStructWithInlineDefinition2/* \u003d SKIP\n```",
       "revId": "da92f2eed6bbdb54e2ea9c8aff55a1c87d114f72",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a26de1ed_b40516a5",
+        "filename": "src/tests/angle_end2end_tests_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-10-30T13:57:58Z",
+      "side": 1,
+      "message": "Yes, I\u0027d imagine both were crashing, maybe? I\u0027m not expert on interpreting the results. Both got failures, at least.",
+      "parentUuid": "2283d506_07315ebb",
+      "revId": "da92f2eed6bbdb54e2ea9c8aff55a1c87d114f72",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
