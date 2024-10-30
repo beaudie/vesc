@@ -87,6 +87,24 @@
       "parentUuid": "d0c96d75_33d2936e",
       "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3238aa26_7d3e7058",
+        "filename": "src/tests/deqp_support/deqp_khr_noctx_gles32_test_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-30T17:40:22Z",
+      "side": 1,
+      "message": "I added ES3.2 tests for swiftshader https://chromium-review.googlesource.com/c/angle/angle/+/4673582/6/infra/specs/test_suites.pyl#1153 to have test coverage. Is it ok to keep the bots, but disable the tests in the expectation file? Or do we only want to enable ES3.2 tests until we implement the support in swiftshader?",
+      "parentUuid": "fde22fd4_53ae367c",
+      "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
