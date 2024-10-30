@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "270bc82e_ed0e6567",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-30T01:37:11Z",
+      "side": 1,
+      "message": "\u003e However, it fails on the related end2end tests\n\nYes, and it should be skipped.\n\n\u003e We could also skip ES 3.2 tests for Pixel 4.\n\nYes, just like with SwiftShader. You can remove ES3.2 deqp testing from Pixel 4 on the bots (the relevant files are under `infra/`). For the traces, ES3.2 traces should also be skipped on Pixel4 like I imagine they already are for SwiftShader.",
+      "parentUuid": "ca43f1b5_7f4fe0c1",
+      "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06ad9700_5529e124",
         "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
         "patchSetId": 7
