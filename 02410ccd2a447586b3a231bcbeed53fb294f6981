@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a59f8471_1e28d94d",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 8345,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-30T18:21:14Z",
+      "side": 1,
+      "message": "```suggestion\n        if (contextVk-\u003egetFeatures().supportsComputeTranscodeEtcToBc.enabled \u0026\u0026\n```",
+      "revId": "02410ccd2a447586b3a231bcbeed53fb294f6981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
