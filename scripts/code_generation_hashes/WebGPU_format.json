@@ -4,9 +4,9 @@
   "src/libANGLE/renderer/angle_format_map.json":
     "eab6744df71f7bf6bfe9e8bb39949b79",
   "src/libANGLE/renderer/wgpu/gen_wgpu_format_table.py":
-    "5ec5376c04a7c2cfce02a82fe87dc1d9",
+    "bfdb325d31186e7e5f576c0466ad9d31",
   "src/libANGLE/renderer/wgpu/wgpu_format_map.json":
-    "0b81ac7c0c17d49453748d2f63e93273",
+    "4d69e22534753d56414d670716214acb",
   "src/libANGLE/renderer/wgpu/wgpu_format_table_autogen.cpp":
-    "f2c8584711e9dfa09a734f13570c9767"
+    "438a0cf77ea39e7cfa5e46bb3e4b5673"
 }

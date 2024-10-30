@@ -33,7 +33,7 @@ egl::Error DisplayWgpu::initialize(egl::Display *display)
     ANGLE_TRY(createWgpuDevice());
 
     mQueue = mDevice.GetQueue();
-    mFormatTable.initialize();
+    mFormatTable.initialize(mDevice);
 
     webgpu::GenerateCaps(mDevice, &mGLCaps, &mGLTextureCaps, &mGLExtensions, &mGLLimitations,
                          &mEGLCaps, &mEGLExtensions, &mMaxSupportedClientVersion);
