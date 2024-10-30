@@ -141,6 +141,24 @@
       "parentUuid": "a779cd00_d0652e0c",
       "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ea9ce05_60d81d21",
+        "filename": "src/tests/deqp_support/deqp_khr_noctx_gles32_test_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-30T23:25:23Z",
+      "side": 1,
+      "message": "Thanks @yuxinhu@google.com! I have now applied this change.",
+      "parentUuid": "6b246267_a54626a5",
+      "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
