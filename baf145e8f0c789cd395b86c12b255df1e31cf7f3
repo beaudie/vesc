@@ -88,6 +88,24 @@
       "parentUuid": "3dd6c7e3_4e595cf6",
       "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f349f615_37bafca6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-30T01:17:58Z",
+      "side": 1,
+      "message": "No need to review DRAFTS (will remove them).\n\nAlready updated the CLs in the chain.",
+      "parentUuid": "0f3c752f_2c3637a6",
+      "revId": "baf145e8f0c789cd395b86c12b255df1e31cf7f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
