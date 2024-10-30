@@ -34,20 +34,32 @@ Format::Format()
       mImageInitializerFunction(nullptr),
       mIsRenderable(false)
 {}
-void Format::initImageFallback(const ImageFormatInitInfo *info, int numInfo)
+void Format::initImageFallback(wgpu::Device &wgpuDevice,
+                               const ImageFormatInitInfo *info,
+                               int numInfo)
 {
-    UNIMPLEMENTED();
-}
-
-void Format::initBufferFallback(const BufferFormatInitInfo *fallbackInfo, int numInfo)
-{
-    UNIMPLEMENTED();
+    int fallbackNum = 0;
+    for (int i = 0; i < numInfo; i++)
+    {
+        fallbackNum = i;
+        if ((rx::IsETCFormat(info[i].format) &&
+             wgpuDevice.HasFeature(wgpu::FeatureName::TextureCompressionETC2)) ||
+            (rx::IsBCFormat(info[i].format) &&
+             wgpuDevice.HasFeature(wgpu::FeatureName::TextureCompressionBC)) ||
+            (rx::IsASTCFormat(info[i].format) &&
+             wgpuDevice.HasFeature(wgpu::FeatureName::TextureCompressionASTC)))
+        {
+            break;
+        }
+    }
+    mActualImageFormatID      = info[fallbackNum].format;
+    mImageInitializerFunction = info[fallbackNum].initializer;
 }
 
 FormatTable::FormatTable() {}
 FormatTable::~FormatTable() {}
 
-void FormatTable::initialize()
+void FormatTable::initialize(wgpu::Device &wgpuDevice)
 {
     for (size_t formatIndex = 0; formatIndex < angle::kNumANGLEFormats; ++formatIndex)
     {
@@ -55,9 +67,8 @@ void FormatTable::initialize()
         const auto intendedFormatID              = static_cast<angle::FormatID>(formatIndex);
         const angle::Format &intendedAngleFormat = angle::Format::Get(intendedFormatID);
 
-        format.initialize(intendedAngleFormat);
+        format.initialize(wgpuDevice, intendedAngleFormat);
         format.mIntendedFormatID = intendedFormatID;
-
         gl::TextureCaps textureCaps;
         FillTextureCaps(format.getActualImageFormat(), format.mActualImageFormatID, &textureCaps);
         if (textureCaps.texturable)

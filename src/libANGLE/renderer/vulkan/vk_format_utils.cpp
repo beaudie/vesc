@@ -253,7 +253,7 @@ void FormatTable::initialize(Renderer *renderer, gl::TextureCapsMap *outTextureC
 
         bool transcodeEtcToBc = false;
         if (renderer->getFeatures().supportsComputeTranscodeEtcToBc.enabled &&
-            IsETCFormat(intendedFormatID) &&
+            rx::IsETCFormat(intendedFormatID) &&
             !angle::Format::Get(format.mActualSampleOnlyImageFormatID).isBlock)
         {
             // Check BC format support
@@ -487,19 +487,6 @@ bool HasNonRenderableTextureFormatSupport(vk::Renderer *renderer, angle::FormatI
            renderer->hasImageFormatFeatureBits(formatID, kBitsDepth);
 }
 
-// Checks if it is a ETC texture format
-bool IsETCFormat(angle::FormatID formatID)
-{
-    return formatID >= angle::FormatID::EAC_R11G11_SNORM_BLOCK &&
-           formatID <= angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK;
-}
-// Checks if it is a BC texture format
-bool IsBCFormat(angle::FormatID formatID)
-{
-    return formatID >= angle::FormatID::BC1_RGBA_UNORM_BLOCK &&
-           formatID <= angle::FormatID::BC7_RGBA_UNORM_SRGB_BLOCK;
-}
-
 static constexpr int kNumETCFormats = 12;
 
 static_assert((int)angle::FormatID::ETC2_R8G8B8_UNORM_BLOCK ==
@@ -543,7 +530,7 @@ static const std::array<LoadImageFunction, kNumETCFormats> kEtcToBcLoadingFunc =
 
 LoadImageFunctionInfo GetEtcToBcTransCodingFunc(angle::FormatID formatID)
 {
-    ASSERT(IsETCFormat(formatID));
+    ASSERT(rx::IsETCFormat(formatID));
     return LoadImageFunctionInfo(
         kEtcToBcLoadingFunc[static_cast<uint32_t>(formatID) -
                             static_cast<uint32_t>(angle::FormatID::EAC_R11G11_SNORM_BLOCK)],
@@ -567,7 +554,7 @@ static constexpr angle::FormatID kEtcToBcFormatMapping[] = {
 
 angle::FormatID GetTranscodeBCFormatID(angle::FormatID formatID)
 {
-    ASSERT(IsETCFormat(formatID));
+    ASSERT(rx::IsETCFormat(formatID));
     return kEtcToBcFormatMapping[static_cast<uint32_t>(formatID) -
                                  static_cast<uint32_t>(angle::FormatID::EAC_R11G11_SNORM_BLOCK)];
 }
