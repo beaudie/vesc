@@ -16,6 +16,29 @@
       "message": "```suggestion\n        if (contextVk-\u003egetFeatures().supportsComputeTranscodeEtcToBc.enabled \u0026\u0026\n```",
       "revId": "02410ccd2a447586b3a231bcbeed53fb294f6981",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08da3010_96ecc09c",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-10-30T22:30:20Z",
+      "side": 1,
+      "message": "what happens if we don\u0027t ever break here?",
+      "range": {
+        "startLine": 52,
+        "startChar": 12,
+        "endLine": 52,
+        "endChar": 17
+      },
+      "revId": "02410ccd2a447586b3a231bcbeed53fb294f6981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
