@@ -68,6 +68,24 @@
       "parentUuid": "9ab55f40_bdff8010",
       "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "64daf6e6_4498df0c",
+        "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
+        "patchSetId": 4
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 1449558
+      },
+      "writtenOn": "2024-10-30T09:16:27Z",
+      "side": 1,
+      "message": "The simulator capabilities is unfortunately amalgamation of various families, and as such it doesn\u0027t return something that would be usable.",
+      "parentUuid": "c3e51f06_68b8ed3c",
+      "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
