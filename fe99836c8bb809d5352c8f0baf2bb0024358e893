@@ -70,6 +70,30 @@
       },
       "revId": "fe99836c8bb809d5352c8f0baf2bb0024358e893",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff897091_535bc987",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-30T02:57:08Z",
+      "side": 0,
+      "message": "\u003e So you\u0027re intentionally diverging with the org.chromium.angle recommendation (and the other apk) in our docs, right?\n\nYes, making a choice to load them from the test APK instead, simplifying things.  The shared objects should be identical, and you don\u0027t need any additional permissions since it is loading from the app\u0027s own directory.\n\n\u003e And to double check, is this way using the blobcache correctly?\n\nYes, the script still runs our harness with --use-gl\u003dnative` and allows the platform to ingest settings that dictate which GLES to use.\n\n\u003e When we run out/AndroidPerformance/angle_trace_tests then blobcache doesn\u0027t work but I suppose that\u0027s because of the way ANGLE is loaded, not due to the package name.\n\nRight, running the test like that uses the packaged ANGLE directly instead of going through the platform loader.",
+      "parentUuid": "18117a83_ff0da94b",
+      "range": {
+        "startLine": 438,
+        "startChar": 0,
+        "endLine": 438,
+        "endChar": 81
+      },
+      "revId": "fe99836c8bb809d5352c8f0baf2bb0024358e893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
