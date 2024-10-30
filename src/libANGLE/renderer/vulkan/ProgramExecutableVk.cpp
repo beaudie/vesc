@@ -1789,9 +1789,9 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
         if (*newSharedCacheKeyOut != nullptr)
         {
             // Cache miss. A new cache entry has been created.
-            descriptorSetDesc.updateDescriptorSet(context->getRenderer(), writeDescriptorDescs,
-                                                  updateBuilder,
-                                                  mDescriptorSets[setIndex]->getDescriptorSet());
+            descriptorSetDesc.updateDescriptorSet(
+                context->getRenderer(), writeDescriptorDescs, updateBuilder,
+                mDescriptorSets[setIndex]->getDescriptorSet(), nullptr);
         }
     }
     else
@@ -1800,9 +1800,9 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
             context, mDescriptorSetLayouts[setIndex].get(), &mDescriptorSets[setIndex]));
         ASSERT(mDescriptorSets[setIndex]);
 
-        descriptorSetDesc.updateDescriptorSet(context->getRenderer(), writeDescriptorDescs,
-                                              updateBuilder,
-                                              mDescriptorSets[setIndex]->getDescriptorSet());
+        descriptorSetDesc.updateDescriptorSet(
+            context->getRenderer(), writeDescriptorDescs, updateBuilder,
+            mDescriptorSets[setIndex]->getDescriptorSet(), nullptr);
     }
 
     return angle::Result::Continue;
@@ -1888,19 +1888,30 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
             descriptorBuilder.updateDescriptorSet(
                 context->getRenderer(), mTextureWriteDescriptorDescs, updateBuilder,
-                mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet());
+                mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet(), nullptr);
         }
     }
     else
     {
+        VkWriteDescriptorSet *writeDescriptorSetOut = nullptr;
         ANGLE_TRY(mDynamicDescriptorPools[DescriptorSetIndex::Texture]->allocateDescriptorSet(
             context, mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
             &mDescriptorSets[DescriptorSetIndex::Texture]));
         ASSERT(mDescriptorSets[DescriptorSetIndex::Texture]);
 
-        ANGLE_TRY(UpdateFullActiveTexturesDescriptorSet(
+        ANGLE_TRY(descriptorBuilder.updateFullActiveTextures(
+            context, mVariableInfoMap, mTextureWriteDescriptorDescs, *mExecutable, textures,
+            samplers, pipelineType));
+
+        descriptorBuilder.updateDescriptorSet(
+            context->getRenderer(), mTextureWriteDescriptorDescs, updateBuilder,
+            mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet(),
+            &writeDescriptorSetOut);
+
+        ANGLE_TRY(VERIFY_UpdateFullActiveTexturesDescriptorSet(
             context, mVariableInfoMap, mTextureWriteDescriptorDescs, updateBuilder, *mExecutable,
-            textures, samplers, mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet()));
+            textures, samplers, mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet(),
+            writeDescriptorSetOut));
     }
 
     return angle::Result::Continue;
