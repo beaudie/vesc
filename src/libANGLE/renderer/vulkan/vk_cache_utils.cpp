@@ -6115,8 +6115,10 @@ void DescriptorSetDesc::updateDescriptorSet(Renderer *renderer,
                                             const WriteDescriptorDescs &writeDescriptorDescs,
                                             UpdateDescriptorSetsBuilder *updateBuilder,
                                             const DescriptorDescHandles *handles,
-                                            VkDescriptorSet descriptorSet) const
+                                            VkDescriptorSet descriptorSet,
+                                            VkWriteDescriptorSet **writeDescriptorSetOut) const
 {
+    size_t previousSize = updateBuilder->mWriteDescriptorSets.size();
     for (uint32_t writeIndex = 0; writeIndex < writeDescriptorDescs.size(); ++writeIndex)
     {
         const WriteDescriptorDesc &writeDesc = writeDescriptorDescs[writeIndex];
@@ -6127,7 +6129,6 @@ void DescriptorSetDesc::updateDescriptorSet(Renderer *renderer,
         }
 
         VkWriteDescriptorSet &writeSet = updateBuilder->allocWriteDescriptorSet();
-
         writeSet.descriptorCount  = writeDesc.descriptorCount;
         writeSet.descriptorType   = static_cast<VkDescriptorType>(writeDesc.descriptorType);
         writeSet.dstArrayElement  = 0;
@@ -6201,6 +6202,10 @@ void DescriptorSetDesc::updateDescriptorSet(Renderer *renderer,
                 UNREACHABLE();
                 break;
         }
+    }
+    if (writeDescriptorSetOut)
+    {
+        *writeDescriptorSetOut = &updateBuilder->mWriteDescriptorSets[previousSize];
     }
 }
 
@@ -6479,7 +6484,102 @@ angle::Result DescriptorSetDescBuilder::updateActiveTexturesForCacheMiss(
     return angle::Result::Continue;
 }
 
-angle::Result UpdateFullActiveTexturesDescriptorSet(
+angle::Result DescriptorSetDescBuilder::updateFullActiveTextures(
+    Context *context,
+    const ShaderInterfaceVariableInfoMap &variableInfoMap,
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    const gl::ProgramExecutable &executable,
+    const gl::ActiveTextureArray<TextureVk *> &textures,
+    const gl::SamplerBindingVector &samplers,
+    PipelineType pipelineType)
+{
+    // This is only used when cache is disabled.
+    ASSERT(!context->getFeatures().descriptorSetCache.enabled);
+    const std::vector<gl::SamplerBinding> &samplerBindings = executable.getSamplerBindings();
+    const std::vector<GLuint> &samplerBoundTextureUnits = executable.getSamplerBoundTextureUnits();
+    const std::vector<gl::LinkedUniform> &uniforms      = executable.getUniforms();
+    const gl::ActiveTextureTypeArray &textureTypes      = executable.getActiveSamplerTypes();
+
+    resize(writeDescriptorDescs.getTotalDescriptorCount());
+
+    for (uint32_t samplerIndex = 0; samplerIndex < samplerBindings.size(); ++samplerIndex)
+    {
+        const gl::SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
+        uint32_t uniformIndex = executable.getUniformIndexFromSamplerIndex(samplerIndex);
+        const gl::LinkedUniform &samplerUniform = uniforms[uniformIndex];
+
+        if (samplerUniform.activeShaders().none())
+        {
+            continue;
+        }
+
+        const gl::ShaderType firstShaderType = samplerUniform.getFirstActiveShaderType();
+        const ShaderInterfaceVariableInfo &info =
+            variableInfoMap.getVariableById(firstShaderType, samplerUniform.getId(firstShaderType));
+
+        uint32_t arraySize        = static_cast<uint32_t>(samplerBinding.textureUnitsCount);
+        bool isSamplerExternalY2Y = samplerBinding.samplerType == GL_SAMPLER_EXTERNAL_2D_Y2Y_EXT;
+
+        for (uint32_t arrayElement = 0; arrayElement < arraySize; ++arrayElement)
+        {
+            GLuint textureUnit =
+                samplerBinding.getTextureUnit(samplerBoundTextureUnits, arrayElement);
+            TextureVk *textureVk = textures[textureUnit];
+
+            uint32_t infoIndex = writeDescriptorDescs[info.binding].descriptorInfoIndex +
+                                 arrayElement + samplerUniform.getOuterArrayOffset();
+            DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
+
+            if (textureTypes[textureUnit] == gl::TextureType::Buffer)
+            {
+                ImageOrBufferViewSubresourceSerial imageViewSerial =
+                    textureVk->getBufferViewSerial();
+                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
+                infoDesc.imageLayoutOrRange      = 0;
+                infoDesc.samplerOrBufferSerial   = 0;
+                infoDesc.imageSubresourceRange   = 0;
+
+                const BufferView *view = nullptr;
+                ANGLE_TRY(
+                    textureVk->getBufferView(context, nullptr, &samplerBinding, false, &view));
+                mHandles[infoIndex].bufferView = view->getHandle();
+            }
+            else
+            {
+                gl::Sampler *sampler       = samplers[textureUnit].get();
+                const SamplerVk *samplerVk = sampler ? vk::GetImpl(sampler) : nullptr;
+
+                const SamplerHelper &samplerHelper =
+                    samplerVk ? samplerVk->getSampler()
+                              : textureVk->getSampler(isSamplerExternalY2Y);
+                const gl::SamplerState &samplerState =
+                    sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
+
+                ImageOrBufferViewSubresourceSerial imageViewSerial =
+                    textureVk->getImageViewSubresourceSerial(
+                        samplerState, samplerUniform.isTexelFetchStaticUse());
+
+                ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
+                SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
+                infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
+                infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
+                memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
+                       sizeof(uint32_t));
+
+                mHandles[infoIndex].sampler = samplerHelper.get().getHandle();
+
+                const ImageView &imageView = textureVk->getReadImageView(
+                    samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
+                    isSamplerExternalY2Y);
+                mHandles[infoIndex].imageView = imageView.getHandle();
+            }
+        }
+    }
+
+    return angle::Result::Continue;
+}
+
+angle::Result VERIFY_UpdateFullActiveTexturesDescriptorSet(
     Context *context,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const WriteDescriptorDescs &writeDescriptorDescs,
@@ -6487,7 +6587,8 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
-    VkDescriptorSet descriptorSet)
+    VkDescriptorSet descriptorSet,
+    VkWriteDescriptorSet *writeDescriptorSetOut)
 {
     // This is only used when cache is disabled.
     ASSERT(!context->getFeatures().descriptorSetCache.enabled);
@@ -6498,8 +6599,9 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
     const gl::ActiveTextureTypeArray &textureTypes      = executable.getActiveSamplerTypes();
 
     // Allocate VkWriteDescriptorSet and initialize the data structure
-    VkWriteDescriptorSet *writeDescriptorSets =
-        updateBuilder->allocWriteDescriptorSets(writeDescriptorDescs.size());
+    // VkWriteDescriptorSet *writeDescriptorSets =
+    //    updateBuilder->allocWriteDescriptorSets(writeDescriptorDescs.size());
+    std::vector<VkWriteDescriptorSet> writeDescriptorSets(writeDescriptorDescs.size());
     for (uint32_t writeIndex = 0; writeIndex < writeDescriptorDescs.size(); ++writeIndex)
     {
         ASSERT(writeDescriptorDescs[writeIndex].descriptorCount > 0);
@@ -6536,7 +6638,7 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
             variableInfoMap.getVariableById(firstShaderType, samplerUniform.getId(firstShaderType));
 
         const gl::SamplerBinding &samplerBinding = samplerBindings[samplerIndex];
-        uint32_t arraySize        = static_cast<uint32_t>(samplerBinding.textureUnitsCount);
+        uint32_t arraySize = static_cast<uint32_t>(samplerBinding.textureUnitsCount);
 
         VkWriteDescriptorSet &writeSet = writeDescriptorSets[info.binding];
         // Now fill pImageInfo or pTexelBufferView for writeSet
@@ -6570,7 +6672,7 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
                 const gl::SamplerState &samplerState =
                     sampler ? sampler->getSamplerState() : textureVk->getState().getSamplerState();
 
-                ImageLayout imageLayout = textureVk->getImage().getCurrentImageLayout();
+                ImageLayout imageLayout    = textureVk->getImage().getCurrentImageLayout();
                 const ImageView &imageView = textureVk->getReadImageView(
                     samplerState.getSRGBDecode(), samplerUniform.isTexelFetchStaticUse(),
                     isSamplerExternalY2Y);
@@ -6584,6 +6686,43 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
         }
     }
 
+    for (size_t writeIndex = 0; writeIndex < writeDescriptorSets.size(); writeIndex++)
+    {
+        const VkWriteDescriptorSet &writeSet = writeDescriptorSets[writeIndex];
+        const VkWriteDescriptorSet &expected = writeDescriptorSetOut[writeIndex];
+        ASSERT(writeSet.descriptorCount == expected.descriptorCount);
+        ASSERT(writeSet.descriptorType == expected.descriptorType);
+        ASSERT(writeSet.dstArrayElement == expected.dstArrayElement);
+        ASSERT(writeSet.dstBinding == expected.dstBinding);
+        ASSERT(writeSet.dstSet == expected.dstSet);
+        if (expected.pBufferInfo)
+        {
+            for (uint32_t i = 0; i < writeSet.descriptorCount; i++)
+            {
+                ASSERT(writeSet.pBufferInfo);
+                ASSERT(writeSet.pBufferInfo[i].buffer == expected.pBufferInfo[i].buffer);
+                ASSERT(writeSet.pBufferInfo[i].offset == expected.pBufferInfo[i].offset);
+                ASSERT(writeSet.pBufferInfo[i].range == expected.pBufferInfo[i].range);
+            }
+        }
+        if (expected.pImageInfo)
+        {
+            for (uint32_t i = 0; i < writeSet.descriptorCount; i++)
+            {
+                ASSERT(writeSet.pImageInfo[i].imageLayout == expected.pImageInfo[i].imageLayout);
+                ASSERT(writeSet.pImageInfo[i].imageView == expected.pImageInfo[i].imageView);
+                ASSERT(writeSet.pImageInfo[i].sampler == expected.pImageInfo[i].sampler);
+            }
+        }
+        ASSERT(writeSet.pNext == nullptr);
+        ASSERT(expected.pNext == nullptr);
+        if (expected.pTexelBufferView)
+        {
+            ASSERT(writeSet.pTexelBufferView[0] == expected.pTexelBufferView[0]);
+        }
+        ASSERT(writeSet.sType == expected.sType);
+    }
+    writeDescriptorSets.clear();
     return angle::Result::Continue;
 }
 
@@ -7094,13 +7233,15 @@ void DescriptorSetDescBuilder::updateInputAttachment(
     mHandles[infoIndex].imageView = imageView->getHandle();
 }
 
-void DescriptorSetDescBuilder::updateDescriptorSet(Renderer *renderer,
-                                                   const WriteDescriptorDescs &writeDescriptorDescs,
-                                                   UpdateDescriptorSetsBuilder *updateBuilder,
-                                                   VkDescriptorSet descriptorSet) const
+void DescriptorSetDescBuilder::updateDescriptorSet(
+    Renderer *renderer,
+    const WriteDescriptorDescs &writeDescriptorDescs,
+    UpdateDescriptorSetsBuilder *updateBuilder,
+    VkDescriptorSet descriptorSet,
+    VkWriteDescriptorSet **writeDescriptorSetOut) const
 {
     mDesc.updateDescriptorSet(renderer, writeDescriptorDescs, updateBuilder, mHandles.data(),
-                              descriptorSet);
+                              descriptorSet, writeDescriptorSetOut);
 }
 
 // SharedCacheKeyManager implementation.

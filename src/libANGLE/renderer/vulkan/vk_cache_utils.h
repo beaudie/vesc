@@ -1851,7 +1851,8 @@ class DescriptorSetDesc
                              const WriteDescriptorDescs &writeDescriptorDescs,
                              UpdateDescriptorSetsBuilder *updateBuilder,
                              const DescriptorDescHandles *handles,
-                             VkDescriptorSet descriptorSet) const;
+                             VkDescriptorSet descriptorSet,
+                             VkWriteDescriptorSet **writeDescriptorSetOut) const;
 
   private:
     // After a preliminary minimum size, use heap memory.
@@ -1981,10 +1982,19 @@ class DescriptorSetDescBuilder final
         const gl::SamplerBindingVector &samplers,
         const SharedDescriptorSetCacheKey &sharedCacheKey);
 
+    angle::Result updateFullActiveTextures(Context *context,
+                                           const ShaderInterfaceVariableInfoMap &variableInfoMap,
+                                           const WriteDescriptorDescs &writeDescriptorDescs,
+                                           const gl::ProgramExecutable &executable,
+                                           const gl::ActiveTextureArray<TextureVk *> &textures,
+                                           const gl::SamplerBindingVector &samplers,
+                                           PipelineType pipelineType);
+
     void updateDescriptorSet(Renderer *renderer,
                              const WriteDescriptorDescs &writeDescriptorDescs,
                              UpdateDescriptorSetsBuilder *updateBuilder,
-                             VkDescriptorSet descriptorSet) const;
+                             VkDescriptorSet descriptorSet,
+                             VkWriteDescriptorSet **writeDescriptorSetOut) const;
 
     const uint32_t *getDynamicOffsets() const { return mDynamicOffsets.data(); }
     size_t getDynamicOffsetsSize() const { return mDynamicOffsets.size(); }
@@ -2006,7 +2016,7 @@ class DescriptorSetDescBuilder final
     angle::FastVector<uint32_t, kFastDescriptorSetDescLimit> mDynamicOffsets;
 };
 
-angle::Result UpdateFullActiveTexturesDescriptorSet(
+angle::Result VERIFY_UpdateFullActiveTexturesDescriptorSet(
     Context *context,
     const ShaderInterfaceVariableInfoMap &variableInfoMap,
     const WriteDescriptorDescs &writeDescriptorDescs,
@@ -2014,7 +2024,8 @@ angle::Result UpdateFullActiveTexturesDescriptorSet(
     const gl::ProgramExecutable &executable,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
-    VkDescriptorSet descriptorSet);
+    VkDescriptorSet descriptorSet,
+    VkWriteDescriptorSet *writeDescriptorSetOut);
 
 // In the FramebufferDesc object:
 //  - Depth/stencil serial is at index 0
@@ -2844,7 +2855,7 @@ class UpdateDescriptorSetsBuilder final : angle::NonCopyable
     // Returns the number of written descriptor sets.
     uint32_t flushDescriptorSetUpdates(VkDevice device);
 
-  private:
+    // private:
     template <typename T, const T *VkWriteDescriptorSet::*pInfo>
     T *allocDescriptorInfos(std::vector<T> *descriptorVector, size_t count);
     template <typename T, const T *VkWriteDescriptorSet::*pInfo>
