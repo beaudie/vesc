@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ae3fb3d_295fd6be",
+        "filename": "src/compiler/translator/msl/ToposortStructs.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 377,
+      "author": {
+        "id": 1559037
+      },
+      "writtenOn": "2024-10-30T15:24:20Z",
+      "side": 1,
+      "message": "`contains` was introduced in C++20, which we can\u0027t yet use in Skia, so this is blocking rolling Angle into Skia. Can we use `find` or `count` here instead?",
+      "revId": "898a1c1241470a6e83636dc7c6990e35b7666d6b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
