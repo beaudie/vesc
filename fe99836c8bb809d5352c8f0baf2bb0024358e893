@@ -94,6 +94,30 @@
       },
       "revId": "fe99836c8bb809d5352c8f0baf2bb0024358e893",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59ad0047_9260be91",
+        "filename": "src/tests/restricted_traces/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 438,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-10-30T14:51:14Z",
+      "side": 0,
+      "message": "If you feel strongly about this, we can keep the default `org.chromium.angle`, it just seemed like an optimization.  It could mess up somebody that assumes it will use that package, but I think we\u0027re the main users.",
+      "parentUuid": "ff897091_535bc987",
+      "range": {
+        "startLine": 438,
+        "startChar": 0,
+        "endLine": 438,
+        "endChar": 81
+      },
+      "revId": "fe99836c8bb809d5352c8f0baf2bb0024358e893",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
