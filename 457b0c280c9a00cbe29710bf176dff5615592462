@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ca43f1b5_7f4fe0c1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-30T01:03:22Z",
+      "side": 1,
+      "message": "I tried adding the `blendEquationAdvancedKHR` exception for Intel. However, it fails on the related end2end tests. (The non-conformant flag is also enabled for end2end tests?)\n\nWe could also skip ES 3.2 tests for Pixel 4. However, there are still the trace tests that fail.",
+      "parentUuid": "7770831b_245a0758",
+      "revId": "457b0c280c9a00cbe29710bf176dff5615592462",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "06ad9700_5529e124",
         "filename": "src/tests/deqp_support/deqp_khr_gles32_test_expectations.txt",
         "patchSetId": 7

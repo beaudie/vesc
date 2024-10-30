@@ -18,6 +18,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a5261aa_81535c6f",
+        "filename": "src/libANGLE/renderer/vulkan/DisplayVk.cpp",
+        "patchSetId": 8
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-30T01:03:22Z",
+      "side": 1,
+      "message": "True.\nThanks 😊",
+      "parentUuid": "9d36c323_b3ade686",
+      "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "29e9326e_e3e2f924",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-29T02:17:07Z",
       "side": 1,
       "message": "Same here, and the other gles32 test suite",
+      "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0c96d75_33d2936e",
+        "filename": "src/tests/deqp_support/deqp_khr_noctx_gles32_test_expectations.txt",
+        "patchSetId": 8
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-10-30T01:03:22Z",
+      "side": 1,
+      "message": "There were some failures reported from these two suites (noctx and singlectx) on SwS. (In PS5)",
+      "parentUuid": "29e9326e_e3e2f924",
       "revId": "092d98d4c54848dc108fe608b8c658c3a487c0ab",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
