@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2aa8e0f2_7927105b",
+        "filename": "src/tests/egl_tests/EGLSurfaceTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 3035,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-30T03:20:51Z",
+      "side": 1,
+      "message": "Needs a comment or it will fail presubmit:\n\n```suggestion\n// Regression test for a bug where destroying more than 2 surfaces during termination\n// overflowed the unlocked tail call storage.\nTEST_P(EGLSurfaceTest, CreateMultiWindowsSurfaceNoDestroy)\n```",
+      "revId": "b0b3da3452b980543b4e48555819f0767a1847f3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
