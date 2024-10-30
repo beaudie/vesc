@@ -16,6 +16,24 @@
       "message": "@syoussefi@chromium.org, @yuxinhu@google.com,  \n\nSorry for the regression.  will debug level logging work?  is there a DEBUG()?",
       "revId": "63f5a3284344d6182f0f9f4404fb0cdb1169635e",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c36bd8d_f1e860a7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-30T15:31:20Z",
+      "side": 1,
+      "message": "Any log would end up in the Chromium logs, but we could reland this change _disabled_.\n\nBasically add a flag like this at the top of the file: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp;l\u003d33;drc\u003d08c1724fec38b9cf5242ed29e82bc4e9437aa650, set it to false, and make the log conditional to that. Then the code is there for future debugging, but it\u0027s disabled by default.",
+      "parentUuid": "88264040_b1b5f459",
+      "revId": "63f5a3284344d6182f0f9f4404fb0cdb1169635e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
