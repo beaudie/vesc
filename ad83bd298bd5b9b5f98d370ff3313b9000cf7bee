@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4f1df89f_aaff3831",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-31T17:19:14Z",
+      "side": 1,
+      "message": "GLSLTest_ES3.VaryingAnonymousStructEquality/ES3_Vulkan_ForceInitShaderVariables is crashing in https://chromium-swarm.appspot.com/task?id\u003d6cfbbc15285fbd10 from https://ci.chromium.org/ui/p/angle/builders/try/android-arm64-test/22817/overview . That\u0027s the cause of the many subsequent test failures on that bot.",
+      "revId": "ad83bd298bd5b9b5f98d370ff3313b9000cf7bee",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
