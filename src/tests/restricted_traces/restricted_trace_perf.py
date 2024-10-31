@@ -40,6 +40,7 @@ import fnmatch
 import json
 import logging
 import os
+import pathlib
 import re
 import statistics
 import subprocess
@@ -50,6 +51,13 @@ import time
 from collections import defaultdict, namedtuple
 from datetime import datetime
 from psutil import process_iter
+
+PY_UTILS = str(pathlib.Path(__file__).resolve().parents[1] / 'py_utils')
+if PY_UTILS not in sys.path:
+    os.stat(PY_UTILS) and sys.path.insert(0, PY_UTILS)
+import android_helper
+import angle_path_util
+import angle_test_util
 
 DEFAULT_TEST_DIR = '.'
 DEFAULT_TEST_JSON = 'restricted_traces.json'
@@ -654,6 +662,24 @@ def percent(x):
     return "%.2f%%" % (x * 100)
 
 
+def pushd(new_dir):
+    global current_dir_stack
+    try:
+        current_dir_stack
+    except NameError:
+        current_dir_stack = []
+    current_dir_stack.append(os.getcwd())
+    os.chdir(new_dir)
+
+
+def popd():
+    global current_dir_stack
+    if not current_dir_stack:
+        logging.error("Directory stack is empty.")
+        return
+    os.chdir(current_dir_stack.pop())
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('-f', '--filter', help='Trace filter. Defaults to all.', default='*')
@@ -707,6 +733,8 @@ def main():
         'but you can point to any APK that contains ANGLE. Specify \'system\' to use libraries ' +
         'already on the device',
         default=DEFAULT_ANGLE_PACKAGE)
+    parser.add_argument(
+        '--config', help='Where to load the APK from, i.e. out/Android', default='')
 
     group = parser.add_mutually_exclusive_group()
     group.add_argument(
@@ -722,7 +750,7 @@ def main():
 
     args = parser.parse_args()
 
-    logging.basicConfig(level=args.log.upper())
+    angle_test_util.SetupLogging(args.log.upper())
 
     run_adb_command('root')
 
@@ -902,11 +930,22 @@ def run_traces(args):
             "\"process\npeak\nmem\ncompare\""
         ])
 
+    if args.config != '':
+        pushd("../../../" + args.config)
+        android_helper.Initialize("angle_trace_tests")
+        android_helper.PrepareTestSuite("angle_trace_tests")
+        popd()
+
     for trace in fnmatch.filter(traces, args.filter):
 
         print(
             "\nStarting run for %s loopcount %i with %s at %s\n" %
             (trace, int(args.loop_count), renderers, datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+
+        if args.config != '':
+            pushd("../../../" + args.config)
+            android_helper.PrepareRestrictedTraces([trace])
+            popd()
 
         # Start with clean data containers for each trace
         rows.clear()
