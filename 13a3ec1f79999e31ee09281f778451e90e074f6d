@@ -351,6 +351,30 @@
       },
       "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d09cf05f_ff4fa9e1",
+        "filename": "src/libANGLE/GlobalMutex.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T01:03:51Z",
+      "side": 1,
+      "message": "I ended up having to move code in anonymous namespace https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/GlobalMutex.cpp;l\u003d114;drc\u003d25ce3dfec69bccb212dba1f0a2510b38952377a9 in `egl::priv` namespace, too. Is there any issue with this move?",
+      "parentUuid": "b53abe0c_56b13cc8",
+      "range": {
+        "startLine": 29,
+        "startChar": 20,
+        "endLine": 29,
+        "endChar": 42
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
