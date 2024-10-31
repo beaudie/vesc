@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "52785415_b9bed8f9",
+        "filename": "src/libANGLE/CLDevice.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-31T16:34:56Z",
+      "side": 1,
+      "message": "Good point. Thanks will update.",
+      "parentUuid": "b0f9981c_80c3a114",
+      "range": {
+        "startLine": 427,
+        "startChar": 0,
+        "endLine": 429,
+        "endChar": 36
+      },
+      "revId": "4aff97489ecafbcf92cad8265a2283050e3a59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0c8146d3_8c4027a1",
         "filename": "src/libANGLE/validationCL.cpp",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-31T16:03:08Z",
       "side": 1,
       "message": "nit: `CHAR_BIT` is the constant for this 😊\n\nMaybe also assert that `(device-\u003egetInfo().memBaseAddrAlign % CHAR_BIT) \u003d\u003d 0` somewhere.",
+      "range": {
+        "startLine": 2682,
+        "startChar": 67,
+        "endLine": 2682,
+        "endChar": 69
+      },
+      "revId": "4aff97489ecafbcf92cad8265a2283050e3a59c0",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84910441_41015365",
+        "filename": "src/libANGLE/validationCL.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2682,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-31T16:34:56Z",
+      "side": 1,
+      "message": "👍🏽",
+      "parentUuid": "0c8146d3_8c4027a1",
       "range": {
         "startLine": 2682,
         "startChar": 67,
