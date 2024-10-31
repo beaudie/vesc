@@ -92,7 +92,9 @@ def enum_type(arg):
     return arg_type.capitalize() + suffix
 
 
-def gen_emulated_function(data):
+def gen_emulated_function(data, minimize_for_chromium):
+    if minimize_for_chromium and data.get('exclude_from_chromium', '') == 'true':
+        return []
 
     func = ""
     if 'comment' in data:
@@ -111,15 +113,31 @@ def gen_emulated_function(data):
     return [func]
 
 
+def generate(minimize_for_chromium, hlsl_json, input_script, hlsl_fname):
+    emulated_functions = []
+    for item in hlsl_json:
+        emulated_functions += gen_emulated_function(item, minimize_for_chromium)
+
+    hlsl_gen = template_emulated_builtin_functions_hlsl.format(
+        script_name=os.path.basename(sys.argv[0]),
+        data_source_name=input_script,
+        emulated_functions="".join(emulated_functions))
+
+    with open(hlsl_fname, 'wt') as f:
+        f.write(hlsl_gen)
+        f.close()
+
+
 def main():
 
     input_script = "emulated_builtin_function_data_hlsl.json"
     hlsl_fname = "emulated_builtin_functions_hlsl_autogen.cpp"
+    hlsl_chromium_fname = "emulated_builtin_functions_hlsl_chromium_autogen.cpp"
 
     # auto_script parameters.
     if len(sys.argv) > 1:
         inputs = [input_script]
-        outputs = [hlsl_fname]
+        outputs = [hlsl_fname, hlsl_chromium_fname]
 
         if sys.argv[1] == 'inputs':
             print(','.join(inputs))
@@ -131,19 +149,8 @@ def main():
         return 0
 
     hlsl_json = load_json(input_script)
-    emulated_functions = []
-
-    for item in hlsl_json:
-        emulated_functions += gen_emulated_function(item)
-
-    hlsl_gen = template_emulated_builtin_functions_hlsl.format(
-        script_name=os.path.basename(sys.argv[0]),
-        data_source_name=input_script,
-        emulated_functions="".join(emulated_functions))
-
-    with open(hlsl_fname, 'wt') as f:
-        f.write(hlsl_gen)
-        f.close()
+    generate(False, hlsl_json, input_script, hlsl_fname)
+    generate(True, hlsl_json, input_script, hlsl_chromium_fname)
 
     return 0
 

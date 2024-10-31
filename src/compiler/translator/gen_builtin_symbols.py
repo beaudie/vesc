@@ -36,7 +36,7 @@ template_immutablestring_cpp = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ImmutableString_autogen.cpp: Wrapper for static or pool allocated char arrays, that are guaranteed to be
+// ImmutableString_{source_label}autogen.cpp: Wrapper for static or pool allocated char arrays, that are guaranteed to be
 // valid and unchanged for the duration of the compilation.
 // Implements mangledNameHash using perfect hash function from gen_builtin_symbols.py
 
@@ -142,7 +142,7 @@ template_immutablestringtest_cpp = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// ImmutableString_test_autogen.cpp:
+// ImmutableString_test_{source_label}autogen.cpp:
 //   Tests for matching script-generated hashes with runtime computed hashes.
 
 #include "compiler/translator/ImmutableString.h"
@@ -151,6 +151,7 @@ template_immutablestringtest_cpp = """// GENERATED FILE - DO NOT EDIT.
 namespace sh
 {{
 
+// Test that script-generated hashes match with runtime computed hashes.
 TEST(ImmutableStringTest, ScriptGeneratedHashesMatch)
 {{
 {script_generated_hash_tests}
@@ -170,7 +171,7 @@ template_builtin_header = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// BuiltIn_autogen.h:
+// BuiltIn_{header_label}autogen.h:
 //   Compile-time initialized built-ins.
 
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_BUILTIN_AUTOGEN_H_
@@ -241,7 +242,7 @@ template_symboltable_cpp = """// GENERATED FILE - DO NOT EDIT.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-// SymbolTable_autogen.cpp:
+// SymbolTable_{source_label}autogen.cpp:
 //   Compile-time initialized built-ins.
 
 #include "compiler/translator/SymbolTable.h"
@@ -1219,7 +1220,42 @@ class HashFunction:
         return (self.G[self.f1(key)] + self.G[self.f2(key)]) % len(self.G)
 
 
-def get_parsed_functions(functions_txt_filename):
+def allow_in_chromium(props, name):
+    essl_level = props['essl_level']
+    extensions = props.get('essl_extensions', [])
+
+    # Chromium does not need anything beyond GLES3.
+    if essl_level == 'ESSL3_1_BUILTINS' or essl_level == 'ESSL3_2_BUILTINS':
+        # imageLoad(gimage2D), imageStore(gimage2D) and memoryBarrierImage() are used by ANGLE_shader_pixel_local_storage
+        if name in ['imageLoad', 'imageStore']:
+            return props['parameters'][0].data['basic'] == 'Image2D'
+        if name == 'memoryBarrierImage':
+            return True
+        return False
+
+    # Exclude symbols from extensions that are neither used by Skia nor WebGL.
+    has_banned_extension = any([
+        ext in [
+            "EXT_geometry_shader",
+            "OES_geometry_shader",
+            "EXT_tessellation_shader",
+            "OES_tessellation_shader",
+            "EXT_gpu_shader5",
+            "OES_gpu_shader5",
+            "EXT_texture_buffer",
+            "OES_texture_buffer",
+            "EXT_texture_cube_map_array",
+            "OES_texture_cube_map_array",
+            "EXT_texture_shadow_lod",
+            "texture_storage_multisample_2d_array",
+            "OES_shader_image_atomic",
+        ] for ext in extensions
+    ])
+
+    return not has_banned_extension
+
+
+def get_parsed_functions(functions_txt_filename, minimize_for_chromium):
 
     def parse_function_parameters(parameters):
         if parameters == '':
@@ -1283,7 +1319,9 @@ def get_parsed_functions(functions_txt_filename):
                     'parameters': parse_function_parameters(parameters)
                 }
                 function_props.update(default_metadata)
-                if 'essl_level' in function_props:
+                assert ('essl_level' in function_props)
+                if not minimize_for_chromium or allow_in_chromium(function_props,
+                                                                  function_props['name']):
                     group_stack[-1]['functions'].append(function_props)
             else:
                 raise Exception('Unexpected function input line: ' + line)
@@ -1671,7 +1709,7 @@ def process_single_function_group(shader_type, group_name, group, symbols, varia
                                     mangled_builtins)
 
 
-def process_function_group(group_name, group, symbols, variables, functions,
+def process_function_group(minimize_for_chromium, group_name, group, symbols, variables, functions,
                            parent_group_op_suffix, unmangled_function_if_statements,
                            mangled_builtins):
 
@@ -1690,11 +1728,11 @@ def process_function_group(group_name, group, symbols, variables, functions,
 
     if 'subgroups' in group:
         for subgroup_name, subgroup in group['subgroups'].items():
-            process_function_group(group_name + subgroup_name, subgroup, symbols, variables,
-                                   functions, group_op_suffix, unmangled_function_if_statements,
-                                   mangled_builtins)
+            process_function_group(minimize_for_chromium, group_name + subgroup_name, subgroup,
+                                   symbols, variables, functions, group_op_suffix,
+                                   unmangled_function_if_statements, mangled_builtins)
 
-    if 'queryFunction' in group:
+    if 'queryFunction' in group and not minimize_for_chromium:
         last_op_index = len(functions.operator_enum_declarations) - 1
 
         first_op = functions.find_op(first_op_index, +1, last_op_index + 1)
@@ -1734,9 +1772,12 @@ def prune_parameters_arrays(parameter_declarations, function_declarations):
     ]
 
 
-def process_single_variable(shader_type, variable_name, props, symbols, variables,
-                            mangled_builtins):
+def process_single_variable(minimize_for_chromium, shader_type, variable_name, props, symbols,
+                            variables, mangled_builtins):
     global id_counter
+
+    if minimize_for_chromium and not allow_in_chromium(props, variable_name):
+        return
 
     essl_level = props['essl_level'] if 'essl_level' in props else None
     template_args = {
@@ -1867,13 +1908,14 @@ return &k{name_with_suffix};
     id_counter += 1
 
 
-def process_single_variable_group(shader_type, group, symbols, variables, mangled_builtins):
+def process_single_variable_group(minimize_for_chromium, shader_type, group, symbols, variables,
+                                  mangled_builtins):
     global id_counter
     if 'variables' not in group:
         return
     for variable_name, props in group['variables'].items():
-        process_single_variable(shader_type, variable_name, props, symbols, variables,
-                                mangled_builtins)
+        process_single_variable(minimize_for_chromium, shader_type, variable_name, props, symbols,
+                                variables, mangled_builtins)
 
         if 'essl_extension_becomes_core_in' in props:
             assert ('essl_extension' in props)
@@ -1887,34 +1929,39 @@ def process_single_variable_group(shader_type, group, symbols, variables, mangle
             suffix = core_props['suffix'] if 'suffix' in core_props else ''
             suffix += generate_suffix_from_level(core_level)
             core_props['suffix'] = suffix
-            process_single_variable(shader_type, variable_name, core_props, symbols, variables,
-                                    mangled_builtins)
+            process_single_variable(minimize_for_chromium, shader_type, variable_name, core_props,
+                                    symbols, variables, mangled_builtins)
 
 
-def process_variable_group(shader_type, group_name, group, symbols, variables, mangled_builtins):
+def process_variable_group(minimize_for_chromium, shader_type, group_name, group, symbols,
+                           variables, mangled_builtins):
     global id_counter
 
     if 'shader_type' in group:
         shader_type = group['shader_type']
 
-    process_single_variable_group(shader_type, group, symbols, variables, mangled_builtins)
+    process_single_variable_group(minimize_for_chromium, shader_type, group, symbols, variables,
+                                  mangled_builtins)
 
     if 'subgroups' in group:
         for subgroup_name, subgroup in group['subgroups'].items():
-            process_variable_group(shader_type, subgroup_name, subgroup, symbols, variables,
-                                   mangled_builtins)
+            process_variable_group(minimize_for_chromium, shader_type, subgroup_name, subgroup,
+                                   symbols, variables, mangled_builtins)
 
 
-def generate_files(args, functions_txt_filename, variables_json_filename,
+def generate_files(args, minimize_for_chromium, functions_txt_filename, variables_json_filename,
                    immutablestring_cpp_filename, immutablestringtest_cpp_filename,
                    builtin_header_filename, symboltable_cpp_filename, operator_header_filename,
                    symboltable_header_filename):
+
+    global id_counter
+    id_counter = 0
 
     symbols = SymbolsData()
     variables = VariablesData()
     functions = FunctionsData()
 
-    parsed_functions = get_parsed_functions(functions_txt_filename)
+    parsed_functions = get_parsed_functions(functions_txt_filename, minimize_for_chromium)
 
     if args.dump_intermediate_json:
         with open('builtin_functions_ESSL.json', 'w') as outfile:
@@ -1965,14 +2012,15 @@ def generate_files(args, functions_txt_filename, variables_json_filename,
     unmangled_function_if_statements = UnmangledGroupedList(unmangled_hashfn, num_unmangled_names)
 
     for group_name, group in parsed_functions.items():
-        process_function_group(group_name, group, symbols, variables, functions, '',
-                               unmangled_function_if_statements, mangled_builtins)
+        process_function_group(minimize_for_chromium, group_name, group, symbols, variables,
+                               functions, '', unmangled_function_if_statements, mangled_builtins)
 
     functions.parameter_declarations = prune_parameters_arrays(functions.parameter_declarations,
                                                                functions.function_declarations)
 
     for group_name, group in parsed_variables.items():
-        process_variable_group('NONE', group_name, group, symbols, variables, mangled_builtins)
+        process_variable_group(minimize_for_chromium, 'NONE', group_name, group, symbols,
+                               variables, mangled_builtins)
 
     mangled_builtins.update_arrays()
 
@@ -2049,6 +2097,10 @@ def generate_files(args, functions_txt_filename, variables_json_filename,
             len(unmangled_G),
         'unmangled_NS':
             len(unmangled_S1),
+        'header_label':
+            'chromium_' if minimize_for_chromium else '',
+        'source_label':
+            'chromium_' if minimize_for_chromium else '',
     }
 
     with open(immutablestring_cpp_filename, 'wt') as outfile_cpp:
@@ -2067,13 +2119,14 @@ def generate_files(args, functions_txt_filename, variables_json_filename,
         output_cpp = template_symboltable_cpp.format(**output_strings)
         outfile_cpp.write(output_cpp)
 
-    with open(operator_header_filename, 'wt') as outfile_header:
-        output_header = template_operator_header.format(**output_strings)
-        outfile_header.write(output_header)
+    if not minimize_for_chromium:
+        with open(operator_header_filename, 'wt') as outfile_header:
+            output_header = template_operator_header.format(**output_strings)
+            outfile_header.write(output_header)
 
-    with open(symboltable_header_filename, 'wt') as outfile_h:
-        output_h = template_symboltable_header.format(**output_strings)
-        outfile_h.write(output_h)
+        with open(symboltable_header_filename, 'wt') as outfile_h:
+            output_h = template_symboltable_header.format(**output_strings)
+            outfile_h.write(output_h)
 
 
 def main():
@@ -2089,6 +2142,7 @@ def main():
     args = parser.parse_args()
 
     test_filename = '../../tests/compiler_tests/ImmutableString_test_autogen.cpp'
+    chromium_test_filename = '../../tests/compiler_tests/ImmutableString_test_chromium_autogen.cpp'
     variables_json_filename = 'builtin_variables.json'
     functions_txt_filename = 'builtin_function_declarations.txt'
 
@@ -2102,9 +2156,13 @@ def main():
             'Operator_autogen.h',
             'SymbolTable_autogen.h',
             test_filename,
+            chromium_test_filename,
             'ImmutableString_autogen.cpp',
             'SymbolTable_autogen.cpp',
             'tree_util/BuiltIn_autogen.h',
+            'ImmutableString_chromium_autogen.cpp',
+            'SymbolTable_chromium_autogen.cpp',
+            'tree_util/BuiltIn_chromium_autogen.h',
         ]
 
         if args.auto_script_command == 'inputs':
@@ -2117,9 +2175,16 @@ def main():
         return 0
 
     # Generate files based on ESSL symbols
-    generate_files(args, functions_txt_filename, variables_json_filename,
+    generate_files(args, False, functions_txt_filename, variables_json_filename,
                    'ImmutableString_autogen.cpp', test_filename, 'tree_util/BuiltIn_autogen.h',
                    'SymbolTable_autogen.cpp', 'Operator_autogen.h', 'SymbolTable_autogen.h')
+
+    # Generate a minimized version of the files that only includes ESSL1, ESSL3
+    # and the extensions that Chromium uses.  This reduces the binary size of Chromium.
+    generate_files(args, True, functions_txt_filename, variables_json_filename,
+                   'ImmutableString_chromium_autogen.cpp', chromium_test_filename,
+                   'tree_util/BuiltIn_chromium_autogen.h', 'SymbolTable_chromium_autogen.cpp',
+                   'Operator_autogen.h', 'SymbolTable_autogen.h')
 
     return 0
 
