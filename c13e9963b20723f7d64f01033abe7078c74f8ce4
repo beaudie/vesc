@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96b4b2f8_0f184dff",
+        "filename": "infra/specs/test_suites.pyl",
+        "patchSetId": 1
+      },
+      "lineNbr": 1374,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-31T02:05:58Z",
+      "side": 0,
+      "message": "Could these tests run elsewhere? Like if you remove these flags and run this on Linux, Windows, Pixel6 or something?",
+      "revId": "c13e9963b20723f7d64f01033abe7078c74f8ce4",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
