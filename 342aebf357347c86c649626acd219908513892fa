@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d885b05c_eee41458",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 3625719
+      },
+      "writtenOn": "2024-10-31T00:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d61315f_05152a00",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 56
+      },
+      "revId": "342aebf357347c86c649626acd219908513892fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a65db778_7d346cae",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-10-30T16:23:58Z",
       "side": 1,
       "message": "Need a `Bug:` line here, in this case:\n\n```\nBug: angleproject:374797737\n```",
+      "revId": "342aebf357347c86c649626acd219908513892fa",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb4a0d9_3ed827d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 3625719
+      },
+      "writtenOn": "2024-10-31T00:47:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a65db778_7d346cae",
       "revId": "342aebf357347c86c649626acd219908513892fa",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
