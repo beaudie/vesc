@@ -54,6 +54,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "ef831a1a_08256a2f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-31T16:15:01Z",
+      "side": 1,
+      "message": "LGTM as well given Kimmo\u0027s +1. Sounds like the question for Alexey could be a follow-up",
+      "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9ab55f40_bdff8010",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 4
