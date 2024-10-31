@@ -69,6 +69,8 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
 {
     emu->addFunctionMap(FindHLSLFunction);
 
+    // Chromium disables ES3.1+ support.
+#ifndef ANGLE_MINIMIZE_FOR_CHROMIUM
     // (a + b2^16) * (c + d2^16) = ac + (ad + bc) * 2^16 + bd * 2^32
     // Also note that below, a * d + ((a * c) >> 16) is guaranteed not to overflow, because:
     // a <= 0xffff, d <= 0xffff, ((a * c) >> 16) <= 0xffff and 0xffff * 0xffff + 0xffff = 0xffff0000
@@ -167,6 +169,7 @@ void InitBuiltInFunctionEmulatorForHLSL(BuiltInFunctionEmulator *emu)
         "    imulExtended_emu(x.z, y.z, msb.z, lsb.z);\n"
         "    imulExtended_emu(x.w, y.w, msb.w, lsb.w);\n"
         "}\n");
+#endif  // ANGLE_MINIMIZE_FOR_CHROMIUM
 }
 
 }  // namespace sh
