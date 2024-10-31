@@ -42,6 +42,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "39144b53_9fe91574",
+        "filename": "src/libANGLE/renderer/CLExtensions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-31T16:33:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f05ec0ee_e321c24e",
+      "range": {
+        "startLine": 55,
+        "startChar": 67,
+        "endLine": 55,
+        "endChar": 69
+      },
+      "revId": "f3cb2e34c163268e7d6a50d83bf8f6008af2e79f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f64a2920_627b35c8",
@@ -55,6 +79,30 @@
       "writtenOn": "2024-10-31T16:24:03Z",
       "side": 1,
       "message": "No need for a lambda here, it can just be done in-line.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 6
+      },
+      "revId": "f3cb2e34c163268e7d6a50d83bf8f6008af2e79f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b228ff8_406f3fc5",
+        "filename": "src/libANGLE/renderer/CLExtensions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-31T16:33:34Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f64a2920_627b35c8",
       "range": {
         "startLine": 62,
         "startChar": 0,
