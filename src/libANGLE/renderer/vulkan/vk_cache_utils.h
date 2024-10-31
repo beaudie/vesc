@@ -2772,7 +2772,11 @@ class DescriptorSetCache final : angle::NonCopyable
 {
   public:
     DescriptorSetCache() = default;
-    ~DescriptorSetCache() { ASSERT(mPayload.empty()); }
+    ~DescriptorSetCache()
+    {
+        ASSERT(mPayload.empty());
+        ASSERT(mLRUList.empty());
+    }
 
     DescriptorSetCache(DescriptorSetCache &&other) : DescriptorSetCache()
     {
@@ -2782,17 +2786,23 @@ class DescriptorSetCache final : angle::NonCopyable
     DescriptorSetCache &operator=(DescriptorSetCache &&other)
     {
         std::swap(mPayload, other.mPayload);
+        std::swap(mLRUList, other.mLRUList);
         return *this;
     }
 
-    void resetCache() { mPayload.clear(); }
+    void resetCache()
+    {
+        mPayload.clear();
+        mLRUList.clear();
+    }
 
     bool getDescriptorSet(const vk::DescriptorSetDesc &desc, T *descriptorSetOut)
     {
         auto iter = mPayload.find(desc);
         if (iter != mPayload.end())
         {
-            *descriptorSetOut = iter->second;
+            mLRUList.splice(mLRUList.begin(), mLRUList, iter->second);
+            *descriptorSetOut = *(iter->second);
             return true;
         }
         return false;
@@ -2800,10 +2810,29 @@ class DescriptorSetCache final : angle::NonCopyable
 
     void insertDescriptorSet(const vk::DescriptorSetDesc &desc, const T &descriptorSetHelper)
     {
-        mPayload.emplace(desc, descriptorSetHelper);
+        mLRUList.emplace_front(descriptorSetHelper);
+        mPayload.emplace(desc, mLRUList.begin());
     }
 
-    void eraseDescriptorSet(const vk::DescriptorSetDesc &desc) { mPayload.erase(desc); }
+    bool eraseDescriptorSet(const vk::DescriptorSetDesc &desc)
+    {
+        auto iter = mPayload.find(desc);
+        if (iter != mPayload.end())
+        {
+            typename std::list<T>::iterator listIterator = iter->second;
+            mPayload.erase(iter);
+            mLRUList.erase(listIterator);
+            return true;
+        }
+        return false;
+    }
+
+    void eraseLeastRecentUsed()
+    {
+        const T &object                   = mLRUList.back();
+        const vk::DescriptorSetDesc &desc = object.getCacheKey();
+        eraseDescriptorSet(desc);
+    }
 
     size_t getTotalCacheSize() const { return mPayload.size(); }
 
@@ -2820,7 +2849,9 @@ class DescriptorSetCache final : angle::NonCopyable
     bool empty() const { return mPayload.empty(); }
 
   private:
-    angle::HashMap<vk::DescriptorSetDesc, T> mPayload;
+    // LRU list for cache eviction: most recent used at front, least used at back.
+    std::list<T> mLRUList;
+    angle::HashMap<vk::DescriptorSetDesc, typename std::list<T>::iterator> mPayload;
 };
 
 // There is 1 default uniform binding used per stage.
