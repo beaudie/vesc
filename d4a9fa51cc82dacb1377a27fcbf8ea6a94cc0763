@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2eff9ade_abe2fd2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-31T19:12:54Z",
+      "side": 1,
+      "message": "Force submitted because Android keeps timing out, and the change is a no-op for the bots anyway",
+      "revId": "d4a9fa51cc82dacb1377a27fcbf8ea6a94cc0763",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
