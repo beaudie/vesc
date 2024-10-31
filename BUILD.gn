@@ -736,7 +736,12 @@ template("translator_lib") {
     _uses_spirv = false
 
     # Frontend support:
-    sources += angle_translator_essl_symbol_table_sources
+    if (angle_minimize_for_chromium) {
+      defines += [ "ANGLE_MINIMIZE_FOR_CHROMIUM" ]
+      sources += angle_translator_essl_chromium_symbol_table_sources
+    } else {
+      sources += angle_translator_essl_symbol_table_sources
+    }
 
     # Backend support:
     if (angle_enable_null) {
@@ -1091,6 +1096,9 @@ angle_source_set("libANGLE_no_vulkan") {
     sources += libangle_cl_sources
   }
   defines = []
+  if (angle_minimize_for_chromium) {
+    defines += [ "ANGLE_MINIMIZE_FOR_CHROMIUM" ]
+  }
 
   include_dirs = []
   libs = []
@@ -1440,6 +1448,9 @@ template("angle_libGLESv2") {
       ":gl_prototypes",
     ]
 
+    if (angle_minimize_for_chromium) {
+      defines += [ "ANGLE_MINIMIZE_FOR_CHROMIUM" ]
+    }
     if (angle_enable_cl) {
       sources += libglesv2_cl_sources
     }
@@ -1486,6 +1497,10 @@ if (angle_has_frame_capture) {
 
 angle_static_library("libGLESv2_static") {
   sources = libglesv2_sources
+  defines = []
+  if (angle_minimize_for_chromium) {
+    defines += [ "ANGLE_MINIMIZE_FOR_CHROMIUM" ]
+  }
   if (angle_enable_cl) {
     sources += libglesv2_cl_sources
   }
