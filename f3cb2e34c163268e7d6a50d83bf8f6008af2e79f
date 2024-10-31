@@ -1,0 +1,68 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f05ec0ee_e321c24e",
+        "filename": "src/libANGLE/renderer/CLExtensions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-31T16:24:03Z",
+      "side": 1,
+      "message": "versionedExtList is not consumed and doesn\u0027t have to be an l value reference.",
+      "range": {
+        "startLine": 55,
+        "startChar": 67,
+        "endLine": 55,
+        "endChar": 69
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "74489e54_a9d886c6",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/libANGLE/renderer/CLExtensions.cpp",
+              "range": {
+                "startLine": 55,
+                "startChar": 0,
+                "endLine": 56,
+                "endChar": 0
+              },
+              "replacement": "void CLExtensions::initializeVersionedExtensions(const NameVersionVector \u0026versionedExtList)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "f3cb2e34c163268e7d6a50d83bf8f6008af2e79f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f64a2920_627b35c8",
+        "filename": "src/libANGLE/renderer/CLExtensions.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-31T16:24:03Z",
+      "side": 1,
+      "message": "No need for a lambda here, it can just be done in-line.",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 6
+      },
+      "revId": "f3cb2e34c163268e7d6a50d83bf8f6008af2e79f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
