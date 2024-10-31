@@ -53,6 +53,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90888eeb_d777ed1c",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2024-10-31T18:26:36Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "8fbf2e16_b66b3193",
+      "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6fe88d5c_32098c6b",
@@ -84,6 +102,24 @@
           ]
         }
       ],
+      "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76810541_748e6163",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1543967
+      },
+      "writtenOn": "2024-10-31T18:26:36Z",
+      "side": 1,
+      "message": "This would be \"NotPLS\", right?",
+      "parentUuid": "6fe88d5c_32098c6b",
       "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
