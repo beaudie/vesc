@@ -2634,7 +2634,14 @@ angle::Result TextureVk::generateMipmap(const gl::Context *context)
     if (getImageViews().hasColorspaceOverrideForRead(*mImage))
     {
         // Handle special case where this is an EGLImage texture target with colorspace override
-        return generateMipmapsWithColorspaceOverride(context);
+        ANGLE_TRY(
+            contextVk->flushCommandsAndEndRenderPass(RenderPassClosureReason::PrepareForBlit));
+
+        angle::FormatID actualFormatID =
+            getImageViews().getColorspaceOverrideFormatForWrite(mImage->getActualFormatID());
+        return contextVk->getUtils().generateMipmapWithDraw(
+            contextVk, mImage, actualFormatID,
+            gl::IsMipmapFiltered(mState.getSamplerState().getMinFilter()));
     }
 
     // If it's possible to generate mipmap in compute, that would give the best possible
