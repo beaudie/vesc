@@ -15,7 +15,7 @@
 //   object format. The metadata is applied to all following functions regardless of grouping until
 //   another "DEFAULT METADATA" line is encountered, or until the end of a top-level group.
 //   Example:
-//     DEFAULT METADATA {"opSuffix": "ComponentWise"}
+//     DEFAULT METADATA {"essl_level": "COMMON_BUILTINS", "opSuffix": "ComponentWise"}
 //
 //   Supported function metadata properties are:
 //     "essl_level"
