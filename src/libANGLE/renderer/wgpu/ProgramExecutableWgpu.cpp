@@ -6,10 +6,18 @@
 // ProgramExecutableWgpu.cpp: Implementation of ProgramExecutableWgpu.
 
 #include "libANGLE/renderer/wgpu/ProgramExecutableWgpu.h"
+#include <iterator>
 
+#include "GLES2/gl2.h"
+#include "anglebase/numerics/safe_conversions.h"
+#include "common/PackedGLEnums_autogen.h"
+#include "compiler/translator/wgsl/OutputUniformBlocks.h"
 #include "libANGLE/Error.h"
 #include "libANGLE/Program.h"
 #include "libANGLE/renderer/renderer_utils.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
+#include "libANGLE/renderer/wgpu/wgpu_helpers.h"
+#include "libANGLE/renderer/wgpu/wgpu_pipeline_state.h"
 
 namespace rx
 {
@@ -26,6 +34,105 @@ ProgramExecutableWgpu::ProgramExecutableWgpu(const gl::ProgramExecutable *execut
 ProgramExecutableWgpu::~ProgramExecutableWgpu() = default;
 
 void ProgramExecutableWgpu::destroy(const gl::Context *context) {}
+
+angle::Result ProgramExecutableWgpu::updateUniformsAndGetBindGroup(ContextWgpu *contextWgpu,
+                                                                   wgpu::BindGroup *outBindGroup)
+{
+    if (mDefaultUniformBlocksDirty.any())
+    {
+        // TODO(anglebug.com/376553328): this creates an entire new buffer every time a single
+        // uniform changes, and the old ones are just garbage collected. This should be optimized.
+        webgpu::BufferHelper defaultUniformBuffer;
+
+        gl::ShaderMap<uint64_t> offsets =
+            {};  // offset in the GPU-side buffer of each shader stage's uniform data.
+        size_t requiredSpace;
+
+        angle::CheckedNumeric<size_t> requiredSpaceChecked =
+            calcUniformUpdateRequiredSpace(contextWgpu, &offsets);
+        if (!requiredSpaceChecked.AssignIfValid(&requiredSpace))
+        {
+            return angle::Result::Stop;
+        }
+
+        ANGLE_TRY(defaultUniformBuffer.initBuffer(
+            contextWgpu->getDevice(), requiredSpace,
+            wgpu::BufferUsage::Uniform | wgpu::BufferUsage::CopyDst, webgpu::MapAtCreation::Yes));
+
+        ASSERT(defaultUniformBuffer.valid());
+
+        uint8_t *bufferData = defaultUniformBuffer.getMapWritePointer(0, requiredSpace);
+        for (gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
+        {
+            const angle::MemoryBuffer &uniformData = mDefaultUniformBlocks[shaderType]->uniformData;
+            memcpy(&bufferData[offsets[shaderType]], uniformData.data(), uniformData.size());
+            mDefaultUniformBlocksDirty.reset(shaderType);
+        }
+        ANGLE_TRY(defaultUniformBuffer.unmap());
+
+        // Create a binding
+        std::vector<wgpu::BindGroupEntry> bindings;
+        // Start with the vertex shader uniform binding.
+        if (mDefaultUniformBlocks[gl::ShaderType::Vertex]->uniformData.size() != 0)
+        {
+            wgpu::BindGroupEntry bindGroupEntry;
+            bindGroupEntry.binding = sh::kDefaultVertexUniformBlockBinding;
+            bindGroupEntry.buffer  = defaultUniformBuffer.getBuffer();
+            bindGroupEntry.offset  = offsets[gl::ShaderType::Vertex];
+            bindGroupEntry.size = mDefaultUniformBlocks[gl::ShaderType::Vertex]->uniformData.size();
+            bindings.push_back(bindGroupEntry);
+        }
+        // The second binding is the uniform block for the fragment shader, which will use a
+        // different offset into the same GPU-side buffer.
+        if (mDefaultUniformBlocks[gl::ShaderType::Fragment]->uniformData.size() != 0)
+        {
+            wgpu::BindGroupEntry bindGroupEntry;
+            bindGroupEntry.binding = sh::kDefaultFragmentUniformBlockBinding;
+            bindGroupEntry.buffer  = defaultUniformBuffer.getBuffer();
+            bindGroupEntry.offset  = offsets[gl::ShaderType::Fragment];
+            bindGroupEntry.size =
+                mDefaultUniformBlocks[gl::ShaderType::Fragment]->uniformData.size();
+            bindings.push_back(bindGroupEntry);
+        }
+
+        // A bind group contains one or multiple bindings
+        wgpu::BindGroupDescriptor bindGroupDesc{};
+        bindGroupDesc.layout = mDefaultBindGroupLayout;
+        // There must be as many bindings as declared in the layout!
+        bindGroupDesc.entryCount = bindings.size();
+        bindGroupDesc.entries    = bindings.data();
+        mDefaultBindGroup        = contextWgpu->getDevice().CreateBindGroup(&bindGroupDesc);
+    }
+    *outBindGroup = mDefaultBindGroup;
+
+    return angle::Result::Continue;
+}
+
+angle::CheckedNumeric<size_t> ProgramExecutableWgpu::getDefaultUniformAlignedSize(
+    ContextWgpu *context,
+    gl::ShaderType shaderType) const
+{
+    size_t alignment = angle::base::checked_cast<size_t>(
+        context->getDisplay()->getLimitsWgpu().minUniformBufferOffsetAlignment);
+    return CheckedRoundUp(mDefaultUniformBlocks[shaderType]->uniformData.size(), alignment);
+}
+
+angle::CheckedNumeric<size_t> ProgramExecutableWgpu::calcUniformUpdateRequiredSpace(
+    ContextWgpu *context,
+    gl::ShaderMap<uint64_t> *uniformOffsets) const
+{
+    angle::CheckedNumeric<size_t> requiredSpace = 0;
+    for (gl::ShaderType shaderType : mExecutable->getLinkedShaderStages())
+    {
+        (*uniformOffsets)[shaderType] = requiredSpace.ValueOrDie();
+        requiredSpace += getDefaultUniformAlignedSize(context, shaderType);
+        if (!requiredSpace.IsValid())
+        {
+            break;
+        }
+    }
+    return requiredSpace;
+}
 
 angle::Result ProgramExecutableWgpu::resizeUniformBlockMemory(
     const gl::ShaderMap<size_t> &requiredBufferSize)
@@ -246,7 +353,59 @@ angle::Result ProgramExecutableWgpu::getRenderPipeline(ContextWgpu *context,
         shaders[shaderType] = mShaderModules[shaderType].module;
     }
 
-    return mPipelineCache.getRenderPipeline(context, desc, nullptr, shaders, pipelineOut);
+    genBindingLayoutIfNecessary(context);
+
+    return mPipelineCache.getRenderPipeline(context, desc, mPipelineLayout, shaders, pipelineOut);
+}
+
+void ProgramExecutableWgpu::genBindingLayoutIfNecessary(ContextWgpu *context)
+{
+    if (mPipelineLayout)
+    {
+        return;
+    }
+    // TODO(anglebug.com/42267100): for now, only create a wgpu::PipelineLayout with the default
+    // uniform block. Will need to be extended for driver uniforms, UBOs, and textures/samplers.
+    // Also, possibly provide this layout as a compilation hint to createShaderModule().
+
+    std::vector<wgpu::BindGroupLayoutEntry> bindGroupLayoutEntries;
+    // Vertex default uniform buffer.
+    if (mDefaultUniformBlocks[gl::ShaderType::Vertex]->uniformData.size() != 0)
+    {
+        wgpu::BindGroupLayoutEntry bindGroupLayoutEntry;
+        bindGroupLayoutEntry.visibility  = wgpu::ShaderStage::Vertex;
+        bindGroupLayoutEntry.binding     = sh::kDefaultVertexUniformBlockBinding;
+        bindGroupLayoutEntry.buffer.type = wgpu::BufferBindingType::Uniform;
+        // By setting a `minBindingSize`, some validation is pushed from every draw call to pipeline
+        // creation time.
+        bindGroupLayoutEntry.buffer.minBindingSize =
+            mDefaultUniformBlocks[gl::ShaderType::Vertex]->uniformData.size();
+        bindGroupLayoutEntries.push_back(bindGroupLayoutEntry);
+    }
+    // Fragment default uniform buffer.
+    if (mDefaultUniformBlocks[gl::ShaderType::Fragment]->uniformData.size() != 0)
+    {
+        wgpu::BindGroupLayoutEntry bindGroupLayoutEntry;
+        bindGroupLayoutEntry.visibility  = wgpu::ShaderStage::Fragment;
+        bindGroupLayoutEntry.binding     = sh::kDefaultFragmentUniformBlockBinding;
+        bindGroupLayoutEntry.buffer.type = wgpu::BufferBindingType::Uniform;
+        bindGroupLayoutEntry.buffer.minBindingSize =
+            mDefaultUniformBlocks[gl::ShaderType::Fragment]->uniformData.size();
+        bindGroupLayoutEntries.push_back(bindGroupLayoutEntry);
+    }
+
+    // Create a bind group layout with these entries.
+    wgpu::BindGroupLayoutDescriptor bindGroupLayoutDesc{};
+    bindGroupLayoutDesc.entryCount = bindGroupLayoutEntries.size();
+    bindGroupLayoutDesc.entries    = bindGroupLayoutEntries.data();
+    mDefaultBindGroupLayout = context->getDevice().CreateBindGroupLayout(&bindGroupLayoutDesc);
+
+    // Create the pipeline layout. This is a list where each element N corresponds to the @group(N)
+    // in the compiled shaders.
+    wgpu::PipelineLayoutDescriptor layoutDesc{};
+    layoutDesc.bindGroupLayoutCount = 1;
+    layoutDesc.bindGroupLayouts     = &mDefaultBindGroupLayout;
+    mPipelineLayout                 = context->getDevice().CreatePipelineLayout(&layoutDesc);
 }
 
 }  // namespace rx
