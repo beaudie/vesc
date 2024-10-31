@@ -362,8 +362,24 @@ bool ValidateTexImageFormatCombination(const Context *context,
         }
     }
 
-    const InternalFormat &formatInfo = GetInternalFormatInfo(internalFormat, type);
-    if (!formatInfo.textureSupport(context->getClientVersion(), context->getExtensions()))
+    const InternalFormat *formatInfo = nullptr;
+
+    // Valid sized internal format combination if enable extension OES_required_internalformat
+    // and EXT_texture_type_2_10_10_10_REV for GL_RGB,GL_UNSIGNED_INT_2_10_10_10_REV_EXT and
+    // at least for one of GL_RGB10_EXT, GL_RGB8_OES, GL_RGB565_OES.
+    if (context->getExtensions().requiredInternalformatOES &&
+        context->getExtensions().textureType2101010REVEXT && format == GL_RGB &&
+        type == GL_UNSIGNED_INT_2_10_10_10_REV_EXT &&
+        (internalFormat == GL_RGB10_EXT || internalFormat == GL_RGB8_OES ||
+         internalFormat == GL_RGB565_OES))
+    {
+        formatInfo = &GetSizedInternalFormatInfo(internalFormat);
+    }
+    else
+    {
+        formatInfo = &GetInternalFormatInfo(internalFormat, type);
+    }
+    if (!formatInfo->textureSupport(context->getClientVersion(), context->getExtensions()))
     {
         ANGLE_VALIDATION_ERRORF(GL_INVALID_OPERATION, kInvalidInternalFormat, internalFormat);
         return false;
@@ -987,6 +1003,7 @@ bool GetUnsizedEffectiveInternalFormatInfo(const InternalFormat &srcFormat,
     constexpr EffectiveInternalFormatInfo list[] = {
         { GL_ALPHA8_EXT,             GL_ALPHA,           0, umax, 0, umax, 0, umax, 1,    8 },
         { GL_LUMINANCE8_EXT,         GL_LUMINANCE,       1,    8, 0, umax, 0, umax, 0, umax },
+        { GL_LUMINANCE4_ALPHA4_OES,  GL_LUMINANCE_ALPHA, 1,    8, 0, umax, 0, umax, 1,    8 },
         { GL_LUMINANCE8_ALPHA8_EXT,  GL_LUMINANCE_ALPHA, 1,    8, 0, umax, 0, umax, 1,    8 },
         { GL_RGB565,                 GL_RGB,             1,    5, 1,    6, 1,    5, 0, umax },
         { GL_RGB8,                   GL_RGB,             6,    8, 7,    8, 6,    8, 0, umax },

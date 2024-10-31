@@ -40,7 +40,7 @@ class CopyTexImageTest : public ANGLETest<>
 
     void testTearDown() override { glDeleteProgram(mTextureProgram); }
 
-    void initializeResources(GLenum internalFormat, GLenum format, GLenum type)
+    void initializeResources(GLenum internalFormat, GLenum format, GLenum type, bool solidColor)
     {
         for (size_t i = 0; i < kFboCount; ++i)
         {
@@ -56,7 +56,16 @@ class CopyTexImageTest : public ANGLETest<>
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D,
                                    mFboTextures[i], 0);
 
-            glClearColor(kFboColors[i][0], kFboColors[i][1], kFboColors[i][2], kFboColors[i][3]);
+            if (solidColor)
+            {
+                glClearColor(kSolidColors[i][0], kSolidColors[i][1], kSolidColors[i][2],
+                             kSolidColors[i][3]);
+            }
+            else
+            {
+                glClearColor(kFboColors[i][0], kFboColors[i][1], kFboColors[i][2],
+                             kFboColors[i][3]);
+            }
             glClear(GL_COLOR_BUFFER_BIT);
         }
 
@@ -65,7 +74,7 @@ class CopyTexImageTest : public ANGLETest<>
 
     void initializeResources(GLenum format, GLenum type)
     {
-        initializeResources(format, format, type);
+        initializeResources(format, format, type, false);
     }
 
     void verifyResults(GLuint texture,
@@ -329,9 +338,13 @@ class CopyTexImageTest : public ANGLETest<>
     static constexpr GLfloat kFboColors[kFboCount][4] = {{0.25f, 1.0f, 0.75f, 0.5f},
                                                          {1.0f, 0.75f, 0.5f, 0.25f},
                                                          {0.5f, 0.25f, 1.0f, 0.75f}};
+    static constexpr GLfloat kSolidColors[kFboCount][4] = {{1.0f, 0.0f, 0.0f, 1.0f},
+                                                           {0.0f, 1.0f, 0.0f, 1.0f},
+                                                           {0.0f, 0.0f, 1.0f, 1.0f}};
 };
 
-TEST_P(CopyTexImageTest, RGBAToRGB)
+// CopyTexImage from GL_RGBA to GL_RGB8
+TEST_P(CopyTexImageTest, RGBAToRGB8)
 {
     GLubyte expected[3][4] = {
         {64, 255, 191, 255},
@@ -340,7 +353,20 @@ TEST_P(CopyTexImageTest, RGBAToRGB)
     };
 
     initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
-    runCopyTexImageTest(GL_RGB, expected);
+    runCopyTexImageTest(GL_RGB8, expected);
+}
+
+// CopyTexImage from GL_RGBA to GL_RGBA
+TEST_P(CopyTexImageTest, RGBAToRGBA)
+{
+    GLubyte expected[3][4] = {
+        {64, 255, 191, 128},
+        {255, 191, 127, 64},
+        {127, 64, 255, 192},
+    };
+
+    initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
+    runCopyTexImageTest(GL_RGBA, expected);
 }
 
 TEST_P(CopyTexImageTest, RGBAToL)
@@ -355,7 +381,8 @@ TEST_P(CopyTexImageTest, RGBAToL)
     runCopyTexImageTest(GL_LUMINANCE, expected);
 }
 
-TEST_P(CopyTexImageTest, RGBToL)
+// CopyTexImage from GL_RGBA to GL_LUMINANCE8_OES
+TEST_P(CopyTexImageTest, RGBAToL8)
 {
     GLubyte expected[3][4] = {
         {64, 64, 64, 255},
@@ -363,8 +390,8 @@ TEST_P(CopyTexImageTest, RGBToL)
         {127, 127, 127, 255},
     };
 
-    initializeResources(GL_RGB, GL_UNSIGNED_BYTE);
-    runCopyTexImageTest(GL_LUMINANCE, expected);
+    initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
+    runCopyTexImageTest(GL_LUMINANCE8_OES, expected);
 }
 
 TEST_P(CopyTexImageTest, RGBAToLA)
@@ -379,6 +406,32 @@ TEST_P(CopyTexImageTest, RGBAToLA)
     runCopyTexImageTest(GL_LUMINANCE_ALPHA, expected);
 }
 
+// CopyTexImage from GL_RGBA to GL_LUMINANCE8_ALPHA8_OES
+TEST_P(CopyTexImageTest, RGBAToL8A8)
+{
+    GLubyte expected[3][4] = {
+        {64, 64, 64, 127},
+        {255, 255, 255, 64},
+        {127, 127, 127, 191},
+    };
+
+    initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
+    runCopyTexImageTest(GL_LUMINANCE8_ALPHA8_OES, expected);
+}
+
+// CopyTexImage from GL_RGBA to GL_LUMINANCE4_ALPHA4_OES
+TEST_P(CopyTexImageTest, RGBAToL4A4)
+{
+    GLubyte expected[3][4] = {
+        {64, 64, 64, 127},
+        {255, 255, 255, 64},
+        {127, 127, 127, 191},
+    };
+
+    initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
+    runCopyTexImageTest(GL_LUMINANCE4_ALPHA4_OES, expected);
+}
+
 TEST_P(CopyTexImageTest, RGBAToA)
 {
     GLubyte expected[3][4] = {
@@ -390,7 +443,70 @@ TEST_P(CopyTexImageTest, RGBAToA)
     initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
     runCopyTexImageTest(GL_ALPHA, expected);
 }
+// CopyTexImage from GL_RGBA to GL_ALPHA8_OES
+TEST_P(CopyTexImageTest, RGBAToA8)
+{
+    GLubyte expected[3][4] = {
+        {0, 0, 0, 127},
+        {0, 0, 0, 64},
+        {0, 0, 0, 191},
+    };
 
+    initializeResources(GL_RGBA, GL_UNSIGNED_BYTE);
+    runCopyTexImageTest(GL_ALPHA8_OES, expected);
+}
+
+// CopyTexImage from GL_RGBA to GL_RGBA4
+TEST_P(CopyTexImageTest, RGBAToRGBA4)
+{
+    GLubyte expected[3][4] = {
+        {255, 0, 0, 255},
+        {0, 255, 0, 255},
+        {0, 0, 255, 255},
+    };
+
+    initializeResources(GL_RGBA4, GL_RGBA, GL_UNSIGNED_BYTE, true);
+    runCopyTexImageTest(GL_RGBA4, expected);
+}
+
+// CopyTexImage from GL_RGB to GL_RGB565
+TEST_P(CopyTexImageTest, RGBToRGB565)
+{
+    GLubyte expected[3][4] = {
+        {255, 0, 0, 255},
+        {0, 255, 0, 255},
+        {0, 0, 255, 255},
+    };
+
+    initializeResources(GL_RGB565, GL_RGB, GL_UNSIGNED_BYTE, true);
+    runCopyTexImageTest(GL_RGB565, expected);
+}
+
+// CopyTexImage from GL_RGBA to GL_RGB5_A1
+TEST_P(CopyTexImageTest, RGBAToRGB5A1)
+{
+    GLubyte expected[3][4] = {
+        {255, 0, 0, 255},
+        {0, 255, 0, 255},
+        {0, 0, 255, 255},
+    };
+
+    initializeResources(GL_RGB5_A1, GL_RGBA, GL_UNSIGNED_BYTE, true);
+    runCopyTexImageTest(GL_RGB5_A1, expected);
+}
+
+// CopyTexImage from GL_RGB to GL_LUMINANCE
+TEST_P(CopyTexImageTest, RGBToL)
+{
+    GLubyte expected[3][4] = {
+        {64, 64, 64, 255},
+        {255, 255, 255, 255},
+        {127, 127, 127, 255},
+    };
+
+    initializeResources(GL_RGB, GL_UNSIGNED_BYTE);
+    runCopyTexImageTest(GL_LUMINANCE, expected);
+}
 TEST_P(CopyTexImageTest, SubImageRGBAToRGB)
 {
     GLubyte expected[3][4] = {
@@ -449,7 +565,7 @@ TEST_P(CopyTexImageTest, RGBXToL)
         {127, 127, 127, 255},
     };
 
-    initializeResources(GL_RGBX8_ANGLE, GL_RGB, GL_UNSIGNED_BYTE);
+    initializeResources(GL_RGBX8_ANGLE, GL_RGB, GL_UNSIGNED_BYTE, false);
     runCopyTexImageTest(GL_LUMINANCE, expected);
 }
 

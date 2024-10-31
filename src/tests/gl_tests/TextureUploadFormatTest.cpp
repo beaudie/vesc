@@ -346,6 +346,12 @@ TEST_P(TextureUploadFormatTest, All)
         fnTest(TexFormat(GL_LUMINANCE_ALPHA, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE), {1, 1, 1, 1});
         fnTest(TexFormat(GL_LUMINANCE, GL_LUMINANCE, GL_UNSIGNED_BYTE), {1, 1, 1, 0});
         fnTest(TexFormat(GL_ALPHA, GL_ALPHA, GL_UNSIGNED_BYTE), {0, 0, 0, 1});
+        fnTest(TexFormat(GL_LUMINANCE4_ALPHA4_OES, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE),
+               {1, 1, 1, 1});
+        fnTest(TexFormat(GL_LUMINANCE8_ALPHA8_OES, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE),
+               {1, 1, 1, 1});
+        fnTest(TexFormat(GL_LUMINANCE8_OES, GL_LUMINANCE, GL_UNSIGNED_BYTE), {1, 1, 1, 0});
+        fnTest(TexFormat(GL_ALPHA8_OES, GL_ALPHA, GL_UNSIGNED_BYTE), {0, 0, 0, 1});
     }
 
     // RGBA+BYTE
@@ -392,6 +398,7 @@ TEST_P(TextureUploadFormatTest, All)
         ZeroAndCopy(srcBuffer, src);
 
         fnTest(TexFormat(GL_RGBA, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1), {8, 8, 8, 255});
+        fnTest(TexFormat(GL_RGB5_A1, GL_RGBA, GL_UNSIGNED_SHORT_5_5_5_1), {8, 8, 8, 255});
     }
 
     // RGBA+UNSIGNED_INT_2_10_10_10_REV

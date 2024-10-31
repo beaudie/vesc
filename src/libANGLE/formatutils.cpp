@@ -1195,6 +1195,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     //                | Internal format           |sized| L | A | Format            | Type             | Component type        | Texture supported                                                           | Filterable                                     | Texture attachment | Renderbuffer | Blend
     AddLUMAFormat(&map, GL_ALPHA8_EXT,             true,  0,  8, GL_ALPHA,           GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireExt<&Extensions::textureStorageEXT>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
     AddLUMAFormat(&map, GL_LUMINANCE8_EXT,         true,  8,  0, GL_LUMINANCE,       GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireExt<&Extensions::textureStorageEXT>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
+    AddLUMAFormat(&map, GL_LUMINANCE4_ALPHA4_OES,  true,  8,  8, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireExt<&Extensions::requiredInternalformatOES>,                              AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
     AddLUMAFormat(&map, GL_LUMINANCE8_ALPHA8_EXT,  true,  8,  8, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, RequireExt<&Extensions::textureStorageEXT>,                                      AlwaysSupported,                                 NeverSupported,      NeverSupported, NeverSupported);
     AddLUMAFormat(&map, GL_ALPHA16F_EXT,           true,  0, 16, GL_ALPHA,           GL_HALF_FLOAT_OES, GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorageEXT, &Extensions::textureHalfFloatOES>, RequireExt<&Extensions::textureHalfFloatLinearOES>, NeverSupported,      NeverSupported, NeverSupported);
     AddLUMAFormat(&map, GL_LUMINANCE16F_EXT,       true, 16,  0, GL_LUMINANCE,       GL_HALF_FLOAT_OES, GL_FLOAT,               RequireExtAndExt<&Extensions::textureStorageEXT, &Extensions::textureHalfFloatOES>, RequireExt<&Extensions::textureHalfFloatLinearOES>, NeverSupported,      NeverSupported, NeverSupported);
@@ -1366,11 +1367,6 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     //                 | Internal format    |sized| R | G | B | A |S | Format | Type             | Component type        | SRGB | Texture supported                     | Filterable     | Texture attachment                    | Renderbuffer                          | Blend
     AddRGBAFormat(&map, GL_SRG8_EXT,         true,  8,  8,  0,  0, 0, GL_RG,   GL_UNSIGNED_BYTE,  GL_UNSIGNED_NORMALIZED, true,  RequireExt<&Extensions::textureSRGBRG8EXT>,    AlwaysSupported, NeverSupported,                         NeverSupported,                         NeverSupported);
 
-    // From GL_EXT_texture_type_2_10_10_10_REV
-    // GL_RGB10_UNORM_ANGLEX is never used directly but needs to be in the list of all sized internal formats so that the backends can determine support.
-    //                  | Internal format      |sized|    R | G | B | A |S |X   | Format           | Type                          | Component type        | SRGB | Texture supported                                  | Filterable     | Texture attachment                               | Renderbuffer  | Blend
-    AddRGBAXFormat(&map, GL_RGB10_UNORM_ANGLEX, true, FB<10, 10, 10,  0, 0, 2>(), GL_RGB,            GL_UNSIGNED_INT_2_10_10_10_REV, GL_UNSIGNED_NORMALIZED, false, NeverSupported,                                     NeverSupported,  NeverSupported,                                    NeverSupported, NeverSupported);
-
     // Unsized formats
     //                  | Internal format  |sized |    R | G | B | A |S |X   | Format           | Type                          | Component type        | SRGB | Texture supported                                  | Filterable     | Texture attachment                               | Renderbuffer  | Blend
     AddRGBAXFormat(&map, GL_RED,            false, FB< 8,  0,  0,  0, 0, 0>(), GL_RED,            GL_UNSIGNED_BYTE,               GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::textureRgEXT>,               AlwaysSupported, RequireExt<&Extensions::textureRgEXT>,             NeverSupported, NeverSupported);
@@ -1470,12 +1466,10 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
     AddYUVFormat(&map,  GL_G8_B8R8_2PLANE_420_UNORM_ANGLE,            true,   8,   8,  8,   0,  0,  GL_G8_B8R8_2PLANE_420_UNORM_ANGLE,    GL_UNSIGNED_BYTE, GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::yuvInternalFormatANGLE>,          RequireExt<&Extensions::yuvInternalFormatANGLE>,          RequireExt<&Extensions::yuvInternalFormatANGLE>,          NeverSupported, NeverSupported);
     AddYUVFormat(&map,  GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE,           true,   8,   8,  8,   0,  0,  GL_G8_B8_R8_3PLANE_420_UNORM_ANGLE,   GL_UNSIGNED_BYTE, GL_UNSIGNED_NORMALIZED, false, RequireExt<&Extensions::yuvInternalFormatANGLE>,          RequireExt<&Extensions::yuvInternalFormatANGLE>,          RequireExt<&Extensions::yuvInternalFormatANGLE>,          NeverSupported, NeverSupported);
 
-#if defined(ANGLE_PLATFORM_LINUX)
     // From GL_OES_required_internalformat
     // The |shared| bit shouldn't be 2. But given this hits assertion when bits
     // are checked, it's fine to have this bit set as 2 as a workaround.
     AddRGBAFormat(&map, GL_RGB10_EXT,        true, 10, 10, 10, 0, 2, GL_RGB, GL_UNSIGNED_INT_2_10_10_10_REV,    GL_UNSIGNED_NORMALIZED,        false, RequireES<1, 0>,                                      NeverSupported,  RequireES<1, 0>,                                         RequireES<1, 0>,                                 NeverSupported);
-#endif
     // clang-format on
 
     return map;

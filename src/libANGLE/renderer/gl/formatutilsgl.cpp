@@ -257,7 +257,7 @@ static InternalFormatInfoMap BuildInternalFormatInfoMap()
 
     // From GL_EXT_texture_type_2_10_10_10_REV
     // Emulated with GL_RGB10_A2 on desktop GL
-    InsertFormatMapping(&map, GL_RGB10_UNORM_ANGLEX,AlwaysSupported(),                                AlwaysSupported(), NeverSupported(),                              ExtsOnly("GL_EXT_texture_type_2_10_10_10_REV"), AlwaysSupported(), NeverSupported(),                     NeverSupported()                         );
+    InsertFormatMapping(&map, GL_RGB10_EXT,         AlwaysSupported(),                                AlwaysSupported(), NeverSupported(),                              ExtsOnly("GL_EXT_texture_type_2_10_10_10_REV"), AlwaysSupported(), NeverSupported(),                     NeverSupported()                         );
 
     // Floating point formats
     // Note 1: GL_EXT_texture_shared_exponent and GL_ARB_color_buffer_float suggest that RGB9_E5
@@ -540,7 +540,7 @@ static GLenum GetNativeInternalFormat(const FunctionsGL *functions,
             }
         }
 
-        if (internalFormat.sizedInternalFormat == GL_RGB10_UNORM_ANGLEX)
+        if (internalFormat.sizedInternalFormat == GL_RGB10_EXT)
         {
             ASSERT(features.emulateRGB10.enabled);
             result = GL_RGB10_A2;

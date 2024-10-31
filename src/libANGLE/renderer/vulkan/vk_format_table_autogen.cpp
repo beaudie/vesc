@@ -1422,7 +1422,7 @@ void Format::initialize(Renderer *renderer, const angle::Format &angleFormat)
             break;
 
         case angle::FormatID::R10G10B10X2_UNORM:
-            mIntendedGLFormat              = GL_RGB10_UNORM_ANGLEX;
+            mIntendedGLFormat              = GL_RGB10_EXT;
             mActualSampleOnlyImageFormatID = angle::FormatID::R10G10B10A2_UNORM;
             mImageInitializerFunction      = nullptr;
             mActualBufferFormatID          = angle::FormatID::NONE;

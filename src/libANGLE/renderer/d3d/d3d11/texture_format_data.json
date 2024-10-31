@@ -711,7 +711,7 @@
       "blue": 10,
       "alpha": 2
     },
-    "glInternalFormat": "GL_RGB10_UNORM_ANGLEX"
+    "glInternalFormat": "GL_RGB10_EXT"
   },
   "R16G16B16A16_SINT": {
     "texFormat": "DXGI_FORMAT_R16G16B16A16_SINT",

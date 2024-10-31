@@ -140,6 +140,7 @@ const ExtensionInfoMap &GetExtensionInfoMap()
         map["GL_NV_read_stencil"] = enableableExtension(&Extensions::readStencilNV);
         map["GL_QCOM_render_shared_exponent"] = enableableExtension(&Extensions::renderSharedExponentQCOM);
         map["GL_EXT_render_snorm"] = enableableExtension(&Extensions::renderSnormEXT);
+        map["GL_OES_required_internalformat"] = enableableExtension(&Extensions::requiredInternalformatOES);
         map["GL_OES_rgb8_rgba8"] = enableableExtension(&Extensions::rgb8Rgba8OES);
         map["GL_KHR_robust_buffer_access_behavior"] = esOnlyExtension(&Extensions::robustBufferAccessBehaviorKHR);
         map["GL_EXT_robustness"] = esOnlyExtension(&Extensions::robustnessEXT);

@@ -436,7 +436,7 @@ GLenum GetSizedFormatInternal(GLenum format, GLenum type)
                 case GL_UNSIGNED_INT_10F_11F_11F_REV:
                     return GL_R11F_G11F_B10F;
                 case GL_UNSIGNED_INT_2_10_10_10_REV:
-                    return GL_RGB10_UNORM_ANGLEX;
+                    return GL_RGB10_EXT;
                 case GL_UNSIGNED_INT_5_9_9_9_REV:
                     return GL_RGB9_E5;
                 case GL_UNSIGNED_SHORT:
@@ -763,6 +763,7 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                         case GL_DEPTH_COMPONENT24:
                         case GL_DEPTH_COMPONENT16:
                         case GL_DEPTH_COMPONENT:
+                        case GL_DEPTH_COMPONENT32_OES:
                             return true;
                         default:
                             break;
@@ -929,6 +930,7 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     {
                         case GL_LUMINANCE_ALPHA:
                         case GL_LUMINANCE8_ALPHA8_EXT:
+                        case GL_LUMINANCE4_ALPHA4_OES:
                             return true;
                         default:
                             break;
@@ -1295,6 +1297,9 @@ bool ValidES3FormatCombination(GLenum format, GLenum type, GLenum internalFormat
                     switch (internalFormat)
                     {
                         case GL_RGB:
+                        case GL_RGB8:
+                        case GL_RGB565:
+                        case GL_RGB10_EXT:
                             return true;
                         default:
                             break;
