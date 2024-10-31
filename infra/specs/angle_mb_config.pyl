@@ -69,7 +69,7 @@
     'angle_reclient_android_arm_debug_bot': ['angle', 'opencl', 'openclcts', 'reclient', 'android', 'arm', 'debug', 'cxx17'],
     'angle_reclient_android_arm_release_bot': ['angle', 'opencl', 'openclcts', 'reclient', 'android', 'arm', 'release'],
     'angle_reclient_android_perf_bot': ['angle', 'reclient', 'android', 'arm64', 'perf'],
-    'angle_reclient_debug_bot': ['angle', 'opencl', 'reclient', 'debug'],
+    'angle_reclient_debug_bot': ['angle', 'opencl', 'reclient', 'debug', 'cxx17'],
     'angle_reclient_debug_openclcts_bot': ['angle', 'opencl', 'openclcts', 'reclient', 'debug'],
     'angle_reclient_perf_bot': ['angle', 'reclient', 'perf'],
     'angle_reclient_release_bot': ['angle', 'capture', 'opencl', 'reclient', 'release'],
