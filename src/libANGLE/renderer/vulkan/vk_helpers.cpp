@@ -4457,37 +4457,23 @@ angle::Result DynamicDescriptorPool::allocateDescriptorSet(
     ASSERT(!mDescriptorPools.empty());
     ASSERT(descriptorSetLayout.getHandle() == mCachedDescriptorSetLayout);
 
-    // First try to allocate from the same pool
-    DescriptorPoolPointer pool1;
-    if (*descriptorSetOut)
-    {
-        pool1 = (*descriptorSetOut)->getPool();
-        if (pool1->allocateDescriptorSet(context, descriptorSetLayout, pool1, descriptorSetOut))
-        {
-            return angle::Result::Continue;
-        }
-    }
-
-    // Next try to allocate from mCurrentPoolIndex pool
-    DescriptorPoolPointer pool2;
-    if (mDescriptorPools[mCurrentPoolIndex] && mDescriptorPools[mCurrentPoolIndex]->valid() &&
-        !mDescriptorPools[mCurrentPoolIndex].owner_equal(pool1))
-    {
-        pool2 = mDescriptorPools[mCurrentPoolIndex];
-        if (pool2->allocateDescriptorSet(context, descriptorSetLayout, pool2, descriptorSetOut))
-        {
-            return angle::Result::Continue;
-        }
-    }
-
-    // Next try all other existing pools
+    // First try recycle from garbage list
     for (DescriptorPoolPointer &pool : mDescriptorPools)
     {
         if (!pool || !pool->valid())
         {
             continue;
         }
-        if (pool.owner_equal(pool1) || pool.owner_equal(pool2))
+        if (pool->recycleGarbage(context->getRenderer(), descriptorSetOut))
+        {
+            return angle::Result::Continue;
+        }
+    }
+
+    // Next try allocate from the existing pools
+    for (DescriptorPoolPointer &pool : mDescriptorPools)
+    {
+        if (!pool || !pool->valid())
         {
             continue;
         }

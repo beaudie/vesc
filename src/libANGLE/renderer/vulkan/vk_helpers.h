@@ -345,6 +345,8 @@ class DescriptorPoolHelper final : public Resource
                                const DescriptorPoolPointer &pool,
                                DescriptorSetPointer *descriptorSetOut);
 
+    bool recycleGarbage(Renderer *renderer, DescriptorSetPointer *descriptorSetOut);
+
     void addGarbage(DescriptorSetPointer &&garbage)
     {
         ASSERT(garbage.unique());
@@ -363,8 +365,6 @@ class DescriptorPoolHelper final : public Resource
     bool allocateVkDescriptorSet(Context *context,
                                  const DescriptorSetLayout &descriptorSetLayout,
                                  VkDescriptorSet *descriptorSetOut);
-
-    bool recycleGarbage(Renderer *renderer, DescriptorSetPointer *descriptorSetOut);
 
     void resetGarbage();
 
