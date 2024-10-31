@@ -5,6 +5,7 @@
 //
 
 #include "libANGLE/renderer/wgpu/wgpu_command_buffer.h"
+#include "libANGLE/renderer/wgpu/ContextWgpu.h"
 
 namespace rx
 {
@@ -64,6 +65,13 @@ void CommandBuffer::drawIndexed(uint32_t indexCount,
     drawIndexedCommand->firstIndex         = firstIndex;
     drawIndexedCommand->baseVertex         = baseVertex;
     drawIndexedCommand->firstInstance      = firstInstance;
+}
+
+void CommandBuffer::setBindGroup(uint32_t groupIndex, wgpu::BindGroup bindGroup)
+{
+    SetBindGroupCommand *setBindGroupCommand = initCommand<CommandID::SetBindGroup>();
+    setBindGroupCommand->groupIndex          = groupIndex;
+    setBindGroupCommand->bindGroup = GetReferencedObject(mReferencedBindGroups, bindGroup);
 }
 
 void CommandBuffer::setPipeline(wgpu::RenderPipeline pipeline)
@@ -179,6 +187,15 @@ void CommandBuffer::recordCommands(wgpu::RenderPassEncoder encoder)
                         drawIndexedCommand.indexCount, drawIndexedCommand.instanceCount,
                         drawIndexedCommand.firstIndex, drawIndexedCommand.baseVertex,
                         drawIndexedCommand.firstInstance);
+                    break;
+                }
+
+                case CommandID::SetBindGroup:
+                {
+                    const SetBindGroupCommand &setBindGroupCommand =
+                        GetCommandAndIterate<CommandID::SetBindGroup>(&currentCommand);
+                    encoder.SetBindGroup(setBindGroupCommand.groupIndex,
+                                         *setBindGroupCommand.bindGroup);
                     break;
                 }
 
