@@ -37,6 +37,23 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "2626a6c3_cfdff35d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3462878
+      },
+      "writtenOn": "2024-10-31T08:47:03Z",
+      "side": 1,
+      "message": "Hi lehoangquyen@chromium.org, could you please take a look? Thanks.",
+      "revId": "273489cc53b502b184dd2c7466b73f6c2d8c028f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "9ab55f40_bdff8010",
         "filename": "src/libANGLE/renderer/metal/DisplayMtl.mm",
         "patchSetId": 4
