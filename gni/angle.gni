@@ -159,6 +159,10 @@ declare_args() {
 }
 
 declare_args() {
+  # Strip down a number of features from ANGLE that won't be used by Chromium,
+  # to reduce binary size, especially on Android.
+  angle_minimize_for_chromium = build_with_chromium && is_android
+
   # By default, ANGLE is using a thread pool for parallel compilation.
   # Activating the delegate worker results in posting the tasks using the
   # embedder API. In Chromium code base, it results in sending tasks to the

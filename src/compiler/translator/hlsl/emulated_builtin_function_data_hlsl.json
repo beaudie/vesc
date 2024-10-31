@@ -88,7 +88,8 @@
          "float mantissa = frexp(abs(x), fexp) * sign(x);",
          "exp = int(fexp);",
          "return mantissa;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"frexp",
@@ -102,7 +103,8 @@
          "float2 mantissa = frexp(abs(x), fexp) * sign(x);",
          "exp = int2(fexp);",
          "return mantissa;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"frexp",
@@ -116,7 +118,8 @@
          "float3 mantissa = frexp(abs(x), fexp) * sign(x);",
          "exp = int3(fexp);",
          "return mantissa;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"frexp",
@@ -130,7 +133,8 @@
          "float4 mantissa = frexp(abs(x), fexp) * sign(x);",
          "exp = int4(fexp);",
          "return mantissa;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"ldexp",
@@ -141,7 +145,8 @@
       ],
       "body":[
          "return ldexp(x, float(exp));"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"ldexp",
@@ -152,7 +157,8 @@
       ],
       "body":[
          "return ldexp(x, float2(exp));"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"ldexp",
@@ -163,7 +169,8 @@
       ],
       "body":[
          "return ldexp(x, float3(exp));"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"ldexp",
@@ -174,7 +181,8 @@
       ],
       "body":[
          "return ldexp(x, float4(exp));"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"faceforward",
@@ -590,7 +598,8 @@
          "int w = webgl_toSnorm8(v.w);",
          "return ((asuint(w) & 0xffu) << 24) | ((asuint(z) & 0xffu) << 16) ",
          "| ((asuint(y) & 0xffu) << 8) | (asuint(x) & 0xffu);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"packUnorm4x8",
@@ -609,7 +618,8 @@
          "uint z = webgl_toUnorm8(v.z);",
          "uint w = webgl_toUnorm8(v.w);",
          "return (w << 24) | (z << 16) | (y << 8) | x;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"unpackSnorm4x8",
@@ -630,7 +640,8 @@
          "uint x = u;",
          "return float4(webgl_fromSnorm8(x), webgl_fromSnorm8(y), ",
          "webgl_fromSnorm8(z), webgl_fromSnorm8(w));"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"unpackUnorm4x8",
@@ -650,7 +661,8 @@
          "uint x = u & 0xffu;",
          "return float4(webgl_fromUnorm8(x), webgl_fromUnorm8(y), ",
          "webgl_fromUnorm8(z), webgl_fromUnorm8(w));"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "comment":[
@@ -913,7 +925,8 @@
       ],
       "body":[
          "return a ? y : x;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"mix",
@@ -925,7 +938,8 @@
       ],
       "body":[
          "return a ? y : x;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"mix",
@@ -949,7 +963,8 @@
       ],
       "body":[
          "return int2(a[0] ? y[0] : x[0], a[1] ? y[1] : x[1]);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"mix",
@@ -961,7 +976,8 @@
       ],
       "body":[
          "return uint2(a[0] ? y[0] : x[0], a[1] ? y[1] : x[1]);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"mix",
@@ -985,7 +1001,8 @@
       ],
       "body":[
          "return int3(a[0] ? y[0] : x[0], a[1] ? y[1] : x[1], a[2] ? y[2] : x[2]);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"mix",
@@ -997,7 +1014,8 @@
       ],
       "body":[
          "return uint3(a[0] ? y[0] : x[0], a[1] ? y[1] : x[1], a[2] ? y[2] : x[2]);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"mix",
@@ -1021,7 +1039,8 @@
       ],
       "body":[
          "return int4(a[0] ? y[0] : x[0], a[1] ? y[1] : x[1], a[2] ? y[2] : x[2], a[3] ? y[3] : x[3]);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"mix",
@@ -1033,7 +1052,8 @@
       ],
       "body":[
          "return uint4(a[0] ? y[0] : x[0], a[1] ? y[1] : x[1], a[2] ? y[2] : x[2], a[3] ? y[3] : x[3]);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1051,7 +1071,8 @@
          "uint maskMsb = (1u << (bits - 1));",
          "uint mask = ((maskMsb - 1u) | maskMsb) << offset;",
          "return (value & mask) >> offset;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1069,7 +1090,8 @@
          "uint maskMsb = (1u << (bits - 1));",
          "uint mask = ((maskMsb - 1u) | maskMsb) << offset;",
          "return (value & mask) >> offset;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1087,7 +1109,8 @@
          "uint maskMsb = (1u << (bits - 1));",
          "uint mask = ((maskMsb - 1u) | maskMsb) << offset;",
          "return (value & mask) >> offset;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1105,7 +1128,8 @@
          "uint maskMsb = (1u << (bits - 1));",
          "uint mask = ((maskMsb - 1u) | maskMsb) << offset;",
          "return (value & mask) >> offset;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1129,7 +1153,8 @@
          "    resultUnsigned |= higherBitsMask;",
          "}",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1153,7 +1178,8 @@
          "    resultUnsigned |= ((resultUnsigned & maskMsb) >> (bits - 1)) * higherBitsMask;",
          "}",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1177,7 +1203,8 @@
          "    resultUnsigned |= ((resultUnsigned & maskMsb) >> (bits - 1)) * higherBitsMask;",
          "}",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldExtract",
@@ -1201,7 +1228,8 @@
          "    resultUnsigned |= ((resultUnsigned & maskMsb) >> (bits - 1)) * higherBitsMask;",
          "}",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1221,7 +1249,8 @@
          "uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;",
          "uint baseMask = ~insertMask;",
          "return (base & baseMask) | ((insert << offset) & insertMask);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1241,7 +1270,8 @@
          "uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;",
          "uint baseMask = ~insertMask;",
          "return (base & baseMask) | ((insert << offset) & insertMask);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1261,7 +1291,8 @@
          "uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;",
          "uint baseMask = ~insertMask;",
          "return (base & baseMask) | ((insert << offset) & insertMask);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1281,7 +1312,8 @@
          "uint insertMask = ((maskMsb - 1u) | maskMsb) << offset;",
          "uint baseMask = ~insertMask;",
          "return (base & baseMask) | ((insert << offset) & insertMask);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1303,7 +1335,8 @@
          "uint resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & ",
          "                       insertMask);",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1325,7 +1358,8 @@
          "uint2 resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & ",
          "                        insertMask);",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1347,7 +1381,8 @@
          "uint3 resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & ",
          "                        insertMask);",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"bitfieldInsert",
@@ -1369,7 +1404,8 @@
          "uint4 resultUnsigned = (asuint(base) & baseMask) | ((asuint(insert) << offset) & ",
          "insertMask);",
          "return asint(resultUnsigned);"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"uaddCarry",
@@ -1382,7 +1418,8 @@
       "body":[
          "carry = uint(x > (0xffffffffu - y));",
          "return x + y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"uaddCarry",
@@ -1395,7 +1432,8 @@
       "body":[
          "carry = uint2(x > (0xffffffffu - y));",
          "return x + y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"uaddCarry",
@@ -1408,7 +1446,8 @@
       "body":[
          "carry = uint3(x > (0xffffffffu - y));",
          "return x + y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"uaddCarry",
@@ -1421,7 +1460,8 @@
       "body":[
          "carry = uint4(x > (0xffffffffu - y));",
          "return x + y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"usubBorrow",
@@ -1434,7 +1474,8 @@
       "body":[
          "borrow = uint(x < y);",
          "return x - y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"usubBorrow",
@@ -1447,7 +1488,8 @@
       "body":[
          "borrow = uint2(x < y);",
          "return x - y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"usubBorrow",
@@ -1460,7 +1502,8 @@
       "body":[
          "borrow = uint3(x < y);",
          "return x - y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "op":"usubBorrow",
@@ -1473,7 +1516,8 @@
       "body":[
          "borrow = uint4(x < y);",
          "return x - y;"
-      ]
+      ],
+      "exclude_from_chromium":"true"
    },
    {
       "comment":[

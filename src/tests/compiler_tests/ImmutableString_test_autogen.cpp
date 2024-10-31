@@ -14,6 +14,7 @@
 namespace sh
 {
 
+// Test that script-generated hashes match with runtime computed hashes.
 TEST(ImmutableStringTest, ScriptGeneratedHashesMatch)
 {
     ASSERT_EQ(0x00000000u, ImmutableString("radians(00B").mangledNameHash());

@@ -5,6 +5,10 @@
 #ifndef COMPILER_TRANSLATOR_TREEUTIL_BUILTIN_H_
 #define COMPILER_TRANSLATOR_TREEUTIL_BUILTIN_H_
 
-#include "BuiltIn_autogen.h"
+#ifdef ANGLE_MINIMIZE_FOR_CHROMIUM
+#    include "BuiltIn_chromium_autogen.h"
+#else
+#    include "BuiltIn_autogen.h"
+#endif
 
 #endif  // COMPILER_TRANSLATOR_TREEUTIL_BUILTIN_H_
