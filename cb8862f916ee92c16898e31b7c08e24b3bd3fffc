@@ -122,6 +122,24 @@
       "parentUuid": "6fe88d5c_32098c6b",
       "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91c5f6b9_312d3cb0",
+        "filename": "include/GLSLANG/ShaderLang.h",
+        "patchSetId": 5
+      },
+      "lineNbr": 875,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-10-31T18:27:31Z",
+      "side": 1,
+      "message": "Yes. I think the AI suggested fix here was wrong.",
+      "parentUuid": "76810541_748e6163",
+      "revId": "cb8862f916ee92c16898e31b7c08e24b3bd3fffc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
