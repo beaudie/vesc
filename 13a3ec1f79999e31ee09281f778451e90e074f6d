@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7b19558c_b2c4f703",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-31T12:23:17Z",
+      "side": 1,
+      "message": "\u003e For `mSyncPools`, `EGL_Terminate()` should not access it if there is any context that is still current on any thread: `Display::Terminate()` returns early before calling `mSyncPools.clear()`: \n\nIn order to call `eglDestroySync()` context do not need to be current.\n\nSo we can create situation where no contexts are current, but  still have `EGLSync` objects. One thread will call `eglTerminate()`, while other will destroy`EGLSync` objects by calling `eglDestroySync()`:\n\n- Thread 1:\n```\nEGL_Terminate() -\u003e\n      Terminate() -\u003e\n          Display::terminate() -\u003e\n              mSyncMap\n              Display::destroyInvalidEglObjects() -\u003e\n                  Display::destroySyncImpl() -\u003e\n                      mSyncHandleAllocator\n                      mSyncPools\n              mSyncPools\n```\n\n- Thread 2:\n```\nEGL_DestroySync() -\u003e\n      DestroySync() -\u003e\n          Display::destroySync() -\u003e\n              mSyncMap (passing pointer)\n              Display::destroySyncImpl() -\u003e\n                  mSyncHandleAllocator\n                  mSyncPools\n                  mSyncMap\n```\n\nAnother scenario, is to call `eglCreateSync()` while display is terminating.\n\nBut now I think, that we also need to protect `Display::mInitialized`, because it is used in `ValidateDisplay()`. So need to also use `ANGLE_SCOPED_GLOBAL_EGL_AND_EGL_SYNC_LOCK` for `eglInitialize()` so there is no race conditions if some thread calls EGL sync APIs (incorrectly), while other initializes the display.\n\nUnfortunately, access to members need to be protected even if API is used incorrectly (unlike in Vulkan).\n\n\u003e For `mSyncHandleAllocator`, would mind pointing me on where it is getting accessed in `EGL_Terminate()` code path?\n\nFrom `Display::destroyInvalidEglObjects()`. See the below answer.\n\n\u003e For `EGL_ReleaseThread()`, and `ThreadCleanupCallBack()`, is it because they call `Display::makeCurrent()`, which can call to `Display::terminate()`?\n\nNot only. There are 2 code paths (that I found):\n\n1. Path calling `Display::releaseThread()`:\n```\nEGL_ReleaseThread() | ThreadCleanupCallback() -\u003e \n      ReleaseThread() -\u003e \n          Display::releaseThread() -\u003e\n              Display::destroyInvalidEglObjects()\n```\n\n2. Path calling `Display::makeCurrent()`:\n```\nEGL_ReleaseThread() | ThreadCleanupCallback() -\u003e\n      ReleaseThread() -\u003e\n          Display::makeCurrent() -\u003e\n              Display::terminate() -\u003e\n                  mSyncMap\n                  Display::destroyInvalidEglObjects()\n                  mSyncPools\n```\n\nBoth access `mSyncPools` and `mSyncHandleAllocator` from `Display::destroyInvalidEglObjects()` -\u003e `Display::destroySyncImpl()`.",
+      "parentUuid": "53e20606_ff8e4998",
+      "range": {
+        "startLine": 26,
+        "startChar": 50,
+        "endLine": 26,
+        "endChar": 58
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "31352038_2e57b46a",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 16
@@ -97,6 +121,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "79cb8f52_4aa6a0e3",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-31T12:23:17Z",
+      "side": 1,
+      "message": "Sorry, but I expected that you keep the local `lock` object. And better to name parameter `contextsLock`, so it is clear what lock is protecting. In the current code the entire function is protected by the mutex and `, std::move(lock)` does nothing.\n\nSuggest:\n```\nError Display::releaseContext(gl::Context *context, Thread *thread)\n{\n    return releaseContextImpl(context, \u0026mState.contextMap,\n               std::unique_lock\u003cangle::SimpleMutex\u003e(mState.contextMapMutex));\n}\n\nError Display::releaseContextImpl(gl::Context *context,\n    ContextMap *contexts, std::unique_lock\u003cangle::SimpleMutex\u003e \u0026\u0026contextsLock)\n{\n    // ...\n    {\n        std::unique_lock\u003cangle::SimpleMutex\u003e lock \u003d std::move(contextsLock);\n        // ...\n    }\n    // ...\n}\n```\n\nRegarding creating local `lock` object and then `std::move()` to the `releaseContextImpl()`, I think it is unnecessary. IMO, passing temporary object is a bit cleaner.",
+      "parentUuid": "22ffc8ed_31ed1f86",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
@@ -132,6 +180,30 @@
       "side": 1,
       "message": "Can you help checking if the format issue is fixed in latest patch? Thank you.",
       "parentUuid": "0ae13593_5de34755",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 47
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a7fa691_5a849f7d",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-31T12:23:17Z",
+      "side": 1,
+      "message": "Everything seems fine. Thanks.",
+      "parentUuid": "26543b24_6905ee07",
       "range": {
         "startLine": 122,
         "startChar": 0,
@@ -367,6 +439,30 @@
       "side": 1,
       "message": "I ended up having to move code in anonymous namespace https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/GlobalMutex.cpp;l\u003d114;drc\u003d25ce3dfec69bccb212dba1f0a2510b38952377a9 in `egl::priv` namespace, too. Is there any issue with this move?",
       "parentUuid": "b53abe0c_56b13cc8",
+      "range": {
+        "startLine": 29,
+        "startChar": 20,
+        "endLine": 29,
+        "endChar": 42
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af055dc9_1164ab10",
+        "filename": "src/libANGLE/GlobalMutex.h",
+        "patchSetId": 16
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-10-31T12:23:17Z",
+      "side": 1,
+      "message": "Sorry for misunderstanding. My intention was to only hide `ScopedGlobalMutexLock\u003c\u003e` template from public use. Moving also `ScopedGlobalEGLMutexLock` and `ScopedGlobalEGLSyncObjectMutexLock` into `egl::priv` contradicts my intention.\n\n\u003e in `egl::priv` namespace, too. Is there any issue with this move?\n\nThis way functions from anonymous namespace can be called from other files. I think it is still better to keep the anonymous namespace - so just extend the `priv` namespace to include the anonymous namespace and the `ScopedGlobalMutexLock\u003c\u003e` implementation.\n\nAlso please check for unnecessary `priv::` usage after extending the `priv` namespace. While you removed some, there are plenty left.\n\nOur you can just add another `priv` namespace scope just for the `ScopedGlobalMutexLock\u003c\u003e` to reduce the code diff. It is up to you.",
+      "parentUuid": "d09cf05f_ff4fa9e1",
       "range": {
         "startLine": 29,
         "startChar": 20,
