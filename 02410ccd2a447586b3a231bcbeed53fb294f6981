@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ecf95df4_200f0be3",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-31T15:41:39Z",
+      "side": 1,
+      "message": "Suggest\n```\nint fallbackNum \u003d 0;\nwhile (fallbackNum \u003c numInfo)\n{\n ....\n```\n\nWith an assert that `fallbackNum \u003c numInfo` at the end",
+      "range": {
+        "startLine": 41,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 24
+      },
+      "revId": "02410ccd2a447586b3a231bcbeed53fb294f6981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08da3010_96ecc09c",
         "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.cpp",
         "patchSetId": 4
@@ -31,6 +54,30 @@
       "writtenOn": "2024-10-30T22:30:20Z",
       "side": 1,
       "message": "what happens if we don\u0027t ever break here?",
+      "range": {
+        "startLine": 52,
+        "startChar": 12,
+        "endLine": 52,
+        "endChar": 17
+      },
+      "revId": "02410ccd2a447586b3a231bcbeed53fb294f6981",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6c3c1bd_bd4ce3d9",
+        "filename": "src/libANGLE/renderer/wgpu/wgpu_format_utils.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-31T15:41:39Z",
+      "side": 1,
+      "message": "I think we want to invert how this loop works and use `continue` when the format is not supported, and break at the end if it is. Something like\n\n```\nif (rx::IsETCFormat(info[i].format) \u0026\u0026 !wgpuDevice.HasFeature(wgpu::FeatureName::TextureCompressionETC2)\n{\n    // Fallback is ETC and it is not supported\n    continue;\n}\n\nif (next feature check not supported..)\n{\n    continue;\n}\n\n// Format supported\nbreak;\n```",
+      "parentUuid": "08da3010_96ecc09c",
       "range": {
         "startLine": 52,
         "startChar": 12,
