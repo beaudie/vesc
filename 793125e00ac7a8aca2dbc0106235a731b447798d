@@ -16,6 +16,24 @@
       "message": "Can we add a build flag to control the value of `kEnableAEPRequirementLogging`?\n\nSee this example of\n\n1. [defining the build flag](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/BUILD.gn;l\u003d238;drc\u003d78f146e3ad4bbb0f37db26ae781ec89f3dc99e83)\n\n2. [declaring the build flag to false](https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/gni/angle.gni;l\u003d247;drc\u003d78f146e3ad4bbb0f37db26ae781ec89f3dc99e83)\n\n3. [use the result of the build flag](https://source.chromium.org/chromium/chromium/src/+/main:third_party/dawn/third_party/angle/src/libANGLE/renderer/vulkan/vk_cache_utils.cpp;l\u003d30;drc\u003d08c1724fec38b9cf5242ed29e82bc4e9437aa650)",
       "revId": "793125e00ac7a8aca2dbc0106235a731b447798d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b8193ca_1cb8770b",
+        "filename": "src/libANGLE/Context.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-10-31T02:10:49Z",
+      "side": 1,
+      "message": "Too niche IMO, would we ever want a test/release config where this is permanently enabled? If this is for local debugging only, we can just toggle it locally.",
+      "parentUuid": "aa348115_55f41582",
+      "revId": "793125e00ac7a8aca2dbc0106235a731b447798d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
