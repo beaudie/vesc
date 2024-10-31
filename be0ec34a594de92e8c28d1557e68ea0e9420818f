@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "58920852_d49f3ad7",
+        "filename": "src/compiler/translator/ImmutableStringBuilder.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-10-31T15:29:56Z",
+      "side": 1,
+      "message": "Nice! I didn\u0027t know about this.",
+      "range": {
+        "startLine": 140,
+        "startChar": 16,
+        "endLine": 140,
+        "endChar": 19
+      },
+      "revId": "be0ec34a594de92e8c28d1557e68ea0e9420818f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
