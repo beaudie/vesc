@@ -69,6 +69,24 @@
       "parentUuid": "b2d2618e_9ed333a1",
       "revId": "691347d118630b1229a7060362be5dad7ee15e55",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dc518e9_f6fdfe21",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 1603052
+      },
+      "writtenOn": "2024-10-31T15:20:24Z",
+      "side": 1,
+      "message": "Sure, working on updating this patchset.",
+      "parentUuid": "325d40e7_ac36ebb7",
+      "revId": "691347d118630b1229a7060362be5dad7ee15e55",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
