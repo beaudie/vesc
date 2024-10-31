@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb5edde0_68d0870a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-31T23:21:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7985e2dc_d869864c",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 36
+      },
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c95f5a39_1a329b32",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-25T19:24:51Z",
       "side": 1,
       "message": "Please use `std::clamp` instead",
+      "range": {
+        "startLine": 501,
+        "startChar": 0,
+        "endLine": 502,
+        "endChar": 69
+      },
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e301af6f_825dc404",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 502,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-31T23:21:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c95f5a39_1a329b32",
       "range": {
         "startLine": 501,
         "startChar": 0,
@@ -100,6 +148,30 @@
       "writtenOn": "2024-10-25T19:24:51Z",
       "side": 1,
       "message": "```suggestion\n                UNREACHABLE();\n```",
+      "range": {
+        "startLine": 633,
+        "startChar": 0,
+        "endLine": 634,
+        "endChar": 30
+      },
+      "revId": "326de3c8e1fc05cba49dab1b7a167a2bd680931b",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ca91897_38401485",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 634,
+      "author": {
+        "id": 3319458
+      },
+      "writtenOn": "2024-10-31T23:21:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c13e42ef_c91a3980",
       "range": {
         "startLine": 633,
         "startChar": 0,
