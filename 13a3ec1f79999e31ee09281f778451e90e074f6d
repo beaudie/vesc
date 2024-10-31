@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "53e20606_ff8e4998",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T00:42:11Z",
+      "side": 1,
+      "message": "\u003e Please also note that need also protect: mSyncPools and mSyncHandleAllocator in case of EGL_Terminate()\n\nFor `mSyncPools`, `EGL_Terminate()` should not access it if there is any context that is still current on any thread:  `Display::Terminate()` returns early before calling `mSyncPools.clear()`: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/Display.cpp;l\u003d1247;drc\u003da0586d6e54d4738ebfae34dd5ae6391548196dbf. So I think if `mSyncPools` is still being used by any thread, it means there is still a current context on that thread, and `EGL_Terminate()` should return early before touching `mSyncPools`. But I agree that it is safe to protect `mSyncPools` in case the code changes in the future.\n\nFor `mSyncHandleAllocator`, would mind pointing me on where it is getting accessed in `EGL_Terminate()` code path?\n\n\u003e Above means, that need to use ANGLE_SCOPED_GLOBAL_EGL_AND_EGL_SYNC_LOCK() in the following functions: EGL_LabelObjectKHR(), EGL_Terminate() (already covered), EGL_ReleaseThread(), and ThreadCleanupCallback().\n\nThank you for pointing out the `EGL_LabelObjectKHR()`! For `EGL_ReleaseThread()`, and `ThreadCleanupCallBack()`, is it because they call `Display::makeCurrent()`, which can call to `Display::terminate()`?",
+      "parentUuid": "c98351b1_73d2c7d3",
+      "range": {
+        "startLine": 26,
+        "startChar": 50,
+        "endLine": 26,
+        "endChar": 58
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "31352038_2e57b46a",
         "filename": "src/libANGLE/Display.cpp",
         "patchSetId": 16
@@ -37,6 +61,30 @@
       "writtenOn": "2024-10-30T15:58:41Z",
       "side": 1,
       "message": "Please consider passing `std::unique_lock\u003cangle::SimpleMutex\u003e \u0026\u0026contextsLock` into the `releaseContextImpl()` along with `contexts`, like so:\n```\nreleaseContextImpl(context, \u0026mState.contextMap,\n                   std::unique_lock\u003cangle::SimpleMutex\u003e(mState.contextMapMutex))\n```\nIn case of `mInvalidContextMap` just call:\n```\nreleaseContextImpl(context, \u0026mInvalidContextMap, {})\n```",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22ffc8ed_31ed1f86",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T00:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31352038_2e57b46a",
       "range": {
         "startLine": 1869,
         "startChar": 8,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26543b24_6905ee07",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T00:42:11Z",
+      "side": 1,
+      "message": "Can you help checking if the format issue is fixed in latest patch? Thank you.",
+      "parentUuid": "0ae13593_5de34755",
+      "range": {
+        "startLine": 122,
+        "startChar": 0,
+        "endLine": 123,
+        "endChar": 47
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3954497d_ac95fb30",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
@@ -83,6 +155,30 @@
       "writtenOn": "2024-10-30T15:58:41Z",
       "side": 1,
       "message": "nit: Consider passing as pointer to match general ANGLE code style. This way at the call site it will be clear that it is out/in-out parameter.",
+      "range": {
+        "startLine": 146,
+        "startChar": 76,
+        "endLine": 146,
+        "endChar": 77
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f58813f6_56c96ad3",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T00:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3954497d_ac95fb30",
       "range": {
         "startLine": 146,
         "startChar": 76,
@@ -116,6 +212,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa92d58e_6668d82c",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T00:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48bfc411_03126865",
+      "range": {
+        "startLine": 235,
+        "startChar": 4,
+        "endLine": 235,
+        "endChar": 21
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e69225a_ed344876",
@@ -139,6 +259,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dc35ba1_83293ccf",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T00:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e69225a_ed344876",
+      "range": {
+        "startLine": 237,
+        "startChar": 0,
+        "endLine": 238,
+        "endChar": 68
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2d405a8_3b32122a",
@@ -152,6 +296,30 @@
       "writtenOn": "2024-10-30T15:58:41Z",
       "side": 1,
       "message": "nit: Please use `*` similar to `AllocateGlobalMutexImpl()`.",
+      "range": {
+        "startLine": 279,
+        "startChar": 64,
+        "endLine": 279,
+        "endChar": 65
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a890e3_cd201265",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-10-31T00:42:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d2d405a8_3b32122a",
       "range": {
         "startLine": 279,
         "startChar": 64,
