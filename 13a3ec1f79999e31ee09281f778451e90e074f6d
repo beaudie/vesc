@@ -479,6 +479,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c755f1_908e8135",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-01T21:31:23Z",
+      "side": 1,
+      "message": "Thank you for the discussions. I made the change. Please take a look.",
+      "parentUuid": "6253750a_068c0a92",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ae13593_5de34755",

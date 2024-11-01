@@ -24,6 +24,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "029d7518_4af03f9d",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-01T21:31:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "605f2b81_98e225f0",
+      "range": {
+        "startLine": 223,
+        "startChar": 27,
+        "endLine": 223,
+        "endChar": 59
+      },
+      "revId": "06100b5efd43bb57034d1e806919c201896a7a1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d2f217b0_ab9ddcfb",
@@ -71,6 +95,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "454ada90_0f460a4c",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-01T21:31:23Z",
+      "side": 1,
+      "message": "I added the comments.",
+      "parentUuid": "32c81d81_a40b0fbd",
+      "range": {
+        "startLine": 1169,
+        "startChar": 12,
+        "endLine": 1169,
+        "endChar": 38
+      },
+      "revId": "06100b5efd43bb57034d1e806919c201896a7a1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2d0bfcb2_a083367e",
@@ -84,6 +132,30 @@
       "writtenOn": "2024-11-01T13:27:21Z",
       "side": 1,
       "message": "One more `priv::` left)",
+      "range": {
+        "startLine": 146,
+        "startChar": 4,
+        "endLine": 146,
+        "endChar": 10
+      },
+      "revId": "06100b5efd43bb57034d1e806919c201896a7a1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b3eb025_17cd384a",
+        "filename": "src/libANGLE/GlobalMutex.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-01T21:31:23Z",
+      "side": 1,
+      "message": "Thank you.",
+      "parentUuid": "2d0bfcb2_a083367e",
       "range": {
         "startLine": 146,
         "startChar": 4,
