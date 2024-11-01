@@ -385,6 +385,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6c07a14f_fc91ce50",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T18:56:40Z",
+      "side": 1,
+      "message": "Thank you Igor\n\n\u003e When reading eraseContextImpl(ContextMap *contexts, Mutex *contextsMutex) all I see is that contexts requires protection by the corresponding mutex somewhere in the function. One question remain if it may be null.\n\nSo if I imagine seeing this function the first time, without having the additional context such as this CL:\n* first I would be confused why the mutex is being passed as an argument (have a look at `git grep \u0027Mutex \\*\u0027`, this is an uncommon pattern and generally used for completely different use cases)\n* when I read the corresponding bit of code I would see the nullptr check and now would be wondering in which cases it is nullptr, so I would have to look at the callers to actually understand what this function does\n* note that if I\u0027m looking at this code in future I likely need to fully understand what is going on because I\u0027m probably chasing a multi-threading bug and those tend to require a lot of elimination of unknowns\n\nThe refactored version with the code requiring locking being its own section (or function in this case) makes it easier: I can now understand the function in isolation, and the function itself doesn\u0027t have anything about locks - meaning I can entirely ignore the implementation if I\u0027m looking into a deadlock, for example.\n\n\u003e This may be added in the comments, that null can be passed if contexts does not require protection.\n\nIt might be a personal preference but I\u0027m not a big believer in relying on people reading comments, especially as the distance between the comment and the changed code increases (note how during a code review \"remote\" comments wouldn\u0027t be visible and hence the reviewer is likely to be unaware of their existence). The only kind of comments that I semi-trust are those that are right next to the problematic spot. So for instance in this case, if we\u0027re adding a nullptr check in the middle of a function that\u0027s where I would add the comment explaining when the mutex can actually be nullptr. That both reduces the likelihood of future breakage and helps anyone reading the code like I described above - but again, in this case the separation between locked and unlocked code seems clear enough that having them in two separate blocks seems like the most logical option.\n\n\u003e Sometimes trying to stick to the pattern makes the original logic more convoluted and therefore more error prone (one example is splitting startThreadLocked in my CLs, especially for the delegate classes)\n\nI totally agree that there are cases like that, but in this specific case I think the separation is quite clean and in my opinion simplifies the code. It is a case-by-case scenario otherwise, yeah. Your CL is a more complex scenario with multiple implementations intertwined which inherently increases the overall complexity; I agree we can\u0027t blindly apply those rules of thumb everywhere!",
+      "parentUuid": "8dbbc1ac_cb999801",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
