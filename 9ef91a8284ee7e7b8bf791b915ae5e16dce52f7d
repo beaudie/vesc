@@ -41,6 +41,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "562dbbc0_f5aa70de",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T23:03:36Z",
+      "side": 1,
+      "message": "Neat thanks!",
+      "parentUuid": "d7991ae5_12cfcf8e",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 5
+      },
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "926687a1_80a74a44",
@@ -178,6 +202,30 @@
       "side": 1,
       "message": "No strong opinion either. `--angle-test-runner` is straightforward enough.",
       "parentUuid": "6ae6131b_60acb334",
+      "range": {
+        "startLine": 149,
+        "startChar": 15,
+        "endLine": 149,
+        "endChar": 34
+      },
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d3350a_13585442",
+        "filename": "src/tests/angle_android_test_runner.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T23:03:36Z",
+      "side": 1,
+      "message": "Going with `--angle-test-runner` and `RunWithAngleTestRunner`. Touching one more file so losing +\u0027s again :)",
+      "parentUuid": "0292866b_82b61114",
       "range": {
         "startLine": 149,
         "startChar": 15,
