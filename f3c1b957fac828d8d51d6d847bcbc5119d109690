@@ -43,6 +43,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "623303bd_d804f52a",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-01T15:32:09Z",
+      "side": 1,
+      "message": "Do you mean an automated wrapper, or something simple we maintain?  Open to the idea, prefer the latter if possible.  I was using `restricted_trace_gold_tests.py` as a reference for this - not clear to me how it invokes the right build.  Maybe it doesn\u0027t handle installation.",
+      "parentUuid": "70f24325_6efd3683",
+      "range": {
+        "startLine": 737,
+        "startChar": 26,
+        "endLine": 737,
+        "endChar": 70
+      },
+      "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20f1b960_d196dad2",
         "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
         "patchSetId": 1
