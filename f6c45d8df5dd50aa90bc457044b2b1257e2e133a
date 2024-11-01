@@ -16,6 +16,47 @@
       "message": "Had to fix capture_tests.py and changed arg name to `--use-angle-runner` (lmk if you have a better name)",
       "revId": "f6c45d8df5dd50aa90bc457044b2b1257e2e133a",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2985c7fd_1bf7300c",
+        "filename": "src/tests/angle_android_test_runner.py",
+        "patchSetId": 9
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-11-01T21:32:17Z",
+      "side": 1,
+      "message": "nit",
+      "range": {
+        "startLine": 135,
+        "startChar": 42,
+        "endLine": 135,
+        "endChar": 50
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "9b32d862_a4f98c6d",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/angle_android_test_runner.py",
+              "range": {
+                "startLine": 135,
+                "startChar": 0,
+                "endLine": 136,
+                "endChar": 0
+              },
+              "replacement": "        help\u003d\u0027Use ANGLE runner instead of Chromium/catapult\u0027,\n"
+            }
+          ]
+        }
+      ],
+      "revId": "f6c45d8df5dd50aa90bc457044b2b1257e2e133a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
