@@ -457,6 +457,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6253750a_068c0a92",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T20:18:42Z",
+      "side": 1,
+      "message": "There are words, yes, but I don\u0027t feel it spiraled out of control, it\u0027s just part of converging on the \"philosophy\". Besides, I think we reached agreement.\nThe tl;dr suggestion is to replace the current code with:\n```\nstd::unique_ptr\u003cgl::Context\u003e context;\n{\n   std::unique_lock\u003cangle::SimpleMutex\u003e lock(mState.contextMapMutex);\n   context \u003d eraseContextImpl(...);\n}\nreleaseContextImpl(context);\n```\nwhere the lock needs to be taken\nand just `releaseContextImpl(eraseContextImpl(...));`\nwhere we are already holding the lock.",
+      "parentUuid": "b9bccce9_b83d1dbe",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
