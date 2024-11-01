@@ -409,6 +409,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "674839d4_2a062473",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-11-01T19:54:30Z",
+      "side": 1,
+      "message": "I appreciate a very detailed explanation.\n\nI hope I understand you.\n\nI agree that passing mutex pointer into a big function where only small part requires locking makes debugging harder, since you will need to look inside that big function each time. This is similar thing, as passing pointer to `rx::Renderer` when all you need is `VkDevice` (or it is used in a single part, that can be split into multiple functions). Or passing non const pointer/reference, when const reference is enough. It is about limiting scope for debugging.\n\n\n\u003e but in this specific case I think the separation is quite clean and in my opinion simplifies the code. \n\nNow I agree.",
+      "parentUuid": "6c07a14f_fc91ce50",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
