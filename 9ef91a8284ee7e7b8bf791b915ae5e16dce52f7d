@@ -114,6 +114,30 @@
       },
       "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ae6131b_60acb334",
+        "filename": "src/tests/angle_android_test_runner.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T22:44:43Z",
+      "side": 1,
+      "message": "`--test-runner\u003dangle` possibly problematic as args are passed to the script/binary and it can conflict with some other flags",
+      "parentUuid": "1ce58377_99ee151e",
+      "range": {
+        "startLine": 149,
+        "startChar": 15,
+        "endLine": 149,
+        "endChar": 34
+      },
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
