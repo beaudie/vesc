@@ -22,6 +22,30 @@
       },
       "revId": "59ce6ce79b1997a5d3e033ccf1b905e8175d7899",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "13f04c23_647a098b",
+        "filename": "src/tests/angle_android_test_runner.py",
+        "patchSetId": 8
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T21:04:31Z",
+      "side": 1,
+      "message": "It\u0027s more useful to have it than not. Without it, it will just raise and we would have an exception without details about what happened, we\u0027ll just know the command failed. With it we might have some output that could be useful for understanding what\u0027s going on.",
+      "parentUuid": "c4285d3a_641ba572",
+      "range": {
+        "startLine": 142,
+        "startChar": 43,
+        "endLine": 142,
+        "endChar": 51
+      },
+      "revId": "59ce6ce79b1997a5d3e033ccf1b905e8175d7899",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
