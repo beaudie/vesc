@@ -90,6 +90,30 @@
       ],
       "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ce58377_99ee151e",
+        "filename": "src/tests/angle_android_test_runner.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T22:42:52Z",
+      "side": 1,
+      "message": "I\u0027ll rename the function following what we choose to call the arg.\n\nIdeas so far (pretty ambivalent here):\n```\n--angle-test-runner\n--test-runner\u003dangle (with say --test-runner\u003dchromium but idk why we\u0027d want that)\n--use-angle-runner\n--use-angle-test-runner\n--use-angle-scripts\n```",
+      "parentUuid": "926687a1_80a74a44",
+      "range": {
+        "startLine": 149,
+        "startChar": 15,
+        "endLine": 149,
+        "endChar": 34
+      },
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
