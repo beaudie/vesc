@@ -433,6 +433,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b9bccce9_b83d1dbe",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T20:04:29Z",
+      "side": 1,
+      "message": "Hi! This conversation may be a little spiraling out of control 🤓\n\nA small disagreement I\u0027m sure, maybe let\u0027s move on with our lives 😊 The code as it is... it\u0027s probably just fine. The split has its merits, the existing encapsulation too. How about we let Yuxin land her optimization change and if anyone feels strongly about the design of the code, we could follow up with another change and see how that looks like?",
+      "parentUuid": "6c07a14f_fc91ce50",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
