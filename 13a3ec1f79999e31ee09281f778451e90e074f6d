@@ -361,6 +361,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8dbbc1ac_cb999801",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-11-01T17:01:23Z",
+      "side": 1,
+      "message": "Thank you for you time and attempts to answer my questions.\n\n\u003e Passing locks around is more difficult to follow than having a local scope guard that is very common in the codebase and unambiguous.\n\nI see. I will remember this.\n\n\u003e Passing a pointer to the mutex which can sometimes be null makes it harder to understand that function in isolation (because now we have to know all the callers).\n\nThis I do not follow.\n\nWhen reading `eraseContextImpl(ContextMap *contexts, Mutex *contextsMutex)` all I see is that `contexts` requires protection by the corresponding mutex somewhere in the function. One question remain if it may be null. This may be added in the comments, that null can be passed if `contexts` does not require protection.\n\n\u003e Technically we could force the caller to remember about locking by adding synthetic lock args all over the place, but that would be a LOT of noise and limited benefit as many other multi-threaded mistakes can still be made. Doing it in only one place but not in the rest of the codebase results in inconsistency, which increases the overall complexity. \n\nUnderstand and agree.\n\n\u003e Hence my preference is to stick to the basic, commonly used patterns, despite their limitations, unless we are motivated enough to develop an improved pattern and refactor the entire codebase to use it.\n\nI understand desire sticking to the pattern, but pattern is not a silver bullet.\nSometimes trying to stick to the pattern makes the original logic more convoluted and therefore more error prone (one example is splitting startThreadLocked in my CLs, especially for the delegate classes).\n\nI agree that trying to enforce patterns is simple, but afraid that even if follow patterns we are not eliminating possibility of bugs, unfortunately. In other words, if you see code that follows all the patterns, you do not get a false sense of a robust and safe code just from this.\n\nAnyway, I will try to suggest/write code that tries to stick to basics/patterns as much as possible, unless it does not make the original code a lot more convoluted.",
+      "parentUuid": "49487f41_f0f008ec",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
