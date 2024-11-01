@@ -368,6 +368,9 @@ class Context : angle::NonCopyable
     }
     const DeviceQueueIndex &getDeviceQueueIndex() const { return mDeviceQueueIndex; }
 
+    int cache_miss = 0;
+    std::chrono::duration<double> cache_miss_time;
+
   protected:
     Renderer *const mRenderer;
     // Stash the ShareGroupVk's RefCountedEventRecycler here ImageHelper to conveniently access

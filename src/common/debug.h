@@ -35,6 +35,14 @@ typedef _Return_type_success_(return >= 0) long HRESULT;
 #    define TRACE_OUTPUT_FILE "angle_debug.txt"
 #endif
 
+#if defined(ANGLE_PLATFORM_ANDROID)
+#    include <android/log.h>
+#    define LOG_TAG "LAO"
+#    define ALOG(...) __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)
+#else
+#    define ALOG(...) printf(__VA_ARGS__)
+#endif
+
 namespace gl
 {
 class Context;
