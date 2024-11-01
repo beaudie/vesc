@@ -16,6 +16,52 @@
       "message": "(note this is WIP) Roman, I\u0027ll probably tidy this up a bit more, but wanted to get your initial thoughts/concerns before heading out for candy.",
       "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f24325_6efd3683",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T12:50:17Z",
+      "side": 1,
+      "message": "I\u0027ve considered this for other places but it adds some handling (like what you did with chdir here)\n\nThe way I\u0027ve been getting around it has been like this:\n```\n(cd out/Android; ../../src/tests/run_angle_android_test.py --suite\u003dangle_end2end_tests ...)\n```\n\nThis is what `out/Android/angle_trace_tests` wrapper effectively does.\n\nI think instead of adding chdir or otherwise supporting this as a flag, it would be better to add a wrapper, something like `out/Android/restricted_trace_perf` which would do this implicitly. This should be fairly easy to do, I can have a look if you like this idea.",
+      "range": {
+        "startLine": 737,
+        "startChar": 26,
+        "endLine": 737,
+        "endChar": 70
+      },
+      "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20f1b960_d196dad2",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T12:50:17Z",
+      "side": 1,
+      "message": "So this will run into the issue I mentioned previously, unconditionally pushing gzipped trace source:\nhttps://crsrc.org/c/third_party/angle/src/tests/py_utils/android_helper.py;drc\u003d3a265f143be43ce85ea0f777ce3245cc8620c051;l\u003d424\n\nI think we\u0027ll need to first make sure tracegz files are not added to the bundle and add some way to turn this push off (for now could be as simple as skipping the push if the file isn\u0027t there).",
+      "range": {
+        "startLine": 947,
+        "startChar": 27,
+        "endLine": 947,
+        "endChar": 50
+      },
+      "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
