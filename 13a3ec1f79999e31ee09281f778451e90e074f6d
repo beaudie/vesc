@@ -96,6 +96,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30992e66_f846f53f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 16
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-11-01T13:27:21Z",
+      "side": 1,
+      "message": "My pleasure.",
+      "parentUuid": "6f16e8ae_4360c3e8",
+      "range": {
+        "startLine": 26,
+        "startChar": 50,
+        "endLine": 26,
+        "endChar": 58
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31352038_2e57b46a",
@@ -181,6 +205,30 @@
       "side": 1,
       "message": "When calling below function:\n\n```\nreturn releaseContextImpl(context, \u0026mState.contextMap, std::unique_lock\u003cangle::SimpleMutex\u003e(mState.contextMapMutex));\n```\n\nMy understanding is the `std::unique_lock\u003cangle::SimpleMutex\u003e(mState.contextMapMutex)` is constructed before calling the function. This means before entering the function `releaseContextImpl()`, the `mState.ContextMapMutex` is locked. Is that not the case?",
       "parentUuid": "79cb8f52_4aa6a0e3",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb01215e_49de4965",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-11-01T13:27:21Z",
+      "side": 1,
+      "message": "\u003e Is that not the case?\n\nYes, your are right, thank you.\n\nSorry, I did not think of this. I wanted to pass a mutex pointer, but since `mInvalidContextMap` does not require locking, we would have `nullptr`, that I avoided by passing the lock, but created a problem, when mutex is locked a little earlier, than needed.\n\nHowever in this particular method, `contexts` is used almost right away, so having a lock early is not a big problem. Lock will still be unlocked, when done with `contexts` - rest of the function will be without the lock.\n\nIn patchset 17, lock was held for the entire method, for example.\n\nRegardless of the above, now I think that it is better to pass the mutex pointer and handle `nullptr` case inside the function. Like this:\n```\nError Display::releaseContextImpl(gl::Context *context, ContextMap *contexts,\n                                  angle::SimpleMutex *contextsMutex)\n{\n    // ...\n    {\n        auto lock \u003d (contextsMutex !\u003d nullptr)\n            ? std::unique_lock\u003cangle::SimpleMutex\u003e(*contextsMutex)\n            : std::unique_lock\u003cangle::SimpleMutex\u003e();\n        ASSERT(contexts-\u003efind(context-\u003eid().value) !\u003d contexts-\u003eend());\n        contexts-\u003eerase(context-\u003eid().value);\n    }\n    // ...\n}\n```\n\nI\u0027m sorry for the confusion...\n\n---\n\nRegarding naming parameter `contextMapLock`. It is still better to call it `contextsLock` (just example, now need to use `contextsMutex`), because it will match `contexts` parameter name. When you call `releaseContextImpl(context, \u0026mInvalidContextMap, {}` you pass empty lock, because in that case you need a lock for the `mInvalidContextMap`, but since it is not requiring lock (yet?) - using empty lock. The `releaseContextImpl()` is universal, and should not be tied to the `State::contextMap` or `State::contextMapMutex`.",
+      "parentUuid": "b35389d1_86ef655e",
       "range": {
         "startLine": 1869,
         "startChar": 8,
