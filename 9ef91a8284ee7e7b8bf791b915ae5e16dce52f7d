@@ -138,6 +138,30 @@
       },
       "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "921b7d3f_5661f7f0",
+        "filename": "src/tests/angle_android_test_runner.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1525982
+      },
+      "writtenOn": "2024-11-01T22:51:23Z",
+      "side": 1,
+      "message": "`--set-test-runner-angle`? The current one is also good, but I would use `angle` at the end",
+      "parentUuid": "6ae6131b_60acb334",
+      "range": {
+        "startLine": 149,
+        "startChar": 15,
+        "endLine": 149,
+        "endChar": 34
+      },
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
