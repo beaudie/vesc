@@ -22,6 +22,30 @@
       },
       "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8956c8e4_86c24308",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 3603174
+      },
+      "writtenOn": "2024-11-01T03:17:43Z",
+      "side": 1,
+      "message": "Yes, with both OES_required_internalformat and EXT_texture_type_2_10_10_10_REV extension, APP may pass GL_RGB10_EXT, GL_RGB8_OES or GL_RGB565_OES sized internal format when call glTexImage2d, we add a patch here to make the combination acceptable. \nAnd since it is sized format, we will call GetSizedInternalFormatInfo to get the formatInfo.",
+      "parentUuid": "ad86120b_e27a7e63",
+      "range": {
+        "startLine": 370,
+        "startChar": 4,
+        "endLine": 381,
+        "endChar": 5
+      },
+      "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
