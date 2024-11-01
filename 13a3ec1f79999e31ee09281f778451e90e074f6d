@@ -313,6 +313,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "486468aa_9691daac",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-11-01T16:09:35Z",
+      "side": 1,
+      "message": "\u003e Unless I\u0027m missing something, we shouldn\u0027t need to pass the lock to `eraseContextImpl`, just lock as usual\n\nI see 2 sources of errors in the above code:\n1. Added after splitting: caller may call `eraseContextImpl()` but not the `releaseContextImpl()`\n2. Added after using external lock: caller may call `eraseContextImpl(context, \u0026mState.contextMap)` without the external lock.\n\nWith single function one source of error: is forget to pass mutex or lock. But this is harder to miss, than requiring to have external lock.\n\nRegardless, I think we need to rename `eraseContextImpl()` into `eraseContextImplLocked()` or just `eraseContextLocked()`. But... It must be locked only in case of using `\u0026mState.contextMap`.\n\nSo it is looks like we can\u0027t add `Locked` suffix here...\n\nWhat is the difference of locking local scope to call `eraseContextImpl()` vs the same thing (but using mutex from passed argument) to lock `contexts-\u003eerase(context-\u003eid().value);`?\nMy understanding of split is to have a function that is entirely locked. Passing lock inside will almost guarantee that (removes source of error).\nI\u0027m confused...\n\nOne nit: can use `std::lock_guard\u003c\u003e` in the above case.",
+      "parentUuid": "f4b6f8e7_49325d85",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16
