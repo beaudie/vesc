@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab8170a_ee004f52",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-01T22:26:16Z",
+      "side": 1,
+      "message": "LGTM, a few nits, nothing blocking.",
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7991ae5_12cfcf8e",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 11
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-01T22:26:16Z",
+      "side": 1,
+      "message": "Slight optimization, although I haven\u0027t tested it:\n```\n     if (is_android) {\n-      data +\u003d [ \"$angle_root/src/tests/angle_android_test_runner.py\" ]\n       android_test_runner_script \u003d\n           \"$angle_root/src/tests/angle_android_test_runner.py\"\n+      data +\u003d [ \"${android_test_runner_script}\" ]\n     }\n\n```\nalthough I see the same pattern below, so this is just mirroring it.",
+      "range": {
+        "startLine": 322,
+        "startChar": 0,
+        "endLine": 326,
+        "endChar": 5
+      },
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "926687a1_80a74a44",
+        "filename": "src/tests/angle_android_test_runner.py",
+        "patchSetId": 11
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-01T22:26:16Z",
+      "side": 1,
+      "message": "If you stick with `--use-angle-runner`, this would be more intuitive as `RunWithAndroidTestRunner`.\n\nOr maybe `--use-angle-test-suite` is the way to go?",
+      "range": {
+        "startLine": 149,
+        "startChar": 15,
+        "endLine": 149,
+        "endChar": 34
+      },
+      "fixSuggestions": [
+        {
+          "fixId": "6b5564b3_dace874b",
+          "description": "prompt_to_edit API",
+          "replacements": [
+            {
+              "path": "src/tests/angle_android_test_runner.py",
+              "range": {
+                "startLine": 77,
+                "startChar": 0,
+                "endLine": 78,
+                "endChar": 0
+              },
+              "replacement": "def RunWithAndroidTestRunner(args, extra_args):\n"
+            },
+            {
+              "path": "src/tests/angle_android_test_runner.py",
+              "range": {
+                "startLine": 149,
+                "startChar": 0,
+                "endLine": 150,
+                "endChar": 0
+              },
+              "replacement": "        return RunWithAndroidTestRunner(args, extra_args)\n"
+            }
+          ]
+        }
+      ],
+      "revId": "9ef91a8284ee7e7b8bf791b915ae5e16dce52f7d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
