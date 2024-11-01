@@ -1881,7 +1881,9 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
 
         if (newSharedCacheKey != nullptr)
         {
+            const auto t1{std::chrono::steady_clock::now()};
             // Cache miss. A new cache entry has been created.
+#if 1
             ANGLE_TRY(descriptorBuilder.updateActiveTexturesForCacheMiss(
                 context, mVariableInfoMap, mTextureWriteDescriptorDescs, *mExecutable, textures,
                 samplers, newSharedCacheKey));
@@ -1889,6 +1891,16 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
             descriptorBuilder.updateDescriptorSet(
                 context->getRenderer(), mTextureWriteDescriptorDescs, updateBuilder,
                 mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet());
+#else
+            ANGLE_TRY(UpdateFullActiveTexturesDescriptorSet(
+                context, mVariableInfoMap, mTextureWriteDescriptorDescs, updateBuilder,
+                *mExecutable, textures, samplers,
+                mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet()));
+#endif
+            const auto t2{std::chrono::steady_clock::now()};
+            context->cache_miss++;
+            const std::chrono::duration<double> elapsed_seconds{t2 - t1};
+            context->cache_miss_time += elapsed_seconds;
         }
     }
     else

@@ -1255,6 +1255,14 @@ ContextVk::~ContextVk() {}
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    std::chrono::duration<double> average_cache_miss_time = cache_miss_time / cache_miss;
+    std::chrono::nanoseconds cache_miss_time_ns =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(cache_miss_time);
+    std::chrono::nanoseconds average_cache_miss_time_ns =
+        std::chrono::duration_cast<std::chrono::nanoseconds>(average_cache_miss_time);
+    ALOG("cacheMissCount: %d, totalTime:%lld ns, averageTime:%lld ns", cache_miss,
+         cache_miss_time_ns.count(), average_cache_miss_time_ns.count());
+
     // If there is a context lost, destroy all the command buffers and resources regardless of
     // whether they finished execution on GPU.
     if (mRenderer->isDeviceLost())
