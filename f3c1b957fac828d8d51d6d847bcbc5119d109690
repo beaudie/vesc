@@ -67,6 +67,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "38886965_3e8ff9e4",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T15:59:14Z",
+      "side": 1,
+      "message": "On bots, `restricted_trace_gold_tests.py` is invoked as the swarming script (configured here: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/infra/specs/gn_isolate_map.pyl;drc\u003db16d105fc63a7365d6809d5033cb1b2172d8d311;l\u003d133)\n\nwhich effectively does this (and that\u0027s how I\u0027ve been testing this script locally):\n```\n(cd out/Android; ../../src/tests/restricted_traces/restricted_trace_gold_tests.py --args)\n```\n\nMy idea is to auto-generate a little wrapper from gn, similarly to how chromium wrappers do it (`cat out/Android/angle_end2end_tests`) but much simpler, to do what we want here it would be just a few lines.",
+      "parentUuid": "623303bd_d804f52a",
+      "range": {
+        "startLine": 737,
+        "startChar": 26,
+        "endLine": 737,
+        "endChar": 70
+      },
+      "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20f1b960_d196dad2",
         "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
         "patchSetId": 1
