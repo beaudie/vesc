@@ -241,6 +241,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "be4afb2d_8eedf2fd",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 16
+      },
+      "lineNbr": 1869,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T14:07:14Z",
+      "side": 1,
+      "message": "My suggestion would be to split `releaseContextImpl` into two parts: one that requires locking (accessing `contexts` and returning `context` that it erased) and one that doesn\u0027t (further calls on `context`). This way we should be able to simplify locking down to the regular local scope locks. The simpler we can keep multi-threading code the less confusion and hence cost it will cause in future.",
+      "parentUuid": "eb01215e_49de4965",
+      "range": {
+        "startLine": 1869,
+        "startChar": 8,
+        "endLine": 1869,
+        "endChar": 73
+      },
+      "revId": "13a3ec1f79999e31ee09281f778451e90e074f6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0ae13593_5de34755",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 16

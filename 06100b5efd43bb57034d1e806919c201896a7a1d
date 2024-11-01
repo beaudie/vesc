@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "605f2b81_98e225f0",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T14:07:14Z",
+      "side": 1,
+      "message": "Nit: can we drop the \"Get\" prefix here and the function below? `ANGLEPlatformCurrent()` is also a global like this and doesn\u0027t have a \"Get\"",
+      "range": {
+        "startLine": 223,
+        "startChar": 27,
+        "endLine": 223,
+        "endChar": 59
+      },
+      "revId": "06100b5efd43bb57034d1e806919c201896a7a1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d2f217b0_ab9ddcfb",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 20
+      },
+      "lineNbr": 1169,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T14:07:14Z",
+      "side": 1,
+      "message": "`mInvalidContextMap` mutation is guarded by `mState.contextMapMutex` in `terminate` but `mInvalidContextMap` access here is not guarded. So this looks like this allows a data race on `mInvalidContextMap`. If this is intentional, could you add a comment explaining why?",
+      "range": {
+        "startLine": 1169,
+        "startChar": 12,
+        "endLine": 1169,
+        "endChar": 38
+      },
+      "revId": "06100b5efd43bb57034d1e806919c201896a7a1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2d0bfcb2_a083367e",
         "filename": "src/libANGLE/GlobalMutex.cpp",
         "patchSetId": 20
