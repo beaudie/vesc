@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1341cac1_a14c2fff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105344
+      },
+      "writtenOn": "2024-11-01T18:23:15Z",
+      "side": 1,
+      "message": "It\u0027s poor that the tests seem flaky and we\u0027ll work on this. In the meantime, trying the CQ again.",
+      "revId": "5450d97ad9296d4ae2be7ac3f057776fd5105223",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
