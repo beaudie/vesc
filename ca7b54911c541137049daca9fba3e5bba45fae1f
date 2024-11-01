@@ -16,6 +16,275 @@
       "message": "PTAL",
       "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e3f5619_89e575c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "Be",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1d3be6f_23cf86f1",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "Don\u0027t need this line, when `generateMipmapWithDraw` opens a new render pass, the old one will automatically close.",
+      "range": {
+        "startLine": 2560,
+        "startChar": 78,
+        "endLine": 2560,
+        "endChar": 92
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "058ebf37_4933273a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4246,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "nit: moving comment to where assertions are:\n\n```suggestion\n    vk::Renderer *renderer \u003d contextVk-\u003egetRenderer();\n\n    ANGLE_TRY(ensureBlitResolveResourcesInitialized(contextVk));\n\n    ASSERT(!contextVk-\u003ehasActiveRenderPass());\n\n    // This function only supports -\n    // 1. color formats that support color attachment feature\n    // 2. image is of type VK_IMAGE_TYPE_2D and is not MSAA\n    ASSERT(image);\n    ASSERT(image-\u003egetType() \u003d\u003d VK_IMAGE_TYPE_2D \u0026\u0026 image-\u003egetSamples() \u003d\u003d 1);\n```",
+      "range": {
+        "startLine": 4236,
+        "startChar": 0,
+        "endLine": 4246,
+        "endChar": 77
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b53a0c1d_9b16cd3c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4266,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "Set the access correctly, so if the image was previously used for rendering it is automatically flushed (that\u0027s how you can remove the endRP call from TextureVk)",
+      "range": {
+        "startLine": 4266,
+        "startChar": 59,
+        "endLine": 4266,
+        "endChar": 61
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6322931_df0e1c47",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4285,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "Remove. This will be flushed automatically as needed (but also see other comments).",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8469b65_e39a3adf",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4364,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "Set the access correctly for automatic command buffer flushes.",
+      "range": {
+        "startLine": 4364,
+        "startChar": 63,
+        "endLine": 4364,
+        "endChar": 65
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce8844b5_aba7c351",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4370,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "... and then remove this line",
+      "range": {
+        "startLine": 4370,
+        "startChar": 0,
+        "endLine": 4370,
+        "endChar": 72
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb9342d2_751fe9fd",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "... and remove this too",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fffb06b8_6c182393",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4443,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "Please add a reason enum for this, like `TemporaryForGenerateMipmap`",
+      "range": {
+        "startLine": 4443,
+        "startChar": 80,
+        "endLine": 4443,
+        "endChar": 94
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a79e061b_20e08188",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4445,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "```suggestion\n    // Transition the last mipLevel to color attachment optimal layout\n```",
+      "range": {
+        "startLine": 4445,
+        "startChar": 56,
+        "endLine": 4445,
+        "endChar": 60
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3258d4c5_0b9982e7",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4447,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "Again, set the access correctly",
+      "range": {
+        "startLine": 4447,
+        "startChar": 59,
+        "endLine": 4447,
+        "endChar": 61
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ced00759_e2439226",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4452,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "... and remove this line",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21f5d5d8_efbc156d",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-01T18:59:23Z",
+      "side": 1,
+      "message": "To make sure all tracking is done correctly, could you please add a test like this?\n\n* Call glGenerateMimap like in the tests above\n* Attach mip 1 to framebuffer\n* Enable blending\n* Draw\n* Verify new color and old color are blended\n\nIf the ImageHelper\u0027s tracking of whether the contents of the mips are valid or not is wrong, the verification render pass ends up using LOAD_OP_DONT_CARE and the results could be wrong. Content validity does not affect sampler usage, or glReadPixels hence the trick with draw calls and blend.",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
