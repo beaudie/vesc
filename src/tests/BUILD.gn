@@ -583,8 +583,13 @@ if (build_angle_trace_tests) {
       "//testing:run_perf_test",
     ]
 
+    deps = [
+      ":wrap_restricted_trace_gold_tests",
+      ":wrap_restricted_trace_perf",
+    ]
+
     if (restricted_traces_outside_of_apk) {
-      deps = [ "restricted_traces:angle_restricted_traces__unpacked_libs" ]
+      deps += [ "restricted_traces:angle_restricted_traces__unpacked_libs" ]
     }
   }
 
@@ -607,6 +612,26 @@ if (build_angle_trace_tests) {
       data += [ "$angle_root/src/tests/angle_android_test_runner.py" ]
     }
     data_deps = [ ":angle_end2end_tests" ]
+  }
+
+  action("wrap_restricted_trace_perf") {
+    script = "//scripts/angle_wrapper.py"
+
+    outputs = [ "$root_build_dir/restricted_trace_perf" ]
+    args = [
+      rebase_path(outputs[0], root_build_dir),
+      "src/tests/restricted_traces/restricted_trace_perf.py",
+    ]
+  }
+
+  action("wrap_restricted_trace_gold_tests") {
+    script = "//scripts/angle_wrapper.py"
+
+    outputs = [ "$root_build_dir/restricted_trace_gold_tests" ]
+    args = [
+      rebase_path(outputs[0], root_build_dir),
+      "src/tests/restricted_traces/restricted_trace_gold_tests.py",
+    ]
   }
 }
 
