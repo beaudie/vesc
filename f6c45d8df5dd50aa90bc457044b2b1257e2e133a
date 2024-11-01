@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5247ad7_e58e93b5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-01T21:29:19Z",
+      "side": 1,
+      "message": "Had to fix capture_tests.py and changed arg name to `--use-angle-runner` (lmk if you have a better name)",
+      "revId": "f6c45d8df5dd50aa90bc457044b2b1257e2e133a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
