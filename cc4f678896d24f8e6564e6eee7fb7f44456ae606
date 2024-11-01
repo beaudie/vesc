@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad86120b_e27a7e63",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-11-01T00:47:05Z",
+      "side": 1,
+      "message": "GetInternalFormatInfo *should* always return a sized format if internalFormat is sized. I think this can be avoided but it looks like it was probably the result of some debugging so maybe not?",
+      "range": {
+        "startLine": 370,
+        "startChar": 4,
+        "endLine": 381,
+        "endChar": 5
+      },
+      "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
