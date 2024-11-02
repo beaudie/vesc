@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15e23ca3_2c2b8ad1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-02T00:08:37Z",
+      "side": 1,
+      "message": "Typo: `ache miss` --\u003e `cache miss`",
+      "revId": "afd5623ba45acce78df5add1786c97c25a9f7fdc",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
