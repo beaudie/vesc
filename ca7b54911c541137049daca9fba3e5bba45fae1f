@@ -58,6 +58,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7faf1cf3_22f18c12",
+        "filename": "src/libANGLE/renderer/vulkan/TextureVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2560,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1d3be6f_23cf86f1",
+      "range": {
+        "startLine": 2560,
+        "startChar": 78,
+        "endLine": 2560,
+        "endChar": 92
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "058ebf37_4933273a",
@@ -71,6 +95,30 @@
       "writtenOn": "2024-11-01T18:59:23Z",
       "side": 1,
       "message": "nit: moving comment to where assertions are:\n\n```suggestion\n    vk::Renderer *renderer \u003d contextVk-\u003egetRenderer();\n\n    ANGLE_TRY(ensureBlitResolveResourcesInitialized(contextVk));\n\n    ASSERT(!contextVk-\u003ehasActiveRenderPass());\n\n    // This function only supports -\n    // 1. color formats that support color attachment feature\n    // 2. image is of type VK_IMAGE_TYPE_2D and is not MSAA\n    ASSERT(image);\n    ASSERT(image-\u003egetType() \u003d\u003d VK_IMAGE_TYPE_2D \u0026\u0026 image-\u003egetSamples() \u003d\u003d 1);\n```",
+      "range": {
+        "startLine": 4236,
+        "startChar": 0,
+        "endLine": 4246,
+        "endChar": 77
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9596a240_72571b25",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4246,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "058ebf37_4933273a",
       "range": {
         "startLine": 4236,
         "startChar": 0,
@@ -106,6 +154,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f249b4e6_aab178ce",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4266,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "responding to this comment and others re: `CommandbufferAccess` -\n\nWe need a fine grained barrier where a specific level is transitioned to a new layout while leaving the rest of the image in the old layout. The current code paths related to barriers change the entire image\u0027s layout even if we only require it for a subresouce range. This leads to incorrect barriers and hence VVL errors. \n\nUntil we support a mapping of {subresourceRange -\u003e layout} we wont be able to use the `CommandbufferAccess` path here\n\nNote that i have used the `CommandbufferAccess` path when a coarse grained barrier would suffice (see `onImageDrawMipmapGenerationWrite`)",
+      "parentUuid": "b53a0c1d_9b16cd3c",
+      "range": {
+        "startLine": 4266,
+        "startChar": 59,
+        "endLine": 4266,
+        "endChar": 61
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b6322931_df0e1c47",
         "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
         "patchSetId": 7
@@ -117,6 +189,24 @@
       "writtenOn": "2024-11-01T18:59:23Z",
       "side": 1,
       "message": "Remove. This will be flushed automatically as needed (but also see other comments).",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "398720a1_3a9501ed",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4285,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b6322931_df0e1c47",
       "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -134,6 +224,30 @@
       "writtenOn": "2024-11-01T18:59:23Z",
       "side": 1,
       "message": "Set the access correctly for automatic command buffer flushes.",
+      "range": {
+        "startLine": 4364,
+        "startChar": 63,
+        "endLine": 4364,
+        "endChar": 65
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11494f2c_4880b1f8",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4364,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8469b65_e39a3adf",
       "range": {
         "startLine": 4364,
         "startChar": 63,
@@ -167,6 +281,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67062f74_24cbef1f",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4370,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce8844b5_aba7c351",
+      "range": {
+        "startLine": 4370,
+        "startChar": 0,
+        "endLine": 4370,
+        "endChar": 72
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb9342d2_751fe9fd",
@@ -184,6 +322,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53fbdc7f_bab2801b",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4433,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb9342d2_751fe9fd",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fffb06b8_6c182393",
@@ -197,6 +353,30 @@
       "writtenOn": "2024-11-01T18:59:23Z",
       "side": 1,
       "message": "Please add a reason enum for this, like `TemporaryForGenerateMipmap`",
+      "range": {
+        "startLine": 4443,
+        "startChar": 80,
+        "endLine": 4443,
+        "endChar": 94
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2dab7329_669b96cb",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4443,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fffb06b8_6c182393",
       "range": {
         "startLine": 4443,
         "startChar": 80,
@@ -230,6 +410,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50c4afba_885b0d5a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4445,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "changed it to shader read only optimal",
+      "parentUuid": "a79e061b_20e08188",
+      "range": {
+        "startLine": 4445,
+        "startChar": 56,
+        "endLine": 4445,
+        "endChar": 60
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3258d4c5_0b9982e7",
@@ -253,6 +457,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "37fcf088_5abc281a",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4447,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3258d4c5_0b9982e7",
+      "range": {
+        "startLine": 4447,
+        "startChar": 59,
+        "endLine": 4447,
+        "endChar": 61
+      },
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ced00759_e2439226",
@@ -266,6 +494,24 @@
       "writtenOn": "2024-11-01T18:59:23Z",
       "side": 1,
       "message": "... and remove this line",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "76d2b6fd_fd4ea024",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 4452,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-03T17:19:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ced00759_e2439226",
       "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
