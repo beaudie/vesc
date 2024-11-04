@@ -51,6 +51,24 @@
       "message": "This is not quite the same test as I mentioned in the other comment. The blend one in particular is about making sure the load op of the render pass is LOAD instead of DONT_CARE. The load op is a function of whether the contents of the color attachment are valid or not.\n\nSo it\u0027s the `dstTexture` itself that should be rendered too, not used as a sampler. The content validity tracking has no effect on sampler usage of the texture.\n\nWould you please move this to a separate test where the blend-into-mip-1 is done right after `glGenerateMipmap` with nothing in between it? And the blend should be _into_ mip 1, not _sampling from_ mip 1.",
       "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "357867ab_67788d0c",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-04T12:31:44Z",
+      "side": 1,
+      "message": "do i need a separate test or should it be fine as long as i use an unused mip level (like blending mip 4 into mip 3)?",
+      "parentUuid": "ad7ced58_d5b0302a",
+      "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
