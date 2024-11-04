@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03e586b5_e6f66897",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:19:18Z",
+      "side": 1,
+      "message": "Thank you for the contribution! Please remember to add your name to the `AUTHORS` file.\n\nAdditionally, please add a test in `EGLSurfaceTest.cpp` to make sure we don\u0027t accidentally break this in the future.",
+      "revId": "14ea080f3fcac6e67b8f0e3fbab17ab8ecad4d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2e6f076_7fb69e6c",
+        "filename": "src/libANGLE/Surface.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 804,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:19:18Z",
+      "side": 1,
+      "message": "nit: You can use `void` where no error is possible.\n\n```suggestion\nvoid Surface::setRequestedRenderBuffer(EGLint requestedRenderBuffer)\n{\n    mRequestedRenderBuffer \u003d requestedRenderBuffer;\n}\n\n```",
+      "range": {
+        "startLine": 799,
+        "startChar": 0,
+        "endLine": 804,
+        "endChar": 0
+      },
+      "revId": "14ea080f3fcac6e67b8f0e3fbab17ab8ecad4d6d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
