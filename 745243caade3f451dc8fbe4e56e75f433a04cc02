@@ -16,6 +16,24 @@
       "message": "Nice work, Yuxin!\n\nIgor, big thanks for the detailed analysis - I only briefly looked at the changes, I think we can count on you catching more issues than I possibly could :}",
       "revId": "745243caade3f451dc8fbe4e56e75f433a04cc02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd3f7423_a46c305e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T04:18:31Z",
+      "side": 1,
+      "message": "Indeed, thanks a lot Igor. Would you please +1 or +2 (if you can) the change?",
+      "parentUuid": "d479c2e0_d2c512bf",
+      "revId": "745243caade3f451dc8fbe4e56e75f433a04cc02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
