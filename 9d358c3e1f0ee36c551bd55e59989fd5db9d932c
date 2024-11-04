@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c53abde8_2ff94146",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-04T14:55:55Z",
+      "side": 1,
+      "message": "This didn\u0027t work for me, I\u0027ll ping you off the review.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 15,
+        "endChar": 41
+      },
+      "revId": "9d358c3e1f0ee36c551bd55e59989fd5db9d932c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51fbe604_415c0660",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 2
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-04T14:55:55Z",
+      "side": 1,
+      "message": "This works when I build `angle_trace_perf_tests`, but not when I build `angle_trace_tests`.  I know it isn\u0027t related to your CL, but the difference confuses me.  I use `angle_trace_tests` 99% of the time.",
+      "range": {
+        "startLine": 570,
+        "startChar": 9,
+        "endLine": 570,
+        "endChar": 31
+      },
+      "revId": "9d358c3e1f0ee36c551bd55e59989fd5db9d932c",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
