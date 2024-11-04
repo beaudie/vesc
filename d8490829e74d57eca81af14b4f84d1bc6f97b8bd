@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "01d724b4_3e120707",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4434,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-04T12:27:29Z",
+      "side": 1,
+      "message": "\u003e I wonder why there are no validation errors when the image is next used as sampler\n\nindeed, once the last mip is transitioned to shader read-only then it is the case that ALL levels have been individually transitioned but the `ImageHelper`\u0027s layout still thinks it is in color attachment layout. Let me see why the subsequent readpixel works fine",
+      "parentUuid": "1e623f03_d4574f9c",
+      "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad7ced58_d5b0302a",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 11
