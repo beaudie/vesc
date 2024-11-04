@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8033e84_f94c9501",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T21:23:19Z",
+      "side": 1,
+      "message": "Side note: what is the reason for this `glFinish`? Seems like all it can do is mask a bug.",
+      "revId": "447101b28fc20bc33936c628a3e40e99b6968257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
