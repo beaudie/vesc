@@ -59,6 +59,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "774cc94a_11896120",
+        "filename": "src/compiler/translator/wgsl/OutputUniformBlocks.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-11-04T17:52:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94d58430_07285668",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 22
+      },
+      "revId": "8d275d4f9f018814b0949bb3d12653418aa33637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b6c58b8_2a9271d1",
@@ -106,6 +130,30 @@
           ]
         }
       ],
+      "revId": "8d275d4f9f018814b0949bb3d12653418aa33637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce8161dc_33f77409",
+        "filename": "src/libANGLE/renderer/wgpu/ContextWgpu.h",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-11-04T17:52:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b6c58b8_2a9271d1",
+      "range": {
+        "startLine": 311,
+        "startChar": 8,
+        "endLine": 311,
+        "endChar": 26
+      },
       "revId": "8d275d4f9f018814b0949bb3d12653418aa33637",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
@@ -161,6 +209,30 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22fd5a55_b009137e",
+        "filename": "src/libANGLE/renderer/wgpu/ProgramExecutableWgpu.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-11-04T17:52:38Z",
+      "side": 1,
+      "message": "Did a lambda since it was more or less the same thing.",
+      "parentUuid": "63fa1f02_a64060f8",
+      "range": {
+        "startLine": 76,
+        "startChar": 8,
+        "endLine": 96,
+        "endChar": 9
+      },
+      "revId": "8d275d4f9f018814b0949bb3d12653418aa33637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87730c5a_4b11f86f",
@@ -174,6 +246,30 @@
       "writtenOn": "2024-11-01T01:09:18Z",
       "side": 1,
       "message": "same for making this a loop if you can map shader type to visibility too.",
+      "range": {
+        "startLine": 376,
+        "startChar": 42,
+        "endLine": 376,
+        "endChar": 69
+      },
+      "revId": "8d275d4f9f018814b0949bb3d12653418aa33637",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8912b450_25ca2a59",
+        "filename": "src/libANGLE/renderer/wgpu/ProgramExecutableWgpu.cpp",
+        "patchSetId": 4
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1297347
+      },
+      "writtenOn": "2024-11-04T17:52:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87730c5a_4b11f86f",
       "range": {
         "startLine": 376,
         "startChar": 42,
