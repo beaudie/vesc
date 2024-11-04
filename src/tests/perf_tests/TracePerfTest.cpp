@@ -234,6 +234,7 @@ class TracePerfTest : public ANGLERenderTest
     int mWindowHeight                                                   = 0;
     GLuint mDrawFramebufferBinding                                      = 0;
     GLuint mReadFramebufferBinding                                      = 0;
+    EGLContext mEglContext                                              = 0;
     uint32_t mCurrentFrame                                              = 0;
     uint32_t mCurrentIteration                                          = 0;
     uint32_t mCurrentOffscreenGridIteration                             = 0;
@@ -2015,6 +2016,8 @@ void TracePerfTest::initializeBenchmark()
         renderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, mWindowWidth, mWindowHeight);
         bindRenderbuffer(GL_RENDERBUFFER, 0);
 
+        mEglContext = eglGetCurrentContext();
+
         genFramebuffers(mMaxOffscreenBufferCount, mOffscreenFramebuffers.data());
         glGenTextures(mMaxOffscreenBufferCount, mOffscreenTextures.data());
         for (int i = 0; i < mMaxOffscreenBufferCount; i++)
@@ -2176,6 +2179,14 @@ void TracePerfTest::drawBenchmark()
         {
             GLuint offscreenBuffer =
                 mOffscreenFramebuffers[mTotalFrameCount % mMaxOffscreenBufferCount];
+
+            EGLContext currentEglContext = eglGetCurrentContext();
+            if (currentEglContext != mEglContext)
+            {
+                eglMakeCurrent(eglGetCurrentDisplay(), eglGetCurrentSurface(EGL_DRAW),
+                               eglGetCurrentSurface(EGL_READ), mEglContext);
+            }
+
             GLint currentDrawFBO, currentReadFBO;
             if (gles1)
             {
@@ -2249,6 +2260,12 @@ void TracePerfTest::drawBenchmark()
             {
                 bindFramebuffer(GL_DRAW_FRAMEBUFFER, currentDrawFBO);
                 bindFramebuffer(GL_READ_FRAMEBUFFER, currentReadFBO);
+            }
+
+            if (currentEglContext != mEglContext)
+            {
+                eglMakeCurrent(eglGetCurrentDisplay(), eglGetCurrentSurface(EGL_DRAW),
+                               eglGetCurrentSurface(EGL_READ), currentEglContext);
             }
         }
 
