@@ -69,6 +69,24 @@
       "parentUuid": "ad7ced58_d5b0302a",
       "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9be28cc4_88ff1c6d",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T16:00:45Z",
+      "side": 1,
+      "message": "\u003e do i need a separate test\n\nThat would be better, the less stuff happens between glGenerateMipmap and the render pass, the higher chance of catching mistakes.\n\n\u003e like blending mip 4 into mip 3\n\nMaybe my comments weren\u0027t clear, all you need to do is blend a constant color (like use the `fs::Red()` program) into a mip. Do _not_ sample from any other mip, the test shouldn\u0027t use the image as a texture, only as a framebuffer attachment.",
+      "parentUuid": "357867ab_67788d0c",
+      "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
