@@ -70,6 +70,30 @@
       },
       "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d32290f_72df2718",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 3603174
+      },
+      "writtenOn": "2024-11-04T03:01:19Z",
+      "side": 1,
+      "message": "I got your point, GetInternalFormatInfo is used for unsized format, format + type to specify the internal format, and we can only use internalformat to get the size format, A bit convoluted, I will give a example.\nglTexImage2D(internalFormat\u003dGL_RGB,format\u003d GL_RGB,type\u003dGL_UNSIGNED_BYTE) specify a GL_RGB8 internal format.\nglTexImage2D(internalFormat\u003dGL_RGB8,format\u003dGL_RGB,type\u003dGL_UNSIGNED_INT_2_10_10_10_REV_EXT) also specify a GL_RGB8 internal format.\nThey have a different type but produce same internal format texture, it is used for this case, we just want to get GL_RGB8 formateInfo.\nInternalFormatInfoMap is a two-dimension map, and if cause duplicate key if we add this case into this map table, so we add a patch outside the GetInternalFormatInfo.\nmap[GL_NONE][GL_NONE] \u003d InternalFormat();",
+      "parentUuid": "cce544fc_b4326cbd",
+      "range": {
+        "startLine": 370,
+        "startChar": 4,
+        "endLine": 381,
+        "endChar": 5
+      },
+      "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
