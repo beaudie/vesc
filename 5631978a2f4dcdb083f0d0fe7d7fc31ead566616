@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d5c70e9_d9f09400",
+        "filename": "src/libANGLE/renderer/vulkan/CLCommandQueueVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:53:46Z",
+      "side": 1,
+      "message": "nit: Please associate TODOs with a bug link",
+      "revId": "5631978a2f4dcdb083f0d0fe7d7fc31ead566616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bbe9088_dd75962d",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:53:46Z",
+      "side": 1,
+      "message": "`bool` arguments often lead to readability issues at call site; please define an `enum class` and pass in a clear value. That would be similar to `ImageBufferCopyDirection` for example.\n\nYou could limit the scope of the `enum class` if you add two `public` functions like `copyStagingToWithPitch` and `copyStagingFromWithPitch`, and make them forward to a `private` helper like `copyStagingWithPitchImpl(...., the_right_enum_value)`. Makes call site easier to read 😊",
+      "range": {
+        "startLine": 338,
+        "startChar": 52,
+        "endLine": 338,
+        "endChar": 56
+      },
+      "revId": "5631978a2f4dcdb083f0d0fe7d7fc31ead566616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97483756_41a220cc",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 806,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:53:46Z",
+      "side": 1,
+      "message": "```suggestion\n            UNREACHABLE();\n```",
+      "range": {
+        "startLine": 805,
+        "startChar": 0,
+        "endLine": 806,
+        "endChar": 26
+      },
+      "revId": "5631978a2f4dcdb083f0d0fe7d7fc31ead566616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c0bd784_2c9df2ac",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:53:46Z",
+      "side": 1,
+      "message": "```suggestion\n    size_t rowPitch \u003d mDesc.rowPitch;\n    if (rowPitch \u003d\u003d 0)\n    {\n        rowPitch \u003d calculateRowPitch();\n    }\n\n    return rowPitch;\n```",
+      "range": {
+        "startLine": 815,
+        "startChar": 0,
+        "endLine": 821,
+        "endChar": 21
+      },
+      "revId": "5631978a2f4dcdb083f0d0fe7d7fc31ead566616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b664a6a_f060b3d1",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 833,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:53:46Z",
+      "side": 1,
+      "message": "```suggestion\n    size_t slicePitch \u003d mDesc.slicePitch;\n\n    if (slicePitch \u003d\u003d 0)\n    {\n        slicePitch \u003d calculateSlicePitch(imageRowPitch);\n    }\n\n    return slicePitch;\n```",
+      "range": {
+        "startLine": 826,
+        "startChar": 0,
+        "endLine": 833,
+        "endChar": 23
+      },
+      "revId": "5631978a2f4dcdb083f0d0fe7d7fc31ead566616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bba46e35_a0effde1",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:53:46Z",
+      "side": 1,
+      "message": "Can be `private`? At least the calculate ones make more sense as `private`.",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 151,
+        "endChar": 47
+      },
+      "revId": "5631978a2f4dcdb083f0d0fe7d7fc31ead566616",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
