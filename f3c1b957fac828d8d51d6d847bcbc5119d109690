@@ -134,6 +134,30 @@
       },
       "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2f42d0a_ec13a6ca",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 947,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-04T15:17:07Z",
+      "side": 1,
+      "message": "PTAL https://crrev.com/c/5987382",
+      "parentUuid": "20f1b960_d196dad2",
+      "range": {
+        "startLine": 947,
+        "startChar": 27,
+        "endLine": 947,
+        "endChar": 50
+      },
+      "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
