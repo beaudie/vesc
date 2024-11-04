@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27fde562_e16d3cac",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4434,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-04T16:35:09Z",
+      "side": 1,
+      "message": "ok, just before readpixel there is a barrier inserted that transitions this mipmap\u0027d image from color_attachment to transfer_src but i dont see any VVL errors. Maybe there is a bug in the layer itself?\n\nso, do i just add a `updateLayoutWithoutBarrier` to handle such cases where subresources have transitioned to a new layout and the union of the subresources \u003d\u003d full image and we just want to update `ImageHelper::mCurrentLayout` to the new layout without inserting any barrier?",
+      "parentUuid": "01d724b4_3e120707",
+      "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad7ced58_d5b0302a",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 11
