@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abd10ed0_8ddaa8f2",
+        "filename": "src/tests/perf_tests/TracePerfTest.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 2187,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-04T23:21:28Z",
+      "side": 1,
+      "message": "Probably need to save all of these too, as they might be changed by the trace?",
+      "range": {
+        "startLine": 2186,
+        "startChar": 31,
+        "endLine": 2187,
+        "endChar": 61
+      },
+      "revId": "bebcdd126c4f028692ed6f52f56ed9d7af1e1712",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
