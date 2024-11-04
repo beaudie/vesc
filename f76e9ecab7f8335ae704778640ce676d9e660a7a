@@ -146,6 +146,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "89a850f7_b2685a98",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 2
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 3314858
+      },
+      "writtenOn": "2024-11-04T13:43:01Z",
+      "side": 1,
+      "message": "@geofflang@chromium.org @lehoangquyen@chromium.org Thanks for the suggestions. I now check in ContextMtl::flush and ContextMtl::finish to see if the previous command had a `MTLCommandBufferErrorOutOfMemory` and treat it as a `GL_OUT_OF_MEMORY`.",
+      "parentUuid": "5b9887da_967c559a",
+      "range": {
+        "startLine": 644,
+        "startChar": 15,
+        "endLine": 644,
+        "endChar": 16
+      },
+      "revId": "f76e9ecab7f8335ae704778640ce676d9e660a7a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "b35f6e89_134e9002",
         "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
         "patchSetId": 2
