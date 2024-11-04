@@ -5285,7 +5285,7 @@ void FramebufferHelper::release(ContextVk *contextVk)
 }
 
 // DescriptorSetDesc implementation.
-size_t DescriptorSetDesc::hash() const
+size_t DescriptorSetDesc::computeHashValue() const
 {
     if (mDescriptorInfos.empty())
     {

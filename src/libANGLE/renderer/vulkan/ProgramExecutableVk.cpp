@@ -1885,6 +1885,8 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
 {
     if (context->getFeatures().descriptorSetCache.enabled)
     {
+        // Compute cached hash value for the cache key
+        descriptorSetDescBuilder.getDesc().computeCachedHashValue();
         ANGLE_TRY(mDynamicDescriptorPools[setIndex]->getOrAllocateDescriptorSet(
             context, descriptorSetDescBuilder.getDesc(), mDescriptorSetLayouts[setIndex].get(),
             &mDescriptorSets[setIndex], newSharedCacheKeyOut));

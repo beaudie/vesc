@@ -1815,15 +1815,24 @@ class DescriptorSetDesc
     DescriptorSetDesc()  = default;
     ~DescriptorSetDesc() = default;
 
-    DescriptorSetDesc(const DescriptorSetDesc &other) : mDescriptorInfos(other.mDescriptorInfos) {}
+    DescriptorSetDesc(const DescriptorSetDesc &other)
+        : mCachedHashValue(other.mCachedHashValue), mDescriptorInfos(other.mDescriptorInfos)
+    {}
 
     DescriptorSetDesc &operator=(const DescriptorSetDesc &other)
     {
+        mCachedHashValue = other.mCachedHashValue;
         mDescriptorInfos = other.mDescriptorInfos;
         return *this;
     }
 
-    size_t hash() const;
+    size_t getCachedHashValue() const
+    {
+        ASSERT(mCachedHashValue == computeHashValue());
+        return mCachedHashValue;
+    }
+
+    void computeCachedHashValue() const { mCachedHashValue = computeHashValue(); }
 
     size_t size() const { return mDescriptorInfos.size(); }
     void resize(size_t count) { mDescriptorInfos.resize(count); }
@@ -1854,6 +1863,8 @@ class DescriptorSetDesc
                              VkDescriptorSet descriptorSet) const;
 
   private:
+    size_t computeHashValue() const;
+    mutable size_t mCachedHashValue;
     // After a preliminary minimum size, use heap memory.
     angle::FastVector<DescriptorInfoDesc, kFastDescriptorSetDescLimit> mDescriptorInfos;
 };
@@ -2244,7 +2255,10 @@ struct hash<rx::vk::ImageSubresourceRange>
 template <>
 struct hash<rx::vk::DescriptorSetDesc>
 {
-    size_t operator()(const rx::vk::DescriptorSetDesc &key) const { return key.hash(); }
+    size_t operator()(const rx::vk::DescriptorSetDesc &key) const
+    {
+        return key.getCachedHashValue();
+    }
 };
 
 template <>
