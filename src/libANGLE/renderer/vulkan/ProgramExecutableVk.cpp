@@ -1885,6 +1885,8 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
 {
     if (context->getFeatures().descriptorSetCache.enabled)
     {
+        // Compute cached hash value for the cache key
+        descriptorSetDesc.getDesc().computeCachedHashValue();
         ANGLE_TRY(mDynamicDescriptorPools[setIndex]->getOrAllocateDescriptorSet(
             context, descriptorSetDesc.getDesc(), mDescriptorSetLayouts[setIndex].get(),
             &mDescriptorSets[setIndex], newSharedCacheKeyOut));
@@ -1975,6 +1977,8 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
         vk::DescriptorSetDescBuilder descriptorBuilder;
         descriptorBuilder.updatePreCacheActiveTextures(context, *mExecutable, textures, samplers);
 
+        // Compute cached hash value for the cache key
+        descriptorBuilder.getDesc().computeCachedHashValue();
         ANGLE_TRY(mDynamicDescriptorPools[DescriptorSetIndex::Texture]->getOrAllocateDescriptorSet(
             context, descriptorBuilder.getDesc(),
             mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
