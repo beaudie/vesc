@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd2e1f84_3b1e464d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T23:45:34Z",
+      "side": 1,
+      "message": "This does the same thing as https://chromium-review.googlesource.com/c/angle/angle/+/5987534 if I\u0027m not mistaken. Could you please coordinate with Rafay which version you\u0027d like to land?",
+      "revId": "f79452ce90dc6909ba1732046c73c0e56a4c3f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
