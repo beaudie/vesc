@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b554dbe_955f02b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3462878
+      },
+      "writtenOn": "2024-11-04T01:42:09Z",
+      "side": 1,
+      "message": "Thanks so much for your help, Geoff! I see the CL now only needs the code owner\u0027s approval (looks like this happened because you became the uploader). Is there anything I can do to help unblock this?",
+      "revId": "75951dada6bc4c61772e299d9ce5cf8096d4377f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
