@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1e623f03_d4574f9c",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T04:40:26Z",
+      "side": 1,
+      "message": "Shouldn\u0027t `image`\u0027s layout be overriden here? The `onImageDrawMipmapGenerationWrite` call makes the image think it\u0027s in color attachment layout... I wonder why there are no validation errors when the image is next used as sampler (and ANGLE inserts a COLOR_ATTACHMENT-\u003eSHADER_READ_ONLY transition)",
+      "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad7ced58_d5b0302a",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 11
