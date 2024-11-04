@@ -26,9 +26,6 @@ import android_helper
 import angle_path_util
 import angle_test_util
 
-angle_path_util.AddDepsDirToPath('build/android')
-import test_runner
-
 
 def AddCommonParserArgs(parser):
     parser.add_argument(
@@ -113,6 +110,10 @@ def RunWithAngleTestRunner(args, extra_args):
 
 
 def RunWithChromiumTestRunner():
+    # Import only here to avoid breaking trace bundles
+    angle_path_util.AddDepsDirToPath('build/android')
+    import test_runner
+
     # Workaround from test_runner's __main__
     exit_code = test_runner.main()
     if exit_code == test_runner.constants.INFRA_EXIT_CODE:
