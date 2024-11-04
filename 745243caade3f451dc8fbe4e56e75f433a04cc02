@@ -52,6 +52,23 @@
       "parentUuid": "bd3f7423_a46c305e",
       "revId": "745243caade3f451dc8fbe4e56e75f433a04cc02",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5baa0004_99015c81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 22
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-04T19:47:41Z",
+      "side": 1,
+      "message": "@mathias@google.com reported that this change causes their team\u0027s app to crash. I will verify it before submitting the change.",
+      "revId": "745243caade3f451dc8fbe4e56e75f433a04cc02",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
