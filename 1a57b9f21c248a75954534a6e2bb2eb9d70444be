@@ -171,6 +171,24 @@
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acde256d_83341d08",
+        "filename": "src/libANGLE/Display.cpp",
+        "patchSetId": 10
+      },
+      "lineNbr": 726,
+      "author": {
+        "id": 1564492
+      },
+      "writtenOn": "2024-11-04T14:38:24Z",
+      "side": 1,
+      "message": "\u003e would you please open a new issue to track this?\n\nNew issue: angleproject:377131179\n\n\u003e  I\u0027ve noticed threading issues with device loss elsewhere too: anglebug.com/42265604\n\nIssue is still relevant. But code was changed a lot since the issue was created, so description does not much. I will take a detailed look once find free time.\n\n---\n\nRegarding this CL.\n\nMutex lock is added to protect `contextMap` access, therefore I will resolve this comment.",
+      "parentUuid": "2ffcc968_6362040a",
+      "revId": "1a57b9f21c248a75954534a6e2bb2eb9d70444be",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c4e1b3fa_9d00ee8b",
