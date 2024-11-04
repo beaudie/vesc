@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "128d4fce_19a00cce",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 738,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:38:31Z",
+      "side": 1,
+      "message": "There\u0027s probably a bug here with array-\u003earray copies. Say a copy is done between a 6 layer image and an 8 layer image. Then `src` and `dst` subresources will declare 6 and 8 layers each, which doesn\u0027t match.\n\nShouldn\u0027t `layerCount` come out of the copy `region`?",
+      "revId": "1bb70c84654452c706be0880cebfc439ca2835a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3ec540f_0292cc1a",
+        "filename": "src/libANGLE/renderer/vulkan/CLMemoryVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:38:31Z",
+      "side": 1,
+      "message": "You can just return the constructed values, Return Value Optimization makes sure this is efficient.\n\n```suggestion\n    VkExtent3D getExtentForCopy(const cl::Coordinate \u0026region);\n    VkOffset3D getOffsetForCopy(const cl::MemOffsets \u0026origin);\n    VkImageSubresourceLayers getSubresourceLayersForCopy(const cl::MemOffsets \u0026origin,\n                              cl::MemObjectType copyToType);\n```",
+      "range": {
+        "startLine": 138,
+        "startChar": 0,
+        "endLine": 142,
+        "endChar": 69
+      },
+      "revId": "1bb70c84654452c706be0880cebfc439ca2835a7",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
