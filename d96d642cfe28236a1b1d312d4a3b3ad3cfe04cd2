@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9922d9e0_1f2f0067",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-04T19:34:52Z",
+      "side": 1,
+      "message": "Pull request created at https://github.com/KhronosGroup/VK-GL-CTS/pull/497",
+      "revId": "d96d642cfe28236a1b1d312d4a3b3ad3cfe04cd2",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
