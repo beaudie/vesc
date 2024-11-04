@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4358f55_e5fd4739",
+        "filename": "src/libANGLE/renderer/vulkan/CLProgramVk.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T15:26:57Z",
+      "side": 1,
+      "message": "nit: Please associate TODOs with bugs like `http://anglebug.com/NNNNNN`",
+      "revId": "63d9b21202097be4c70f23dfdd4b2cce49839267",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
