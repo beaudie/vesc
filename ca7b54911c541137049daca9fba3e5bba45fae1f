@@ -531,6 +531,24 @@
       "message": "To make sure all tracking is done correctly, could you please add a test like this?\n\n* Call glGenerateMimap like in the tests above\n* Attach mip 1 to framebuffer\n* Enable blending\n* Draw\n* Verify new color and old color are blended\n\nIf the ImageHelper\u0027s tracking of whether the contents of the mips are valid or not is wrong, the verification render pass ends up using LOAD_OP_DONT_CARE and the results could be wrong. Content validity does not affect sampler usage, or glReadPixels hence the trick with draw calls and blend.",
       "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d8d047d0_937c86bc",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 2311,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-04T03:25:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "21f5d5d8_efbc156d",
+      "revId": "ca7b54911c541137049daca9fba3e5bba45fae1f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
