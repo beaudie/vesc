@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "86615c1d_58a2e1d5",
+        "filename": "src/libANGLE/renderer/vulkan/UtilsVk.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 4434,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T16:52:03Z",
+      "side": 1,
+      "message": "There\u0027s already `setCurrentImageLayout` for this purpose, but that doesn\u0027t set `mCurrentShaderReadStageMask` and `mLastNonShaderReadOnlyLayout`. Basically you\u0027d need something similar to what\u0027s done at the bottom of `ImageHelper::generateMipmapsWithBlit`.\n\nI think `setCurrentImageLayouts` is buggy by not updating these values, could you please add a `VkPipelineStageFlags shaderReadStageMask` to it? You can then pass the right stage here and call `setCurrentImageLayout` directly. I _think_ the function should be able to automatically set `mCurrentShaderReadStageMask` to the previous layout (now being overwritten) similar to this logic: https://source.chromium.org/chromium/chromium/src/+/main:third_party/angle/src/libANGLE/renderer/vulkan/vk_helpers.cpp;l\u003d7748;drc\u003d79b6c7ab3086488faf2a2ac64a02d48101d26ebf\n\nYou might need to move the function to cpp for that.",
+      "parentUuid": "27fde562_e16d3cac",
+      "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ad7ced58_d5b0302a",
         "filename": "src/tests/gl_tests/ImageTest.cpp",
         "patchSetId": 11
