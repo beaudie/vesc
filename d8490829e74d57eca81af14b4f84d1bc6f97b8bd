@@ -87,6 +87,24 @@
       "parentUuid": "357867ab_67788d0c",
       "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82916bbc_0f3f0e84",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 11
+      },
+      "lineNbr": 2276,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-04T16:01:44Z",
+      "side": 1,
+      "message": "Oh, and you can use `glBlendFunc(GL_ONE, GL_ONE)` and like, if you use the `Red` program, verify that green and blue channels contain values coming from mipgen (and they are not garbage).",
+      "parentUuid": "9be28cc4_88ff1c6d",
+      "revId": "d8490829e74d57eca81af14b4f84d1bc6f97b8bd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
