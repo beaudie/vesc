@@ -52,6 +52,24 @@
       "parentUuid": "caf82886_8bc27ca1",
       "revId": "447101b28fc20bc33936c628a3e40e99b6968257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc855b0d_7cefad2d",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-05T12:44:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "303254ae_adef2f2d",
+      "revId": "447101b28fc20bc33936c628a3e40e99b6968257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
