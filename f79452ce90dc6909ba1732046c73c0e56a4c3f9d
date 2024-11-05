@@ -16,6 +16,24 @@
       "message": "This does the same thing as https://chromium-review.googlesource.com/c/angle/angle/+/5987534 if I\u0027m not mistaken. Could you please coordinate with Rafay which version you\u0027d like to land?",
       "revId": "f79452ce90dc6909ba1732046c73c0e56a4c3f9d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef40556a_e0982d93",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1604617
+      },
+      "writtenOn": "2024-11-05T00:06:50Z",
+      "side": 1,
+      "message": "@syoussefi@chromium.org - It does not quite do the same thing.\n\nUnmap API is generic for buffer and image types. \nHis only accounts for image types:\n`if ((memoryType !\u003d CL_MEM_OBJECT_BUFFER) \u0026\u0026 (memoryType !\u003d CL_MEM_OBJECT_PIPE))`\n\nand does the copy from the image\u0027s staging buffer. For buffer unmap, we need to do a resource map + memcpy.",
+      "parentUuid": "bd2e1f84_3b1e464d",
+      "revId": "f79452ce90dc6909ba1732046c73c0e56a4c3f9d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
