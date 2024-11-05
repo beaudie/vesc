@@ -1878,7 +1878,7 @@ void ProgramExecutableVk::resolvePrecisionMismatch(const gl::ProgramMergedVaryin
 angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     vk::Context *context,
     UpdateDescriptorSetsBuilder *updateBuilder,
-    const vk::DescriptorSetDescBuilder &descriptorSetDesc,
+    const vk::DescriptorSetDescBuilder &descriptorSetDescBuilder,
     const vk::WriteDescriptorDescs &writeDescriptorDescs,
     DescriptorSetIndex setIndex,
     vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
@@ -1886,17 +1886,19 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
     if (context->getFeatures().descriptorSetCache.enabled)
     {
         ANGLE_TRY(mDynamicDescriptorPools[setIndex]->getOrAllocateDescriptorSet(
-            context, descriptorSetDesc.getDesc(), mDescriptorSetLayouts[setIndex].get(),
+            context, descriptorSetDescBuilder.getDesc(), mDescriptorSetLayouts[setIndex].get(),
             &mDescriptorSets[setIndex], newSharedCacheKeyOut));
         ASSERT(mDescriptorSets[setIndex]);
         mDescriptorPools[setIndex] = mDescriptorSets[setIndex]->getPool();
 
-        if (*newSharedCacheKeyOut != nullptr)
+        // Texture descriptor set will be updated by caller since it requires other information not
+        // available here.
+        if (*newSharedCacheKeyOut != nullptr && setIndex != DescriptorSetIndex::Texture)
         {
             // Cache miss. A new cache entry has been created.
-            descriptorSetDesc.updateDescriptorSet(context->getRenderer(), writeDescriptorDescs,
-                                                  updateBuilder,
-                                                  mDescriptorSets[setIndex]->getDescriptorSet());
+            descriptorSetDescBuilder.updateDescriptorSet(
+                context->getRenderer(), writeDescriptorDescs, updateBuilder,
+                mDescriptorSets[setIndex]->getDescriptorSet());
         }
     }
     else
@@ -1905,9 +1907,14 @@ angle::Result ProgramExecutableVk::getOrAllocateDescriptorSet(
             context, mDescriptorSetLayouts[setIndex].get(), &mDescriptorSets[setIndex]));
         ASSERT(mDescriptorSets[setIndex]);
 
-        descriptorSetDesc.updateDescriptorSet(context->getRenderer(), writeDescriptorDescs,
-                                              updateBuilder,
-                                              mDescriptorSets[setIndex]->getDescriptorSet());
+        // Texture descriptor set will be updated by caller since it requires other information not
+        // available here.
+        if (setIndex != DescriptorSetIndex::Texture)
+        {
+            descriptorSetDescBuilder.updateDescriptorSet(
+                context->getRenderer(), writeDescriptorDescs, updateBuilder,
+                mDescriptorSets[setIndex]->getDescriptorSet());
+        }
     }
 
     return angle::Result::Continue;
@@ -1917,7 +1924,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     vk::Context *context,
     UpdateDescriptorSetsBuilder *updateBuilder,
     const vk::WriteDescriptorDescs &writeDescriptorDescs,
-    const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
+    const vk::DescriptorSetDescBuilder &shaderResourcesDescBuilder,
     vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
     if (!mDynamicDescriptorPools[DescriptorSetIndex::ShaderResource])
@@ -1926,7 +1933,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
         return angle::Result::Continue;
     }
 
-    ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, shaderResourcesDesc,
+    ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, shaderResourcesDescBuilder,
                                          writeDescriptorDescs, DescriptorSetIndex::ShaderResource,
                                          newSharedCacheKeyOut));
 
@@ -1935,7 +1942,7 @@ angle::Result ProgramExecutableVk::updateShaderResourcesDescriptorSet(
     if (numOffsets > 0)
     {
         memcpy(mDynamicShaderResourceDescriptorOffsets.data(),
-               shaderResourcesDesc.getDynamicOffsets(), numOffsets * sizeof(uint32_t));
+               shaderResourcesDescBuilder.getDynamicOffsets(), numOffsets * sizeof(uint32_t));
     }
 
     return angle::Result::Continue;
@@ -1946,13 +1953,13 @@ angle::Result ProgramExecutableVk::updateUniformsAndXfbDescriptorSet(
     UpdateDescriptorSetsBuilder *updateBuilder,
     const vk::WriteDescriptorDescs &writeDescriptorDescs,
     vk::BufferHelper *defaultUniformBuffer,
-    vk::DescriptorSetDescBuilder *uniformsAndXfbDesc,
+    vk::DescriptorSetDescBuilder *uniformsAndXfbDescBuilder,
     vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut)
 {
     mCurrentDefaultUniformBufferSerial =
         defaultUniformBuffer ? defaultUniformBuffer->getBufferSerial() : vk::kInvalidBufferSerial;
 
-    return getOrAllocateDescriptorSet(context, updateBuilder, *uniformsAndXfbDesc,
+    return getOrAllocateDescriptorSet(context, updateBuilder, *uniformsAndXfbDescBuilder,
                                       writeDescriptorDescs, DescriptorSetIndex::UniformsAndXfb,
                                       sharedCacheKeyOut);
 }
@@ -1961,53 +1968,45 @@ angle::Result ProgramExecutableVk::updateTexturesDescriptorSet(
     vk::Context *context,
     const gl::ActiveTextureArray<TextureVk *> &textures,
     const gl::SamplerBindingVector &samplers,
-    PipelineType pipelineType,
     UpdateDescriptorSetsBuilder *updateBuilder)
 {
+    vk::SharedDescriptorSetCacheKey newSharedCacheKey = nullptr;
+    // We use textureSerial to optimize texture binding updates. Each permutation of a
+    // {VkImage/VkSampler} generates a unique serial. These object ids are combined to form a
+    // unique signature for each descriptor set. This allows us to keep a cache of descriptor
+    // sets and avoid calling vkAllocateDesctiporSets each texture update.
+    vk::DescriptorSetDescBuilder textureDescriptorSetDescBuilder;
+
     if (context->getFeatures().descriptorSetCache.enabled)
     {
-        vk::SharedDescriptorSetCacheKey newSharedCacheKey;
-
-        // We use textureSerial to optimize texture binding updates. Each permutation of a
-        // {VkImage/VkSampler} generates a unique serial. These object ids are combined to form a
-        // unique signature for each descriptor set. This allows us to keep a cache of descriptor
-        // sets and avoid calling vkAllocateDesctiporSets each texture update.
-        vk::DescriptorSetDescBuilder descriptorBuilder;
-        descriptorBuilder.updatePreCacheActiveTextures(context, *mExecutable, textures, samplers);
-
-        ANGLE_TRY(mDynamicDescriptorPools[DescriptorSetIndex::Texture]->getOrAllocateDescriptorSet(
-            context, descriptorBuilder.getDesc(),
-            mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
-            &mDescriptorSets[DescriptorSetIndex::Texture], &newSharedCacheKey));
-        ASSERT(mDescriptorSets[DescriptorSetIndex::Texture]);
-        mDescriptorPools[DescriptorSetIndex::Texture] =
-            mDescriptorSets[DescriptorSetIndex::Texture]->getPool();
-
-        if (newSharedCacheKey != nullptr)
-        {
-            ANGLE_TRY(UpdateFullTexturesDescriptorSet(
-                context, mVariableInfoMap, mTextureWriteDescriptorDescs, updateBuilder,
-                *mExecutable, textures, samplers,
-                mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet()));
-
-            const gl::ActiveTextureMask &activeTextureMask = mExecutable->getActiveSamplersMask();
-            for (size_t textureUnit : activeTextureMask)
-            {
-                ASSERT(textures[textureUnit] != nullptr);
-                textures[textureUnit]->onNewDescriptorSet(newSharedCacheKey);
-            }
-        }
+        textureDescriptorSetDescBuilder.updatePreCacheActiveTextures(context, *mExecutable,
+                                                                     textures, samplers);
     }
-    else
-    {
-        ANGLE_TRY(mDynamicDescriptorPools[DescriptorSetIndex::Texture]->allocateDescriptorSet(
-            context, mDescriptorSetLayouts[DescriptorSetIndex::Texture].get(),
-            &mDescriptorSets[DescriptorSetIndex::Texture]));
-        ASSERT(mDescriptorSets[DescriptorSetIndex::Texture]);
 
+    ANGLE_TRY(getOrAllocateDescriptorSet(context, updateBuilder, textureDescriptorSetDescBuilder,
+                                         mTextureWriteDescriptorDescs, DescriptorSetIndex::Texture,
+                                         &newSharedCacheKey));
+
+    if (newSharedCacheKey != nullptr || !context->getFeatures().descriptorSetCache.enabled)
+    {
+        // Update the descriptorSet if cache miss or cache is disabled.
         ANGLE_TRY(UpdateFullTexturesDescriptorSet(
             context, mVariableInfoMap, mTextureWriteDescriptorDescs, updateBuilder, *mExecutable,
             textures, samplers, mDescriptorSets[DescriptorSetIndex::Texture]->getDescriptorSet()));
+    }
+
+    if (newSharedCacheKey != nullptr)
+    {
+        ASSERT(context->getFeatures().descriptorSetCache.enabled);
+        // If cache is enabled and there is cache miss, we need to update each texture that
+        // participates the cache key with new shared ache key so that the cache can be destroyed
+        // when texture is deleted.
+        const gl::ActiveTextureMask &activeTextureMask = mExecutable->getActiveSamplersMask();
+        for (size_t textureUnit : activeTextureMask)
+        {
+            ASSERT(textures[textureUnit] != nullptr);
+            textures[textureUnit]->onNewDescriptorSet(newSharedCacheKey);
+        }
     }
 
     return angle::Result::Continue;

@@ -217,14 +217,13 @@ class ProgramExecutableVk : public ProgramExecutableImpl
     angle::Result updateTexturesDescriptorSet(vk::Context *context,
                                               const gl::ActiveTextureArray<TextureVk *> &textures,
                                               const gl::SamplerBindingVector &samplers,
-                                              PipelineType pipelineType,
                                               UpdateDescriptorSetsBuilder *updateBuilder);
 
     angle::Result updateShaderResourcesDescriptorSet(
         vk::Context *context,
         UpdateDescriptorSetsBuilder *updateBuilder,
         const vk::WriteDescriptorDescs &writeDescriptorDescs,
-        const vk::DescriptorSetDescBuilder &shaderResourcesDesc,
+        const vk::DescriptorSetDescBuilder &shaderResourcesDescBuilder,
         vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
 
     angle::Result updateUniformsAndXfbDescriptorSet(
@@ -232,7 +231,7 @@ class ProgramExecutableVk : public ProgramExecutableImpl
         UpdateDescriptorSetsBuilder *updateBuilder,
         const vk::WriteDescriptorDescs &writeDescriptorDescs,
         vk::BufferHelper *defaultUniformBuffer,
-        vk::DescriptorSetDescBuilder *uniformsAndXfbDesc,
+        vk::DescriptorSetDescBuilder *uniformsAndXfbDescBuilder,
         vk::SharedDescriptorSetCacheKey *sharedCacheKeyOut);
 
     template <typename CommandBufferT>
@@ -494,12 +493,13 @@ class ProgramExecutableVk : public ProgramExecutableImpl
                                               vk::PipelineHelper *placeholderPipelineHelper);
     void waitForPostLinkTasksImpl(ContextVk *contextVk);
 
-    angle::Result getOrAllocateDescriptorSet(vk::Context *context,
-                                             UpdateDescriptorSetsBuilder *updateBuilder,
-                                             const vk::DescriptorSetDescBuilder &descriptorSetDesc,
-                                             const vk::WriteDescriptorDescs &writeDescriptorDescs,
-                                             DescriptorSetIndex setIndex,
-                                             vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
+    angle::Result getOrAllocateDescriptorSet(
+        vk::Context *context,
+        UpdateDescriptorSetsBuilder *updateBuilder,
+        const vk::DescriptorSetDescBuilder &descriptorSetDescBuilder,
+        const vk::WriteDescriptorDescs &writeDescriptorDescs,
+        DescriptorSetIndex setIndex,
+        vk::SharedDescriptorSetCacheKey *newSharedCacheKeyOut);
 
     // When loading from cache / binary, initialize the pipeline cache with given data.  Otherwise
     // the cache is lazily created as needed.
