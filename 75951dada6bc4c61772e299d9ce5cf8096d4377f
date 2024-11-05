@@ -16,6 +16,24 @@
       "message": "Thanks so much for your help, Geoff! I see the CL now only needs the code owner\u0027s approval (looks like this happened because you became the uploader). Is there anything I can do to help unblock this?",
       "revId": "75951dada6bc4c61772e299d9ce5cf8096d4377f",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "74340171_f90d1571",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3462878
+      },
+      "writtenOn": "2024-11-05T11:41:24Z",
+      "side": 1,
+      "message": "Friendly ping @geofflang@chromium.org. Just checking in on the status of this CL, as I’m hoping to move forward with the next steps. Thanks!",
+      "parentUuid": "1b554dbe_955f02b7",
+      "revId": "75951dada6bc4c61772e299d9ce5cf8096d4377f",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
