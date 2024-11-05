@@ -70,6 +70,30 @@
       },
       "revId": "ef162100bee7f3d362dd98fc0788ac788c0d2e1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a3a11bc_0bb83487",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-05T20:48:03Z",
+      "side": 1,
+      "message": "\u003e so the real fix would be to move the ANGLE_SKIP_TEST_IFs outside the helper and into the function itself\n\nok but that causes code duplication which i wanted to avoid. thats fine, added an alternate early-return condition",
+      "parentUuid": "d287b159_e93db383",
+      "range": {
+        "startLine": 2352,
+        "startChar": 4,
+        "endLine": 2352,
+        "endChar": 37
+      },
+      "revId": "ef162100bee7f3d362dd98fc0788ac788c0d2e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
