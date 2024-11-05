@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79c57aef_0dde229b",
+        "filename": "src/compiler/translator/tree_ops/msl/SeparateCompoundExpressions.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-11-05T17:56:28Z",
+      "side": 1,
+      "message": "Is there anything stopping us from moving this one folder up the tree and removing the `#if ANGLE_ENABLE_METAL`? I\u0027m not worried about potentially binary size issues.",
+      "revId": "9e12a40a4f142e22d8bb01ffd02a554ed6f79f64",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
