@@ -34,6 +34,24 @@
       "parentUuid": "d8033e84_f94c9501",
       "revId": "447101b28fc20bc33936c628a3e40e99b6968257",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "303254ae_adef2f2d",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 12
+      },
+      "lineNbr": 2254,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-05T01:26:26Z",
+      "side": 1,
+      "message": "aha, after removing this `glFinish` i now see this VVL error -\n```\n..\\..\\src\\tests\\test_utils\\ANGLETest.cpp(69): error: vk_renderer.cpp:811 \n(rx::vk::(anonymous namespace)::DebugUtilsMessenger): [ VUID-\nVkImageMemoryBarrier-oldLayout-01197 ] Validation Error: [ VUID-\nVkImageMemoryBarrier-oldLayout-01197 ] Object 0: handle \u003d 0x1bb56c4d810, type \u003d \nVK_OBJECT_TYPE_COMMAND_BUFFER; Object 1: handle \u003d 0x300000000030, type \u003d \nVK_OBJECT_TYPE_IMAGE; | MessageID \u003d 0x124ffb34 | vkCmdPipelineBarrier(): \npImageMemoryBarriers[0].image (VkImage 0x300000000030[]) cannot transition the \nlayout of aspect\u003d1, level\u003d0, layer\u003d0 from \nVK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL when the previous known layout is \nVK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL.\nThe Vulkan spec states: If srcQueueFamilyIndex and dstQueueFamilyIndex define a \nqueue family ownership transfer or oldLayout and newLayout define an image layout \ntransition, oldLayout must be VK_IMAGE_LAYOUT_UNDEFINED or the current layout of \nthe image subresources affected by the barrier \n(https://www.khronos.org/registry/vulkan/specs/1.3-\nextensions/html/vkspec.html#VUID-VkImageMemoryBarrier-oldLayout-01197)\n```",
+      "parentUuid": "caf82886_8bc27ca1",
+      "revId": "447101b28fc20bc33936c628a3e40e99b6968257",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
