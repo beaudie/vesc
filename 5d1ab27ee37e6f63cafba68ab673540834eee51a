@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0c9ae38_90c5f082",
+        "filename": "src/tests/cl_support/angle_oclcts_gtest.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-05T21:35:28Z",
+      "side": 1,
+      "message": "FWIW, I accidentally broke forwarding non-gtest command line arguments to the CTS here, but it should be an easy fix. Let me know if you\u0027d like me to fix that.\n\nI\u0027ve been thinking about the tests not running because of `clGetPlatformIDs` failing, maybe something to do with `rpath`?",
+      "revId": "5d1ab27ee37e6f63cafba68ab673540834eee51a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
