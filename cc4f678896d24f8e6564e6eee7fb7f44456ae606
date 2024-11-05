@@ -94,6 +94,30 @@
       },
       "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56f5902d_b05ee9d8",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 3603174
+      },
+      "writtenOn": "2024-11-05T09:04:19Z",
+      "side": 1,
+      "message": "@Geoff Lang, not sure if I make it clear， can we start to test this patch.",
+      "parentUuid": "4d32290f_72df2718",
+      "range": {
+        "startLine": 370,
+        "startChar": 4,
+        "endLine": 381,
+        "endChar": 5
+      },
+      "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
