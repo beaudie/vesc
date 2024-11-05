@@ -2624,7 +2624,7 @@ ANGLE_INLINE angle::Result ContextVk::handleDirtyTexturesImpl(
     {
         ProgramExecutableVk *executableVk = vk::GetImpl(executable);
         ANGLE_TRY(executableVk->updateTexturesDescriptorSet(
-            this, mActiveTextures, mState.getSamplers(), pipelineType,
+            this, mActiveTextures, mState.getSamplers(),
             mShareGroupVk->getUpdateDescriptorSetsBuilder()));
     }
 
@@ -2871,11 +2871,11 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     mShaderBufferWriteDescriptorDescs.updateInputAttachments(
         *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()));
 
-    mShaderBuffersDescriptorDesc.resize(
+    mShaderBuffersDescriptorDescBuilder.resize(
         mShaderBufferWriteDescriptorDescs.getTotalDescriptorCount());
     if (hasUniformBuffers)
     {
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
+        mShaderBuffersDescriptorDescBuilder.updateShaderBuffers(
             commandBufferHelper, *executable, variableInfoMap,
             mState.getOffsetBindingPointerUniformBuffers(), executable->getUniformBlocks(),
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
@@ -2883,7 +2883,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     }
     if (hasStorageBuffers)
     {
-        mShaderBuffersDescriptorDesc.updateShaderBuffers(
+        mShaderBuffersDescriptorDescBuilder.updateShaderBuffers(
             commandBufferHelper, *executable, variableInfoMap,
             mState.getOffsetBindingPointerShaderStorageBuffers(),
             executable->getShaderStorageBlocks(), executableVk->getStorageBufferDescriptorType(),
@@ -2892,7 +2892,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     }
     if (hasAtomicCounterBuffers)
     {
-        mShaderBuffersDescriptorDesc.updateAtomicCounters(
+        mShaderBuffersDescriptorDescBuilder.updateAtomicCounters(
             commandBufferHelper, *executable, variableInfoMap,
             mState.getOffsetBindingPointerAtomicCounterBuffers(),
             executable->getAtomicCounterBuffers(), limits.minStorageBufferOffsetAlignment,
@@ -2901,13 +2901,13 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     if (hasImages)
     {
         ANGLE_TRY(updateActiveImages(commandBufferHelper));
-        ANGLE_TRY(mShaderBuffersDescriptorDesc.updateImages(this, *executable, variableInfoMap,
-                                                            mActiveImages, mState.getImageUnits(),
-                                                            mShaderBufferWriteDescriptorDescs));
+        ANGLE_TRY(mShaderBuffersDescriptorDescBuilder.updateImages(
+            this, *executable, variableInfoMap, mActiveImages, mState.getImageUnits(),
+            mShaderBufferWriteDescriptorDescs));
     }
     if (hasFramebufferFetch)
     {
-        ANGLE_TRY(mShaderBuffersDescriptorDesc.updateInputAttachments(
+        ANGLE_TRY(mShaderBuffersDescriptorDescBuilder.updateInputAttachments(
             this, *executable, variableInfoMap, vk::GetImpl(mState.getDrawFramebuffer()),
             mShaderBufferWriteDescriptorDescs));
     }
@@ -2917,7 +2917,7 @@ angle::Result ContextVk::handleDirtyShaderResourcesImpl(CommandBufferHelperT *co
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateShaderResourcesDescriptorSet(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), mShaderBufferWriteDescriptorDescs,
-        mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+        mShaderBuffersDescriptorDescBuilder, &newSharedCacheKey));
 
     if (newSharedCacheKey)
     {
@@ -2964,7 +2964,7 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     for (size_t blockIndex : dirtyBits)
     {
         const GLuint binding = executable->getUniformBlockBinding(blockIndex);
-        mShaderBuffersDescriptorDesc.updateOneShaderBuffer(
+        mShaderBuffersDescriptorDescBuilder.updateOneShaderBuffer(
             commandBufferHelper, variableInfoMap, mState.getOffsetBindingPointerUniformBuffers(),
             executable->getUniformBlocks()[blockIndex], binding,
             executableVk->getUniformBufferDescriptorType(), limits.maxUniformBufferRange,
@@ -2974,7 +2974,7 @@ angle::Result ContextVk::handleDirtyUniformBuffersImpl(CommandBufferT *commandBu
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateShaderResourcesDescriptorSet(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), mShaderBufferWriteDescriptorDescs,
-        mShaderBuffersDescriptorDesc, &newSharedCacheKey));
+        mShaderBuffersDescriptorDescBuilder, &newSharedCacheKey));
 
     if (newSharedCacheKey)
     {
@@ -3035,15 +3035,16 @@ angle::Result ContextVk::handleDirtyGraphicsTransformFeedbackBuffersEmulation(
     const vk::WriteDescriptorDescs &writeDescriptorDescs =
         executableVk->getDefaultUniformWriteDescriptorDescs(transformFeedbackVk);
 
-    vk::DescriptorSetDescBuilder uniformsAndXfbDesc(writeDescriptorDescs.getTotalDescriptorCount());
-    uniformsAndXfbDesc.updateUniformsAndXfb(
+    vk::DescriptorSetDescBuilder uniformsAndXfbDescBuilder(
+        writeDescriptorDescs.getTotalDescriptorCount());
+    uniformsAndXfbDescBuilder.updateUniformsAndXfb(
         this, *executable, writeDescriptorDescs, currentUniformBuffer, mEmptyBuffer,
         mState.isTransformFeedbackActiveUnpaused(), transformFeedbackVk);
 
     vk::SharedDescriptorSetCacheKey newSharedCacheKey;
     ANGLE_TRY(executableVk->updateUniformsAndXfbDescriptorSet(
         this, mShareGroupVk->getUpdateDescriptorSetsBuilder(), writeDescriptorDescs,
-        currentUniformBuffer, &uniformsAndXfbDesc, &newSharedCacheKey));
+        currentUniformBuffer, &uniformsAndXfbDescBuilder, &newSharedCacheKey));
 
     if (newSharedCacheKey)
     {
