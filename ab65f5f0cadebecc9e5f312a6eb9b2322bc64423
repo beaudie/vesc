@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f16ce99c_4144414e",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1531247
+      },
+      "writtenOn": "2024-11-05T15:40:47Z",
+      "side": 1,
+      "message": "I recommend this pattern instead: https://crsrc.org/c/third_party/angle/testing/scripts/common.py;drc\u003dfd88b0e565f3d829639265cd536429bf3d7948ed;l\u003d161\n\nSo it would be something like this (I didn\u0027t test this code but it should be very close):\n```\n@contextlib.contextmanager\ndef run_from_dir(dir):\n  cwd \u003d os.getcwd()\n  os.chdir(dir)\n  try:\n    yield\n  finally:\n    os.chdir(cwd)\n```\n\nusage:\n```\nwith run_from_dir(args.build_dir):\n  android_helper.Initialize(\"angle_trace_tests\")\n  android_helper.PrepareTestSuite(\"angle_trace_tests\")\n```\n\nyou could also stack them and it should work as expected\n```\nwith run_from_dir(args.build_dir):\n  a()\n  with run_from_dir(another_dir):\n    b()\n```\n\nI know it is not very intuitive but once you get the hang of it, super useful and quite common in python. `yield` passes the execution to the inner part of the `with` block. The stuff in the `finally` block is executed at the end of the `with` block, including when exceptions are raised.",
+      "range": {
+        "startLine": 948,
+        "startChar": 4,
+        "endLine": 948,
+        "endChar": 22
+      },
+      "revId": "ab65f5f0cadebecc9e5f312a6eb9b2322bc64423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
