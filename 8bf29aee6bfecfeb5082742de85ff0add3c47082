@@ -16,6 +16,52 @@
       "message": "@geofflang@chromium.org @lehoangquyen@chromium.org Could you please review the code again? thx.",
       "revId": "8bf29aee6bfecfeb5082742de85ff0add3c47082",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d00305c4_55ed485e",
+        "filename": "src/libANGLE/renderer/metal/ContextMtl.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-11-05T13:31:15Z",
+      "side": 1,
+      "message": "tbh I\u0027m not sure whether it\u0027s enough to forward the error to glFinish and glFlush only. If users never call these functions, the error might be undetected.\n\n@geofflang, what do you think is the best way to forward the error?",
+      "range": {
+        "startLine": 276,
+        "startChar": 11,
+        "endLine": 276,
+        "endChar": 34
+      },
+      "revId": "8bf29aee6bfecfeb5082742de85ff0add3c47082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f0c4bd6_0ed5027f",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 1543187
+      },
+      "writtenOn": "2024-11-05T13:31:15Z",
+      "side": 1,
+      "message": "I think this should be an atomic variable.",
+      "range": {
+        "startLine": 649,
+        "startChar": 8,
+        "endLine": 649,
+        "endChar": 27
+      },
+      "revId": "8bf29aee6bfecfeb5082742de85ff0add3c47082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
