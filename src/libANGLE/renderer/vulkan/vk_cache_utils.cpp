@@ -6393,8 +6393,9 @@ void DescriptorSetDescBuilder::updatePreCacheActiveTextures(
                 SetBitField(infoDesc.imageLayoutOrRange, imageLayout);
                 infoDesc.imageViewSerialOrOffset = imageViewSerial.viewSerial.getValue();
                 infoDesc.samplerOrBufferSerial   = samplerHelper.getSamplerSerial().getValue();
-                memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
-                       sizeof(uint32_t));
+                // memcpy(&infoDesc.imageSubresourceRange, &imageViewSerial.subresource,
+                //        sizeof(uint32_t));
+                infoDesc.imageSubresourceRange = 0;
             }
         }
     }
@@ -6788,7 +6789,8 @@ angle::Result DescriptorSetDescBuilder::updateImages(
 
                 DescriptorInfoDesc &infoDesc = mDesc.getInfoDesc(infoIndex);
                 SetBitField(infoDesc.imageLayoutOrRange, image->getCurrentImageLayout());
-                memcpy(&infoDesc.imageSubresourceRange, &serial.subresource, sizeof(uint32_t));
+                // memcpy(&infoDesc.imageSubresourceRange, &serial.subresource, sizeof(uint32_t));
+                infoDesc.imageSubresourceRange   = 0;
                 infoDesc.imageViewSerialOrOffset = serial.viewSerial.getValue();
                 infoDesc.samplerOrBufferSerial   = 0;
 
@@ -6901,7 +6903,8 @@ void DescriptorSetDescBuilder::updateInputAttachment(
     // The serial is not totally precise.
     SetBitField(infoDesc.imageLayoutOrRange, layout);
     infoDesc.imageViewSerialOrOffset = serial.viewSerial.getValue();
-    memcpy(&infoDesc.imageSubresourceRange, &serial.subresource, sizeof(uint32_t));
+    // memcpy(&infoDesc.imageSubresourceRange, &serial.subresource, sizeof(uint32_t));
+    infoDesc.imageSubresourceRange = 0;
     infoDesc.samplerOrBufferSerial = 0;
 
     mHandles[infoIndex].imageView = imageView->getHandle();
