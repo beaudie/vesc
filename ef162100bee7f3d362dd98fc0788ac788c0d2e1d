@@ -46,6 +46,30 @@
       },
       "revId": "ef162100bee7f3d362dd98fc0788ac788c0d2e1d",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d287b159_e93db383",
+        "filename": "src/tests/gl_tests/ImageTest.cpp",
+        "patchSetId": 15
+      },
+      "lineNbr": 2352,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-05T20:29:47Z",
+      "side": 1,
+      "message": "It\u0027s probably because exceptions are disabled (assuming gtest would have used that otherwise to abort the test) and `ANGLE_SKIP_TEST_IF` basically just `return`s (so the real fix would be to move the `ANGLE_SKIP_TEST_IF`s outside the helper and into the function itself):\n\n```\n#define ANGLE_SKIP_TEST_IF(COND)                        \\\n    do                                                  \\\n    {                                                   \\\n        if (COND)                                       \\\n        {                                               \\\n            GTEST_SKIP() \u003c\u003c \"Test skipped: \" #COND \".\"; \\\n            return;                                     \\\n        }                                               \\\n    } while (0)\n```",
+      "parentUuid": "347e61e8_0ba418e5",
+      "range": {
+        "startLine": 2352,
+        "startChar": 4,
+        "endLine": 2352,
+        "endChar": 37
+      },
+      "revId": "ef162100bee7f3d362dd98fc0788ac788c0d2e1d",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
