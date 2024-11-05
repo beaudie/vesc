@@ -26,7 +26,7 @@
 
 // Version number for shader translation API.
 // It is incremented every time the API changes.
-#define ANGLE_SH_VERSION 371
+#define ANGLE_SH_VERSION 372
 
 enum ShShaderSpec
 {
@@ -473,6 +473,9 @@ struct ShCompileOptions
 
     // Specify struct in one statement, declare instance in other.
     uint64_t separateCompoundStructDeclarations : 1;
+
+    // Convert binary and tertiary expressions to if statements.
+    uint64_t separateCompoundExpressions : 1;
 
     ShCompileOptionsMetal metal;
     ShPixelLocalStorageOptions pls;

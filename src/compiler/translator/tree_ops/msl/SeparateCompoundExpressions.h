@@ -9,8 +9,6 @@
 
 #include "common/angleutils.h"
 #include "compiler/translator/Compiler.h"
-#include "compiler/translator/msl/IdGen.h"
-#include "compiler/translator/msl/SymbolEnv.h"
 
 namespace sh
 {
@@ -37,10 +35,20 @@ namespace sh
 //        auto _3 = _1[_2] + 1; // Index operator remains in (+) expr here.
 //        foo(_3);
 //
+#if ANGLE_ENABLE_METAL
+
 [[nodiscard]] bool SeparateCompoundExpressions(TCompiler &compiler,
-                                               SymbolEnv &symbolEnv,
-                                               IdGen &idGen,
                                                TIntermBlock &root);
+
+#else
+
+[[nodiscard]] inline bool SeparateCompoundExpressions(TCompiler &compiler, TIntermBlock &root)
+{
+    UNREACHABLE();
+    return false;
+}
+
+#endif
 
 }  // namespace sh
 

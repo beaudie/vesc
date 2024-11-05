@@ -38,7 +38,6 @@
 #include "compiler/translator/tree_ops/msl/RewriteInterpolants.h"
 #include "compiler/translator/tree_ops/msl/RewriteOutArgs.h"
 #include "compiler/translator/tree_ops/msl/RewriteUnaddressableReferences.h"
-#include "compiler/translator/tree_ops/msl/SeparateCompoundExpressions.h"
 #include "compiler/translator/tree_ops/msl/WrapMain.h"
 #include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/tree_util/DriverUniform.h"
@@ -1411,11 +1410,6 @@ bool TranslatorMSL::translateImpl(TInfoSinkBase &sink,
 
     const bool needsExplicitBoolCasts = compileOptions.addExplicitBoolCasts;
     if (!AddExplicitTypeCasts(*this, *root, symbolEnv, needsExplicitBoolCasts))
-    {
-        return false;
-    }
-
-    if (!SeparateCompoundExpressions(*this, symbolEnv, idGen, *root))
     {
         return false;
     }

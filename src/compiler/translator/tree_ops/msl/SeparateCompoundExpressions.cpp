@@ -6,7 +6,6 @@
 
 #include <unordered_map>
 
-#include "common/system_utils.h"
 #include "compiler/translator/IntermRebuild.h"
 #include "compiler/translator/tree_ops/msl/SeparateCompoundExpressions.h"
 #include "compiler/translator/tree_util/IntermNode_util.h"
@@ -148,16 +147,13 @@ class PrePass : public TIntermRebuild
 
 class Separator : public TIntermRebuild
 {
-    IdGen &mIdGen;
     std::vector<std::vector<TIntermNode *>> mStmtsStack;
     std::vector<std::unordered_map<const TVariable *, TIntermDeclaration *>> mBindingMapStack;
     std::unordered_map<TIntermTyped *, TIntermTyped *> mExprMap;
     std::unordered_set<TIntermDeclaration *> mMaskedDecls;
 
   public:
-    Separator(TCompiler &compiler, SymbolEnv &symbolEnv, IdGen &idGen)
-        : TIntermRebuild(compiler, true, true), mIdGen(idGen)
-    {}
+    Separator(TCompiler &compiler) : TIntermRebuild(compiler, true, true) {}
 
     ~Separator() override
     {
@@ -423,9 +419,8 @@ class Separator : public TIntermRebuild
 
         if (op == TOperator::EOpLogicalAnd || op == TOperator::EOpLogicalOr)
         {
-            const Name name = mIdGen.createNewName();
-            auto *var = new TVariable(&mSymbolTable, name.rawName(), new TType(TBasicType::EbtBool),
-                                      name.symbolType());
+            auto *var = new TVariable(&mSymbolTable, kEmptyImmutableString,
+                                      new TType(TBasicType::EbtBool), SymbolType::AngleInternal);
 
             TIntermTyped *newRight   = pullMappedExpr(right, true);
             TIntermBlock *rightBlock = &buildBlockWithTailAssign(*var, *newRight);
@@ -650,21 +645,14 @@ class Separator : public TIntermRebuild
 ////////////////////////////////////////////////////////////////////////////////
 
 bool sh::SeparateCompoundExpressions(TCompiler &compiler,
-                                     SymbolEnv &symbolEnv,
-                                     IdGen &idGen,
                                      TIntermBlock &root)
 {
-    if (angle::GetBoolEnvironmentVar("GMT_DISABLE_SEPARATE_COMPOUND_EXPRESSIONS"))
-    {
-        return true;
-    }
-
     if (!PrePass(compiler).rebuildRoot(root))
     {
         return false;
     }
 
-    if (!Separator(compiler, symbolEnv, idGen).rebuildRoot(root))
+    if (!Separator(compiler).rebuildRoot(root))
     {
         return false;
     }

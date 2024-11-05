@@ -60,13 +60,15 @@ std::shared_ptr<ShaderTranslateTask> ShaderMtl::compile(const gl::Context *conte
 
     // TODO(jcunningham): Remove this workaround once correct fix to move validation to the very end
     // is in place. https://bugs.webkit.org/show_bug.cgi?id=224991
-    options->validateAST = false;
+    options->validateAST = true;
 
     options->simplifyLoopConditions = true;
 
     options->initializeUninitializedLocals = true;
 
     options->separateCompoundStructDeclarations = true;
+
+    options->separateCompoundExpressions = true;
 
     if (context->isWebGL() && mState.getShaderType() != gl::ShaderType::Compute)
     {

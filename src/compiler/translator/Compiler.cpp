@@ -60,6 +60,7 @@
 #include "compiler/translator/tree_ops/glsl/apple/AddAndTrueToLoopCondition.h"
 #include "compiler/translator/tree_ops/glsl/apple/RewriteDoWhile.h"
 #include "compiler/translator/tree_ops/glsl/apple/UnfoldShortCircuitAST.h"
+#include "compiler/translator/tree_ops/msl/SeparateCompoundExpressions.h"
 #include "compiler/translator/tree_util/BuiltIn.h"
 #include "compiler/translator/tree_util/IntermNodePatternMatcher.h"
 #include "compiler/translator/tree_util/ReplaceShadowingVariables.h"
@@ -1058,6 +1059,14 @@ bool TCompiler::checkAndSimplifyAST(TIntermBlock *root,
     if (!SeparateDeclarations(*this, *root, mCompileOptions.separateCompoundStructDeclarations))
     {
         return false;
+    }
+
+    if (compileOptions.separateCompoundExpressions)
+    {
+        if (!SeparateCompoundExpressions(*this, *root))
+        {
+            return false;
+        }
     }
 
     if (IsWebGLBasedSpec(mShaderSpec))
