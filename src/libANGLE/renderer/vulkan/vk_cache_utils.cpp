@@ -25,6 +25,9 @@
 
 #include <type_traits>
 
+int computeCachedHashValueCallCount = 0;
+int getCachedHashValueCallCount     = 0;
+
 namespace rx
 {
 #if defined(ANGLE_DUMP_PIPELINE_CACHE_GRAPH)
@@ -5287,6 +5290,7 @@ void FramebufferHelper::release(ContextVk *contextVk)
 // DescriptorSetDesc implementation.
 size_t DescriptorSetDesc::computeHashValue() const
 {
+    computeCachedHashValueCallCount++;
     if (mDescriptorInfos.empty())
     {
         return 0;
@@ -5294,6 +5298,11 @@ size_t DescriptorSetDesc::computeHashValue() const
 
     return angle::ComputeGenericHash(mDescriptorInfos.data(),
                                      sizeof(mDescriptorInfos[0]) * mDescriptorInfos.size());
+}
+size_t DescriptorSetDesc::getCachedHashValue() const
+{
+    getCachedHashValueCallCount++;
+    return mCachedHashValue;
 }
 
 // FramebufferDesc implementation.

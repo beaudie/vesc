@@ -47,6 +47,9 @@
 #include <iostream>
 #include <sstream>
 
+extern int computeCachedHashValueCallCount;
+extern int getCachedHashValueCallCount;
+
 namespace rx
 {
 namespace
@@ -1255,6 +1258,8 @@ ContextVk::~ContextVk() {}
 
 void ContextVk::onDestroy(const gl::Context *context)
 {
+    ALOG(" computeCachedHashValueCallCount=%d, getCachedHashValueCallCount=%d",
+         computeCachedHashValueCallCount, getCachedHashValueCallCount);
     // If there is a context lost, destroy all the command buffers and resources regardless of
     // whether they finished execution on GPU.
     if (mRenderer->isDeviceLost())

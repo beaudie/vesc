@@ -1826,11 +1826,7 @@ class DescriptorSetDesc
         return *this;
     }
 
-    size_t getCachedHashValue() const
-    {
-        ASSERT(mCachedHashValue == computeHashValue());
-        return mCachedHashValue;
-    }
+    size_t getCachedHashValue() const;
 
     void computeCachedHashValue() const { mCachedHashValue = computeHashValue(); }
 
