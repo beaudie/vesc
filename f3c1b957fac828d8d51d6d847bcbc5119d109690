@@ -115,6 +115,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0b07b0df_3c11bce8",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 1
+      },
+      "lineNbr": 737,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-05T15:10:54Z",
+      "side": 1,
+      "message": "Updated the CL to work with the wrapper CL.  It now requires `--build-dir` unless you run from `out/\u003cconfig\u003e` already.  I kept the push/pop stuff to support writing the results out wherever you invoke the script from.",
+      "parentUuid": "3ae2177e_bbcaf877",
+      "range": {
+        "startLine": 737,
+        "startChar": 26,
+        "endLine": 737,
+        "endChar": 70
+      },
+      "revId": "f3c1b957fac828d8d51d6d847bcbc5119d109690",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "20f1b960_d196dad2",
         "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
         "patchSetId": 1
