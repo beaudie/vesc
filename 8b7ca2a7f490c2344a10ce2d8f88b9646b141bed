@@ -22,6 +22,30 @@
       },
       "revId": "8b7ca2a7f490c2344a10ce2d8f88b9646b141bed",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26de8069_6a92dc76",
+        "filename": "third_party/OpenCL-CTS/angle_oclcts_gtest.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-05T21:33:43Z",
+      "side": 1,
+      "message": "Acknowledged, I cleaned this up myself.",
+      "parentUuid": "cc164c42_df402724",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 28
+      },
+      "revId": "8b7ca2a7f490c2344a10ce2d8f88b9646b141bed",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
