@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8dbfb9a6_dd521946",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 7088,
+      "author": {
+        "id": 1300114
+      },
+      "writtenOn": "2024-11-05T15:51:56Z",
+      "side": 1,
+      "message": "Should this be something like this instead?\n\n```suggestion\n    mCurrentShaderReadStageMask \u003d IsShaderReadOnlyLayout(transitionTo) ? transitionTo.dstStageMask : 0;\n```",
+      "range": {
+        "startLine": 7088,
+        "startChar": 0,
+        "endLine": 7088,
+        "endChar": 60
+      },
+      "revId": "2686a0bdc88741cbd1a7cf90fc4ce695b186346a",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
