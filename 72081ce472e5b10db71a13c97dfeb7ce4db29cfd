@@ -39,6 +39,30 @@
       },
       "revId": "72081ce472e5b10db71a13c97dfeb7ce4db29cfd",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bccd6f8_4c895eed",
+        "filename": "src/libANGLE/renderer/vulkan/vk_helpers.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 7086,
+      "author": {
+        "id": 1340649
+      },
+      "writtenOn": "2024-11-05T17:26:17Z",
+      "side": 1,
+      "message": "im not that familiar with the event feature, should this \"release\" be done only if the image is transitioning from a non-shaderReadOnlyLayout? when and how should `mLastNonShaderReadOnlyEvent` be set",
+      "parentUuid": "92fd6b7c_cbdb4ec4",
+      "range": {
+        "startLine": 7086,
+        "startChar": 0,
+        "endLine": 7086,
+        "endChar": 34
+      },
+      "revId": "72081ce472e5b10db71a13c97dfeb7ce4db29cfd",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
