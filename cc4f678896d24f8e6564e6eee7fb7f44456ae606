@@ -118,6 +118,30 @@
       },
       "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b603e20_48735c92",
+        "filename": "src/libANGLE/validationES3.cpp",
+        "patchSetId": 1
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1105284
+      },
+      "writtenOn": "2024-11-05T14:47:33Z",
+      "side": 1,
+      "message": "There are already many cases where `internalFormat` is sized at this point in the code for other formats. If you look at the implementation of `GetInternalFormatInfo`:\n\n```\nconst InternalFormat \u0026GetInternalFormatInfo(GLenum internalFormat, GLenum type)\n{\n    static const InternalFormat defaultInternalFormat;\n    const InternalFormatInfoMap \u0026formatMap \u003d GetInternalFormatMap();\n\n    auto internalFormatIter \u003d formatMap.find(internalFormat);\n    if (internalFormatIter \u003d\u003d formatMap.end())\n    {\n        return defaultInternalFormat;\n    }\n\n    // If the internal format is sized, simply return it without the type check.\n    if (internalFormatIter-\u003esecond.size() \u003d\u003d 1 \u0026\u0026 internalFormatIter-\u003esecond.begin()-\u003esecond.sized)\n    {\n        return internalFormatIter-\u003esecond.begin()-\u003esecond;\n    }\n    ...\n ```\n \n It returns the sized internal format info if the provided `internalFormat` is sized without looking at the type parameter which is equivalent to calling `GetSizedInternalFormatInfo`. What goes wrong when you remove this code block in the validation?",
+      "parentUuid": "56f5902d_b05ee9d8",
+      "range": {
+        "startLine": 370,
+        "startChar": 4,
+        "endLine": 381,
+        "endChar": 5
+      },
+      "revId": "cc4f678896d24f8e6564e6eee7fb7f44456ae606",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
