@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24171bbb_a8ec057a",
+        "filename": "src/tests/BUILD.gn",
+        "patchSetId": 3
+      },
+      "lineNbr": 621,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-06T16:25:47Z",
+      "side": 1,
+      "message": "This might be better as `angle_test_wrapper`",
+      "range": {
+        "startLine": 621,
+        "startChar": 24,
+        "endLine": 621,
+        "endChar": 37
+      },
+      "revId": "ce7e352e30ed7bfdc646b5f1aefa0806120d943e",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
