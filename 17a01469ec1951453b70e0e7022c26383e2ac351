@@ -34,6 +34,24 @@
       "parentUuid": "44b72fb9_3ba112c5",
       "revId": "17a01469ec1951453b70e0e7022c26383e2ac351",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8bd031d6_63178377",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-06T18:29:21Z",
+      "side": 1,
+      "message": "Got it. Yes, let\u0027s skip the test on S22",
+      "parentUuid": "d288ae35_ac47ac9b",
+      "revId": "17a01469ec1951453b70e0e7022c26383e2ac351",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
