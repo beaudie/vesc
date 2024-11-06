@@ -62,6 +62,30 @@
       },
       "revId": "8bf29aee6bfecfeb5082742de85ff0add3c47082",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32712883_2a1367db",
+        "filename": "src/libANGLE/renderer/metal/mtl_command_buffer.mm",
+        "patchSetId": 5
+      },
+      "lineNbr": 649,
+      "author": {
+        "id": 3314858
+      },
+      "writtenOn": "2024-11-06T02:46:16Z",
+      "side": 1,
+      "message": "Yes, I should use atomic to ensure thread-safe access to mLastCmdBufferError.",
+      "parentUuid": "7f0c4bd6_0ed5027f",
+      "range": {
+        "startLine": 649,
+        "startChar": 8,
+        "endLine": 649,
+        "endChar": 27
+      },
+      "revId": "8bf29aee6bfecfeb5082742de85ff0add3c47082",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
