@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44b72fb9_3ba112c5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1520902
+      },
+      "writtenOn": "2024-11-06T02:06:01Z",
+      "side": 1,
+      "message": "This change causes `ImageTestES3.SourceAHBTarget2DGenerateMipmap*` start failing on S22 bot: https://ci.chromium.org/ui/p/angle/builders/ci/android-arm64-exp-s22-test/1538/overview. Would you please take a look? Thank you",
+      "revId": "17a01469ec1951453b70e0e7022c26383e2ac351",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
