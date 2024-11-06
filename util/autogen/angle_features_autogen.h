@@ -346,6 +346,7 @@ enum class Feature
     SupportsHostImageCopy,
     SupportsHostQueryReset,
     SupportsImage2dViewOf3d,
+    SupportsImageCompressionControl,
     SupportsImageCubeArray,
     SupportsImageFormatList,
     SupportsImagelessFramebuffer,
