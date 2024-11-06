@@ -22,6 +22,30 @@
       },
       "revId": "ab65f5f0cadebecc9e5f312a6eb9b2322bc64423",
       "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12a3fb2d_3a9e3a33",
+        "filename": "src/tests/restricted_traces/restricted_trace_perf.py",
+        "patchSetId": 2
+      },
+      "lineNbr": 948,
+      "author": {
+        "id": 1256237
+      },
+      "writtenOn": "2024-11-06T16:02:52Z",
+      "side": 1,
+      "message": "That\u0027s awesome!  Thanks for continually dropping python knowledge on me.",
+      "parentUuid": "f16ce99c_4144414e",
+      "range": {
+        "startLine": 948,
+        "startChar": 4,
+        "endLine": 948,
+        "endChar": 22
+      },
+      "revId": "ab65f5f0cadebecc9e5f312a6eb9b2322bc64423",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
     }
   ]
 }
