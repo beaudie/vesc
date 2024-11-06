@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5849299_9e8477a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3395304
+      },
+      "writtenOn": "2024-11-06T08:26:20Z",
+      "side": 1,
+      "message": "PTAL\n\nHello, could you please help me to execute tryjobs, as I do not have permission to do so.\n\nIn addition, if the changes I made in this CL are supported by both of you, I will continue to work on this in the ANGLE repository. This work may require multiple CLs. In order to allow subsequent CLs to be tested by tryjobs before review, could you please grant me permission to execute tryjobs?\n\nThank you! :)",
+      "revId": "1dc022f67a51e113018cf6b26d0a0be285ed86e3",
+      "serverId": "3ce6091f-6c88-37e8-8c75-72f92ae8dfba"
+    }
+  ]
+}
