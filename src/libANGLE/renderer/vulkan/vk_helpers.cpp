@@ -4515,23 +4515,33 @@ angle::Result DynamicDescriptorPool::getOrAllocateDescriptorSet(
     SharedDescriptorSetCacheKey *newSharedCacheKeyOut)
 {
     ASSERT(context->getFeatures().descriptorSetCache.enabled);
+    DescriptorSetCacheEntry cacheEntry;
+
     // First scan the descriptorSet cache.
-    if (mDescriptorSetCache.getDescriptorSet(desc, descriptorSetOut))
+    if (mDescriptorSetCache.getDescriptorSet(desc, &cacheEntry))
     {
+        *descriptorSetOut     = cacheEntry.first;
         *newSharedCacheKeyOut = nullptr;
+        // Move it to the front of the LRU list.
+        mLRUList.splice(mLRUList.begin(), mLRUList, cacheEntry.second);
         mCacheStats.hit();
         return angle::Result::Continue;
     }
 
     ANGLE_TRY(allocateDescriptorSet(context, descriptorSetLayout, descriptorSetOut));
-    ++context->getPerfCounters().descriptorSetAllocations;
 
-    mDescriptorSetCache.insertDescriptorSet(desc, *descriptorSetOut);
-    mCacheStats.missAndIncrementSize();
     // Let pool know there is a shared cache key created and destroys the shared cache key
     // when it destroys the pool.
-    *newSharedCacheKeyOut = CreateSharedDescriptorSetCacheKey(desc, this);
-    (*descriptorSetOut)->getPool()->onNewDescriptorSetAllocated(*newSharedCacheKeyOut);
+    SharedDescriptorSetCacheKey sharedCacheKey = CreateSharedDescriptorSetCacheKey(desc, this);
+    (*descriptorSetOut)->getPool()->onNewDescriptorSetAllocated(sharedCacheKey);
+
+    // Add to the front of the LRU list and add to the cache
+    mLRUList.push_front(sharedCacheKey);
+    mDescriptorSetCache.insertDescriptorSet(desc,
+                                            std::make_pair(*descriptorSetOut, mLRUList.begin()));
+    mCacheStats.missAndIncrementSize();
+
+    *newSharedCacheKeyOut = sharedCacheKey;
 
     return angle::Result::Continue;
 }
@@ -4588,17 +4598,17 @@ void DynamicDescriptorPool::releaseCachedDescriptorSet(Renderer *renderer,
                                                        const DescriptorSetDesc &desc)
 {
     ASSERT(renderer->getFeatures().descriptorSetCache.enabled);
-    DescriptorSetPointer descriptorSet;
-    if (mDescriptorSetCache.getDescriptorSet(desc, &descriptorSet))
+    DescriptorSetCacheEntry cacheEntry;
+    // Remove from the cache hash map. Note that we can't delete it until refcount goes to 0
+    if (mDescriptorSetCache.eraseDescriptorSet(desc, &cacheEntry))
     {
-        // Remove from the cache hash map. Note that we can't delete it until refcount goes to 0
-        mDescriptorSetCache.eraseDescriptorSet(desc);
         mCacheStats.decrementSize();
+        mLRUList.erase(cacheEntry.second);
 
-        if (descriptorSet.unique())
+        if (cacheEntry.first.unique())
         {
-            DescriptorPoolWeakPointer pool = descriptorSet->getPool();
-            descriptorSet.reset();
+            DescriptorPoolWeakPointer pool = cacheEntry.first->getPool();
+            cacheEntry.first.reset();
             checkAndReleaseUnusedPool(renderer, pool);
         }
     }

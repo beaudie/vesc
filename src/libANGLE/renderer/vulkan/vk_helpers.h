@@ -455,9 +455,14 @@ class DynamicDescriptorPool final : angle::NonCopyable
     // from the pool matches the layout that the pool was created for, to ensure that the free
     // descriptor count is accurate and new pools are created appropriately.
     VkDescriptorSetLayout mCachedDescriptorSetLayout;
+    // LRU list for cache eviction: most recent used at front, least used at back.
+    using DescriptorSetLRUList         = std::list<SharedDescriptorSetCacheKey>;
+    using DescriptorSetLRUListIterator = DescriptorSetLRUList::iterator;
+    DescriptorSetLRUList mLRUList;
     // Tracks cache for descriptorSet. Note that cached DescriptorSet can be reuse even if it is GPU
     // busy.
-    DescriptorSetCache<DescriptorSetPointer> mDescriptorSetCache;
+    using DescriptorSetCacheEntry = std::pair<DescriptorSetPointer, DescriptorSetLRUListIterator>;
+    DescriptorSetCache<DescriptorSetCacheEntry> mDescriptorSetCache;
     // Statistics for the cache.
     CacheStats mCacheStats;
 };
